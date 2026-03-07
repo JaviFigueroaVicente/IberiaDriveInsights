@@ -256,4 +256,4 @@ temp/
 *.sw?
 
 # modelos 
-backend/models/
+backend/ai_models/
