@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+import models
 import uvicorn
-from typing import List
+from database import engine
+from api import cars
 
 app = FastAPI()
+
+models.Base.metadata.create_all(bind=engine)
 
 origins = [
     "http://localhost:3000",
@@ -23,9 +26,8 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int):
-    return {"item_id": item_id}
+app.include_router(cars.router)
+# app.include_router(users.router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from core.config import Base, engine
+from database import Base, engine
 
 class CarRecord(Base):
     __tablename__ = "car_records"
@@ -19,9 +19,8 @@ class CarRecord(Base):
     price = Column(Integer, nullable=False)
     is_prediction = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    def __repr__(self):
-        return f"<CarRecord {self.make} {self.model} {self.version}>"
 
 
 # class User(Base):
