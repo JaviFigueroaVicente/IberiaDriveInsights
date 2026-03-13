@@ -10,7 +10,7 @@ class User(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-class CarRecord(BaseModel):
+class Car(BaseModel):
     id: int
     make: str
     model: str
@@ -23,11 +23,11 @@ class CarRecord(BaseModel):
     kms: int
     price: int
 
-class CarRecordCreate(CarRecord):
+class CarCreate(Car):
     is_prediction: bool = True
     
 
-class CarRecordResponse(BaseModel):
+class CarResponse(BaseModel):
     id: int
     make: str
     model: str

@@ -3,8 +3,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base, engine
 
-class CarRecord(Base):
-    __tablename__ = "car_records"
+class Car(Base):
+    __tablename__ = "cars"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     make = Column(String(50), nullable=False)
@@ -21,23 +21,22 @@ class CarRecord(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+    rep_id = Column(Integer, ForeignKey("users.id"))
+
+    rep = relationship("User", back_populates="cars")
 
 
-# class User(Base):
-#     __table__name = "users"
-#     id = Column(Integer, primary_key=True, index=True, required=True)
-#     email = Column(String, unique=True, index=True, required=True)
-#     hashed_password = Column(String, required=True)
-#     name = Column(String, required=True)
-#     surname = Column(String)
-#     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-#     items = relationship("Item", back_populates="owner")
+class User(Base):
+    __tablename__ = "users"
 
-# class Item(Base):
-#     __tablename__ = "items"
-#     id = Column(Integer, primary_key=True, index=True, required=True)
-#     title = Column(String, required=True)
-#     description = Column(String, required=True)
-#     owner_id = Column(Integer, ForeignKey("users.id"))
-#     owner = relationship("User", back_populates="items")
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(100), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)
+    name = Column(String(50))
+    surname = Column(String(50))
+    role = Column(Integer, default="2") 
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    
+    cars = relationship("Car", back_populates="rep")
