@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base, engine
 
+# Car Model
 class Car(Base):
     __tablename__ = "cars"
 
@@ -12,7 +13,7 @@ class Car(Base):
     version = Column(String(100), nullable=False)
     months_old = Column(Integer, nullable=False)
     power = Column(Integer, nullable=False)
-    sale_type = Column(String(20), nullable=False)
+    sale_type = Column(String(20), nullable=False) 
     gear_type = Column(String(30), nullable=False)
     fuel_type = Column(String(30), nullable=False)
     kms = Column(Integer, nullable=False)

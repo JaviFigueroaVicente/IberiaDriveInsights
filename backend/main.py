@@ -1,9 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, Header, Request, Response, Cookie
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from typing import Annotated
 import models
 import uvicorn
 from database import engine
-from api import cars
+from api import cars, auth
+import jwt
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
 app = FastAPI()
 
@@ -21,11 +31,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def get_headers(
+    access_token: Annotated[str | None, Header()] = None,
+    user_role: Annotated[str | None, Header()] = None,
+    ):
+    if access_token != "access_token":
+        raise HTTPException(status_code=401, detail="Not authorized")
+
+    return {
+        "access_token": access_token,
+        "user_role": user_role,
+    }
+
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def root():
+    # return JSONResponse(content={"message": "Hello World"}, headers={"set-cookie": "email={users.email}"})
+    return {"message": "Hello World"}
 
+@app.get("/users")
+def users():
+    response = JSONResponse(content={"message": "Hello World"})
+    response.set_cookie(key="email", value = users.email, path="/users")
+    return response
 
+app.include_router(auth.router)
 app.include_router(cars.router)
 # app.include_router(users.router)
 
