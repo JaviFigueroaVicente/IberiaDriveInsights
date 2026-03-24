@@ -257,3 +257,4 @@ temp/
 
 # modelos 
 backend/ai_models/
+backend/datasets/data_compramostucoche.csv
