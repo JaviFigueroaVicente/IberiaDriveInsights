@@ -1,6 +1,6 @@
 import pandas as pd
 from database import engine, Base, SessionLocal
-from models import Car, User
+from models import User
 from werkzeug.security import generate_password_hash
 
 def generar_seeders():
@@ -18,9 +18,20 @@ def generar_seeders():
         db.bulk_save_objects(users)
         db.commit()
 
-        df = pd.read_csv('datasets/data_clean.csv')
+        df_cars = pd.read_csv('datasets/coches_clean.csv')
+        df_cars.to_sql('cars', con=engine, if_exists='append', index=False)
 
-        df.to_sql('cars', con=engine, if_exists='append', index=False)
+        df_cars_kaffle = pd.read_csv('datasets/data_clean.csv')
+        df_cars_kaffle.to_sql('cars_kaffle', con=engine, if_exists='append', index=False)
+
+        df_makes = pd.read_csv('datasets/seed_marcas.csv')
+        df_makes.to_sql('makes', con=engine, if_exists='append', index=False)
+
+        df_models = pd.read_csv('datasets/seed_modelos.csv')
+        df_models.to_sql('models', con=engine, if_exists='append', index=False)
+        
+        df_versions = pd.read_csv('datasets/seed_versiones.csv')
+        df_versions.to_sql('versions', con=engine, if_exists='append', index=False)
 
         print("Datos insertados correctamente")
             

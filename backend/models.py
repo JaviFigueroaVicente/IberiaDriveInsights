@@ -1,11 +1,11 @@
-from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime
+from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base, engine
 
 # Car Model
-class Car(Base):
-    __tablename__ = "cars"
+class CarKaffle(Base):
+    __tablename__ = "cars_kaffle"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     make = Column(String(50), nullable=False)
@@ -24,8 +24,28 @@ class Car(Base):
 
     rep_id = Column(Integer, ForeignKey("users.id"))
 
-    rep = relationship("User", back_populates="cars")
+    rep = relationship("User", back_populates="cars_kaffle")
 
+class Car(Base):
+    __tablename__ = "cars"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    make = Column(String(50), nullable=False)
+    model = Column(String(50), nullable=False)
+    version = Column(String(100), nullable=False)
+    registration = Column(Date, nullable=False)
+    power = Column(Integer, nullable=False)
+    gear_type = Column(String(30), nullable=False)
+    fuel_type = Column(String(30), nullable=False)
+    kms = Column(Integer, nullable=False)
+    price = Column(Integer, nullable=False)
+    is_prediction = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    rep_id = Column(Integer, ForeignKey("users.id"))
+
+    rep = relationship("User", back_populates="cars")
 
 
 class User(Base):
@@ -40,4 +60,39 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
+    cars_kaffle = relationship("CarKaffle", back_populates="rep")
     cars = relationship("Car", back_populates="rep")
+
+
+class Make(Base):
+    __tablename__ = "makes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String(50), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    models = relationship("Model", back_populates="makes")
+
+class Model(Base):
+    __tablename__ = "models"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String(50), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    id_marca = Column(Integer, ForeignKey("makes.id"))
+
+    makes = relationship("Make", back_populates="models")
+    versions = relationship("Version", back_populates="models")
+
+class Version(Base):
+    __tablename__ = "versions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String(50), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    id_modelo = Column(Integer, ForeignKey("models.id"))
+
+    models = relationship("Model", back_populates="versions")
