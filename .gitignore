@@ -258,3 +258,6 @@ temp/
 # modelos 
 backend/ai_models/
 backend/datasets/data_compramostucoche.csv
+backend/datasets/seed_marcas.csv
+backend/datasets/seed_modelos.csv
+backend/datasets/seed_versiones.csv
