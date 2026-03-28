@@ -6,11 +6,7 @@ from database import SessionLocal
 from schemas import CarBase, CarResponse
 from api.auth import get_current_user, get_admin_user
 
-router = APIRouter(
-    prefix="/cars",
-    tags=["cars"],
-    responses={404: {"description": "Not found"}},
-)
+router = APIRouter()
 
 def get_db():
     db = SessionLocal()

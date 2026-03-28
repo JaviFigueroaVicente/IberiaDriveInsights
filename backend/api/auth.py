@@ -9,7 +9,7 @@ import models, security, schemas
 from database import SessionLocal
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def get_db():
     db = SessionLocal()
@@ -52,7 +52,7 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db)
 ):
-    user = db.query(models.User).filter(models.User.email == form_data.email).first()
+    user = db.query(models.User).filter(models.User.email == form_data.username).first()
     
     if not user or not security.verify_password(form_data.password, user.password):
         raise HTTPException(
@@ -69,3 +69,7 @@ async def read_users_me(
     current_user: Annotated[models.User, Depends(get_current_user)]
 ):
     return current_user
+
+@router.post("/logout")
+async def logout():
+    return {"message": "Logout successful"}

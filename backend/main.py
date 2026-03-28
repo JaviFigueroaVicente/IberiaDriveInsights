@@ -20,7 +20,9 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 origins = [
-    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://www.localhost:5173",
 ]
 
 app.add_middleware(
@@ -54,8 +56,8 @@ def users():
     response.set_cookie(key="email", value = users.email, path="/users")
     return response
 
-app.include_router(auth.router)
-app.include_router(cars.router)
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(cars.router, prefix="/cars", tags=["cars"])
 # app.include_router(users.router)
 
 

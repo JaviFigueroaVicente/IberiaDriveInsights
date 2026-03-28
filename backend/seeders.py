@@ -1,7 +1,7 @@
 import pandas as pd
 from database import engine, Base, SessionLocal
 from models import User
-from werkzeug.security import generate_password_hash
+from security import get_password_hash
 
 def generar_seeders():
     Base.metadata.drop_all(bind=engine) 
@@ -11,8 +11,8 @@ def generar_seeders():
 
     try:
         users = [
-            User(id=1, name='Admin', surname='IberiaDrive', email='admin@demo.com', password=generate_password_hash('admin') , role=1),
-            User(id=2, name='Comercial', surname='User', email='user@demo.com', password=generate_password_hash('12345678'), role=2)
+            User(id=1, name='Admin', surname='IberiaDrive', email='admin@demo.com', password=get_password_hash('admin') , role=1),
+            User(id=2, name='Comercial', surname='User', email='user@demo.com', password=get_password_hash('12345678'), role=2)
         ]
 
         db.bulk_save_objects(users)
