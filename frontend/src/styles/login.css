@@ -1,0 +1,114 @@
+body {
+    background: linear-gradient(180deg, #131B2E 0%, #171F33 100%);
+    background-attachment: fixed;
+    margin: 0;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 2. Cuadrícula Técnica (Blueprint Grid) */
+.blueprint-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(to right, rgba(14, 165, 233, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(14, 165, 233, 0.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 3. Brillo Radial Cinético (Brillos en esquinas) */
+.kinetic-radial {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(93, 230, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 4. Líneas de Decoración "Neural" (Opcional) */
+.neural-line-v {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 1px;
+    height: 128px;
+    background: linear-gradient(to bottom, transparent, rgba(137, 206, 255, 0.3), transparent);
+}
+
+
+/* 5. Tarjeta de Login */
+section{
+     .logo{
+        border: 5px solid #0EA5E9;
+        border-radius: 50%
+    }
+
+    .login-card{
+        background-color: #001E2Fe0;
+        z-index: 2;
+        margin-left: auto;
+        margin-right: auto;
+
+        h2, label, p, .link{
+            color: #BEC8D2;
+        }    
+
+        input{
+            background-color: rgba(190, 200, 210, 0.15);
+            color: #FFFFFF;
+            border-radius: 1px; 
+            transition: all 0.2s ease-in-out;
+        }
+
+        input:hover{
+            outline: 1px solid #BEC8D2e0;
+        }
+
+        .contra-olvidada{
+            color: #0EA5E9;
+            transition: all 0.1s ease-in-out;
+        }
+
+        .contra-olvidada:hover{
+            color: #22D3EE;
+            text-decoration: 1px solid underline;
+        }
+
+        button{
+            border-radius: 1px;
+            box-shadow: 0px 0px 20px rgba(14,165,233,0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        button:hover{
+            box-shadow: 0px 0px 30px rgba(14,165,233,0.3);
+        }
+
+        .link{
+            transition: all 0.1s ease-in-out;
+            color: #0EA5E9;        
+        }
+
+        .link:hover{
+            color: #22D3EE;
+            text-decoration: 1px solid underline;
+        }
+    }
+
+    .login-card-bottom{
+        background-color: #0F172A;
+        p{
+            color: #0EA5E9 !important;
+        }
+    }
+
+    .derechos{
+        color: #BEC8D2E0;
+    }
+}
+

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import '../styles/App.css'
 import Home from './Home'
 import Login from './Login'
 import Register from './Register'
