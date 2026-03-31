@@ -29,9 +29,11 @@ export default function Login({onLoginSuccess}) {
             <div className="kinetic-radial"></div>
             <section className="flex flex-col items-center justify-center align-middle relative min-h-screen">
                 <div className="flex flex-col items-start">
-                    <div className="flex justify-center items-center mb-4 pl-2">
-                        <img src={Logo} alt="" className="logo w-14 h-14 rounded"/>
-                        <h1 className="pl-4 text-l bold">IBERIA DRIVE <span className="text-[#0EA5E9]">INSIGHTS</span></h1>
+                    <div className="mb-4 pl-2">
+                        <Link to='/' className='flex justify-center items-center '>
+                            <img src={Logo} alt="" className="logo w-14 h-14 rounded"/>
+                            <h1 className="pl-4 text-l bold">IBERIA DRIVE <span className="text-[#0EA5E9]">INSIGHTS</span></h1>
+                        </Link>
                     </div>
                     <div className="login-card">
                         <div className="flex flex-col p-10 md:p-12 align-middle">
@@ -62,7 +64,7 @@ export default function Login({onLoginSuccess}) {
                             <p className="flex justify-center text-[11px] mt-7">¿No tienes una cuenta?<Link to={'/register'} className='link pl-2'>Regístrate aquí</Link></p>
                         </div>
                         <div className="login-card-bottom flex flex-col mt p-6 md:p-7 align-middle">
-                            <p className="flex justify-end text-[11px] mr-3">• SERVICIO ACTIVO</p>
+                            <p className="flex justify-end text-[11px] mr-3"><span className='pr-1 activo'>•</span>  SERVICIO ACTIVO</p>
                         </div>
                     </div>
                 </div>

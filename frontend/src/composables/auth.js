@@ -57,7 +57,7 @@ const logoutUser = async () => {
     });
     localStorage.removeItem('token');
     delete apiClient.defaults.headers.common['Authorization'];
-    console.log('Logout successful');
+    // console.log('Logout successful');
 
   } catch (error) {
     console.log(error);

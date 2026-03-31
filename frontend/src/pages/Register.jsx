@@ -45,9 +45,11 @@ export default function Register(){
                 <div className='register-card flex align-middle items-center flex-col md:flex-row w-full md:w-8/10'>
                     <div className='card-left flex-col justify-between p-8 relative border-white/5 w-full md:w-1/2'>
                         <div className="relative z-20">
-                            <div className='flex items-center'>
-                                <img src={Logo} alt="" className="w-12 h-12 rounded"/>
-                                <h1 className="pl-4 text-l bold">IBERIA DRIVE <span>INSIGHTS</span></h1>
+                            <div>
+                                <Link to='/' className='flex items-center '>
+                                    <img src={Logo} alt="" className="w-12 h-12 rounded"/>
+                                    <h1 className="pl-4 text-l bold">IBERIA DRIVE <span>INSIGHTS</span></h1>
+                                </Link>
                             </div>
                         </div>
                         <div className="space-y-8 relative mt-12 z-20">
