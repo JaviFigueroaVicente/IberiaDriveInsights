@@ -7,10 +7,8 @@ body {
     overflow-x: hidden;
 }
 
-/* 2. Cuadrícula Técnica (Blueprint Grid) */
 .blueprint-grid {
     position: absolute;
-    inset: 0;
     background-image: 
         linear-gradient(to right, rgba(14, 165, 233, 0.07) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(14, 165, 233, 0.07) 1px, transparent 1px);
@@ -19,38 +17,38 @@ body {
     z-index: 0;
 }
 
-/* 3. Brillo Radial Cinético (Brillos en esquinas) */
+
 .kinetic-radial {
     position: absolute;
     inset: 0;
     background: 
-        radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(93, 230, 255, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 5% 15%, rgba(14, 165, 233, 0.15) 0%, transparent 25%),
+        radial-gradient(circle at 95% 85%, rgba(93, 230, 255, 0.1) 0%, transparent 25%);
     pointer-events: none;
     z-index: 1;
 }
 
-/* 5. Tarjeta de Login */
-section{
-     .logo{
-        border: 5px solid #0EA5E9;
-        border-radius: 50%
+.register-card{
+    box-shadow: 
+        10px 10px 30px 1px rgba(0, 0, 0, 0.5), 
+        -5px -5px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.015);
+    z-index: 2;
+    border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2;
+    background-color: #131B2E;
+
+    p{
+        color: #BEC8D2;
+    }
+    
+    span{
+        color: #2FD9F4;
     }
 
-    .login-card{
-        background-color: #001E2Fe0;
-        z-index: 2;
-        margin-left: auto;
-        margin-right: auto;
-        box-shadow: 
-            5px 5px 10px 1px rgba(0, 0, 0, 0.25), 
-            -2px -2px 5px rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.015);
-
-        h2, label, p, .link{
-            color: #BEC8D2;
-        }    
-
+    .card-right{
         input{
             background-color: rgba(190, 200, 210, 0.15);
             color: #FFFFFF;
@@ -62,12 +60,16 @@ section{
             outline: 1px solid #BEC8D2e0;
         }
 
-        .contra-olvidada{
+        label{
+            color: #FFFFFF
+        }
+
+        a{
             color: #0EA5E9;
             transition: all 0.1s ease-in-out;
         }
 
-        .contra-olvidada:hover{
+        a:hover{
             color: #22D3EE;
             text-decoration: 1px solid underline;
         }
@@ -81,27 +83,5 @@ section{
         button:hover{
             box-shadow: 0px 0px 30px rgba(14,165,233,0.3);
         }
-
-        .link{
-            transition: all 0.1s ease-in-out;
-            color: #0EA5E9;        
-        }
-
-        .link:hover{
-            color: #22D3EE;
-            text-decoration: 1px solid underline;
-        }
-    }
-
-    .login-card-bottom{
-        background-color: #0F172A;
-        p{
-            color: #0EA5E9 !important;
-        }
-    }
-
-    .derechos{
-        color: #BEC8D2E0;
     }
 }
-

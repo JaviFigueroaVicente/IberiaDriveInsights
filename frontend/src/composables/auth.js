@@ -35,7 +35,8 @@ const loginUser = async (email, password) => {
 
 const registerUser = async (userData) => {
   try {
-    const response = await axios.post('register/', userData);
+    const response = await apiClient.post('/auth/register', userData);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;

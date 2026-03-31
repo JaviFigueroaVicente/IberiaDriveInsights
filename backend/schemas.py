@@ -13,14 +13,25 @@ class TokenData(BaseModel):
 
 # Users
 class User(BaseModel):
+    id: int
     email: EmailStr
+    name: str
+    surname: str
+    role: int
+
+    class Config:
+        from_attributes = True
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
     name: str
     surname: str
 
 class UserInDB(User):
     password: str
     created_at: datetime
-    updated_at: datetime
+    updted_at: Optional[datetime] = None
 
 # Cars
 class CarBase(BaseModel):

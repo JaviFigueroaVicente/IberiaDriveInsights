@@ -16,7 +16,7 @@ export default function Login({onLoginSuccess}) {
         e.preventDefault();
         try{
             const response = await loginUser(email, password);
-            console.log(response);
+            // console.log(response);
             await onLoginSuccess(response.access_token)
         }catch(error){
             console.log(error);
@@ -27,7 +27,6 @@ export default function Login({onLoginSuccess}) {
         <div className="min-h-screen">
             <div className="blueprint-grid"></div>
             <div className="kinetic-radial"></div>
-            <div className="neural-line-v"></div>
             <section className="flex flex-col items-center justify-center align-middle relative min-h-screen">
                 <div className="flex flex-col items-start">
                     <div className="flex justify-center items-center mb-4 pl-2">

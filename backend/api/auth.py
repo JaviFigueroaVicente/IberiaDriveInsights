@@ -64,6 +64,21 @@ async def login(
     access_token = security.create_access_token(data={"sub": user.email})
     return {"access_token": access_token, "token_type": "bearer"}
 
+@router.post("/register", response_model=schemas.User)
+async def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    hashed_password = security.get_password_hash(user.password)
+    
+    db_user = models.User(
+        email=user.email,
+        password=hashed_password,
+        name=user.name,
+        surname=user.surname
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
 @router.get("/me", response_model=schemas.User)
 async def read_users_me(
     current_user: Annotated[models.User, Depends(get_current_user)]
