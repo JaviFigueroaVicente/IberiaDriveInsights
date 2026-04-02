@@ -1,0 +1,132 @@
+.home{
+    background-color: #0b1326;
+
+    span{
+        color: #22D3EE;
+    }
+
+    p{
+        color: #BEC8D2;
+    }
+
+
+/* PREDICTION SECTION */
+    .prediciton-button{
+        background: linear-gradient(135deg, #89ceff 0%, #0ea5e9 100%);
+        transition: all 0.2s ease-in-out;
+    }
+
+    .prediciton-button:hover{
+        box-shadow: 0px 0px 30px rgba(14,165,233,0.3);
+        cursor: pointer;
+    }
+
+    .accuracy-button{
+        background-color: #222a3d;
+        transition: all 0.2s ease-in-out;
+        color: #BEC8D2;
+    }
+
+    .accuracy-button:hover{
+        background-color: #2d3449;
+    }
+
+    .glass-panel{
+        background: rgba(45, 52, 73, 0.6);
+        backdrop-filter: blur(20px);
+        border-color: rgb(62, 72, 80, 0.1)
+    }
+
+    .glow-subtle{
+        box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+    }
+
+
+/* METRICS */
+    .metrics{
+        background-color: #131b2e;
+
+        .accuracy-meter{
+            background-color: #2d3449;
+
+            span{
+                color: #BEC8D2;
+            }
+        }
+
+        .meter{
+            color: #5de6ff;
+        }
+        .meter-line{
+            background-color: #0b1326;
+            div{
+                background-color: #5de6ff;
+            }
+        }
+
+        .card-section{
+            .card{
+                border-color: #5de6ff;
+                background-color: #171f33;
+                transition: all 0.3s ease-in-out;
+            }
+
+            .card:hover{
+                background-color: #222a3d;
+            }
+        }
+    }
+
+
+/* CORE SECTION */
+    .core-model{
+        background-color: #060e20;
+        P{
+            color: #bec8d2;
+        }
+
+        .card-core{
+            background-color: #171f33;
+            transition: all 0.3s ease-in-out;
+
+            span{
+                background-color: #2d3449;
+                color: #bec8d2;
+            }
+
+            .icon{
+                background-color: rgb(93, 230, 255, 0.1);
+                border-color: rgb(62, 72, 80, 0.1);
+            }
+        }
+
+        .card-core:hover{
+            background-color: #222a3d;
+        }
+        
+    }
+
+/* INITIALIZE EVALUTATION SECTION */
+    .initialize-evaluation{
+        background-color: #131b2e;
+
+        .primary-gradient{
+            background: linear-gradient(135deg, #89ceff 0%, #0ea5e9 100%);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .primary-gradient:hover{
+            box-shadow: 0px 0px 30px rgba(14,165,233,0.3);
+            cursor: pointer;
+        }
+
+        button{
+            background-color: transparent;
+
+        }
+
+        button:hover{
+            background-color: transparent;
+        }
+    }
+}

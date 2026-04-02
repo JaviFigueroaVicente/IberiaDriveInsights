@@ -50,6 +50,7 @@ class Car(Base):
 
 class User(Base):
     __tablename__ = "users"
+
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(100), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
@@ -80,6 +81,7 @@ class Model(Base):
     nombre = Column(String(50), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    
     id_marca = Column(Integer, ForeignKey("makes.id"))
 
     makes = relationship("Make", back_populates="models")
@@ -92,6 +94,7 @@ class Version(Base):
     nombre = Column(String(50), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    
     id_modelo = Column(Integer, ForeignKey("models.id"))
 
     models = relationship("Model", back_populates="versions")
