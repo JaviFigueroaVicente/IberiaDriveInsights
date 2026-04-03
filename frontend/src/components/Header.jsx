@@ -37,7 +37,7 @@ export default function Header({isAuthenticated, currentUser, onLogout}){
                     flex-col absolute top-full left-0 w-100 bg-[#111116] p-6 gap-6 z-50
                     font-bold text-space tracking-widest navegador
                 `}>
-                    <li><Link className='link block' to='/' onClick={() => setIsMenuOpen(false)}>Predecir</Link></li>
+                    <li><Link className='link block' to='/predict' onClick={() => setIsMenuOpen(false)}>Predecir</Link></li>
                     <li><Link className='link block' to='/' onClick={() => setIsMenuOpen(false)}>Análisis</Link></li>
                     <li><Link className='link block' to='/' onClick={() => setIsMenuOpen(false)}>Modelo</Link></li>
                     
@@ -76,7 +76,15 @@ export default function Header({isAuthenticated, currentUser, onLogout}){
                                                 Configuración
                                             </Link>
                                         </li>
-                                        
+                                        <li>
+                                        </li>
+                                        {currentUser.role == '1' && (
+                                            <li>
+                                                <Link to="/admin" className="block px-4 py-2 text-sm text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors">
+                                                    Admin Panel
+                                                </Link>
+                                            </li>
+                                        )}
                                         <li className="mt-2 pt-2 border-t border-white/5">
                                             <button 
                                                 onClick={onLogout}

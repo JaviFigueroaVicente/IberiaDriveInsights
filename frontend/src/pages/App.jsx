@@ -4,6 +4,7 @@ import Login from './Login'
 import Register from './Register'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Predict from './Predict'
 import { Routes, Route, BrowserRouter, useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { getUserProfile, logoutUser } from '../composables/auth'
 
@@ -68,6 +69,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
+        <Route path="/predict" element={<Predict />} />
         <Route path="*" element={<Error />} />
       </Routes>
       {!hideLogin && <Footer/>}

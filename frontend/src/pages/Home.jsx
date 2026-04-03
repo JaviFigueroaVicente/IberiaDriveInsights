@@ -119,7 +119,7 @@ export default function Home(){
                                 </div>
                                 <h3 className='text-xl font-bold mb-2'>Margen de Confianza</h3>
                                 <p className='text-4xl font-light mb-4'>91.34%</p>
-                                <p className='text-sm'>Intervalo de confianza para modelos de vehículo hasta el año 2018 .</p>
+                                <p className='text-sm'>Intervalo de confianza para modelos de vehículo hasta el año 2018.</p>
                             </div>
                         </div>
                     </div>
@@ -171,7 +171,7 @@ export default function Home(){
                             <p className='text-[#bec8d2]'>Prueba las especificaciones para obtener un resultado estimado.</p>
                         </div>
                         <div>
-                            <Link to='/' className='w-full primary-gradient h-14.5 rounded-0.125rem text-[#00344d] font-bold text-sm flex items-center justify-center gap-2'>
+                            <Link to='/predict' className='w-full primary-gradient h-14.5 rounded-0.125rem text-[#00344d] font-bold text-sm flex items-center justify-center gap-2'>
                                 <button type='buttton' className='flex items-center p-4 gap-2'>
                                     GENERAR EVALUACIÓN
                                     <span className='text-lg'><img src={Bolt} alt='' /></span>

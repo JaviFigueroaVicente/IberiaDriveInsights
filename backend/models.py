@@ -98,3 +98,19 @@ class Version(Base):
     id_modelo = Column(Integer, ForeignKey("models.id"))
 
     models = relationship("Model", back_populates="versions")
+
+class FuelType(Base):
+    __tablename__ = "fuel_types"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String(50), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+class GearType(Base):
+    __tablename__ = "gear_types"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String(50), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
