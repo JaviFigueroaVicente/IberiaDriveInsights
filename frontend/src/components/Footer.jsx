@@ -38,9 +38,14 @@ export default function Footer() {
               <ul className="space-y-4 text-sm text-[#bec8d2] normal-case tracking-normal font-medium">
                 {section.links.map(link => (
                   <li key={link}>
-                    <a href="#" className="hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                      <span className="h-px w-0 bg-(--primary-container) transition-all group-hover:w-3"></span>
-                      {link}
+                    <a href="#" className="hover:text-white transition-colors duration-300 flex items-center group relative">
+                      <div className="w-5 flex items-center shrink-0">
+                        <span className="h-px w-0 bg-(--primary-container) transition-all duration-300 group-hover:w-3 opacity-0 group-hover:opacity-100"></span>
+                      </div>
+                      
+                      <span className="block truncate">
+                        {link}
+                      </span>
                     </a>
                   </li>
                 ))}
@@ -63,8 +68,8 @@ export default function Footer() {
             {[{ id: 'Share', src: Share },
               { id: 'Monitoring', src: Monitoring },
               { id: 'Settings', src: SettingsInputComponent }].map(icon => (
-              <img 
-                key={icon.id} 
+              <img
+                key={icon.id}
                 src={icon.src}
                 alt={icon.id}
                 className="cursor-pointer"
@@ -75,8 +80,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Detalle decorativo de esquina en el footer (opcional para simular el estilo de tarjeta) */}
-      <div className="absolute bottom-0 right-0 h-16 w-16 border-b border-r border-white/10 pointer-events-none"></div>
     </footer>
   );
 }

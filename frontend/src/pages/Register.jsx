@@ -36,82 +36,68 @@ export default function Register() {
     }
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center bg-(--surface) font-['Inter'] text-[#dae2fd] overflow-hidden p-4 md:p-8">
-            {/* Elementos de fondo */}
+        <div className="relative flex min-h-screen items-center justify-center bg-(--surface) text-[#dae2fd] overflow-hidden py-4 px-4 md:px-8">
             <div className="blueprint-grid pointer-events-none absolute inset-0 opacity-40"></div>
             <div className="kinetic-radial pointer-events-none absolute inset-0 opacity-20"></div>
 
-            <main className="z-10 w-full max-w-275 grid grid-cols-1 lg:grid-cols-2 shadow-2xl bg-(--surface-low) border border-white/5 relative overflow-hidden">
+            <main className="z-10 w-full max-w-260 grid grid-cols-1 lg:grid-cols-2 shadow-2xl bg-(--surface-low) border border-white/5 relative overflow-hidden">
                 
-                {/* ESQUINAS DECORATIVAS DEL CONTENEDOR PRINCIPAL */}
-                <div className="absolute -top-1 -left-1 h-12 w-12 border-t-2 border-l-2 border-(--primary-container)/40 z-30"></div>
-                <div className="absolute -bottom-1 -right-1 h-12 w-12 border-b-2 border-r-2 border-(--secondary)/40 z-30"></div>
+                <div className="absolute -top-1 -left-1 h-8 w-8 border-t-2 border-l-2 border-(--primary-container)/40 z-30"></div>
+                <div className="absolute -bottom-1 -right-1 h-8 w-8 border-b-2 border-r-2 border-(--secondary)/40 z-30"></div>
 
-                {/* --- Lado Visual (Branding) --- */}
-                <div className="hidden lg:flex flex-col justify-between p-12 relative border-r border-white/5 overflow-hidden">
-                    {/* Imagen de fondo del panel izquierdo */}
-                    <div className="absolute inset-0 opacity-15 pointer-events-none">
+                {/* --- Lado Visual (Compactado) --- */}
+                <div className="hidden lg:flex flex-col justify-between p-10 relative border-r border-white/5 overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 pointer-events-none">
                         <img src={FotoRegister} alt="" className="w-full h-full object-cover grayscale" />
                     </div>
                     
                     <div className="relative z-20">
-                        <Link to="/" className="flex items-center gap-4 mb-16 group">
-                            <div className="h-10 w-10 p-1 bg-(--primary-container)/20 border border-(--primary-container)/40 rounded-sm group-hover:scale-105 transition-transform">
+                        <Link to="/" className="flex items-center gap-3 mb-8 group">
+                            <div className="h-9 w-9 p-1 bg-(--primary-container)/20 border border-(--primary-container)/40 rounded-sm group-hover:scale-105 transition-transform">
                                 <img src={Logo} alt="Logo" className="w-full h-full object-contain" />
                             </div>
-                            <h1 className="text-xl font-bold tracking-tighter text-white uppercase">
+                            <h1 className="text-lg font-bold tracking-tighter text-white uppercase">
                                 Iberia Drive <span className="text-(--primary-container)">Insights</span>
                             </h1>
                         </Link>
 
-                        <div className="space-y-6 mt-12">
-                            <h2 className="text-5xl font-bold leading-[1.1] tracking-tight text-white uppercase">
+                        <div className="space-y-4 mt-8">
+                            <h2 className="text-4xl font-bold leading-tight tracking-tight text-white uppercase">
                                 Precisión <br />
-                                <span className="text-(--primary-container)">Automoción</span> <br />
-                                IA Predictiva.
+                                <span className="text-(--primary-container)">Automoción</span>
                             </h2>
-                            <p className="max-w-sm font-light leading-relaxed text-[#bec8d2] opacity-80">
-                                Acceso en tiempo real a modelos ML entrenados con datos reales del mercado automotriz ibérico.
+                            <p className="max-w-xs text-xs font-light leading-relaxed text-[#bec8d2] opacity-70">
+                                Modelos ML entrenados con datos del mercado ibérico.
                             </p>
                         </div>
                     </div>
 
-                    {/* Indicadores técnicos */}
-                    <div className="relative z-20 flex flex-col gap-6">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 flex items-center justify-center bg-black/30 rounded-sm border border-white/10 shadow-inner">
-                                <img src={Analytics} className="w-5 h-5 opacity-80" alt="" />
+                    <div className="relative z-20 flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 flex items-center justify-center bg-black/30 rounded-sm border border-white/10">
+                                <img src={Analytics} className="w-4 h-4 opacity-80" alt="" />
                             </div>
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]">Motor de Datos</p>
-                                <p className="text-sm text-white">V1.0 Modelos de ML</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 flex items-center justify-center bg-black/30 rounded-sm border border-white/10 shadow-inner">
-                                <img src={VerifiedUser} className="w-5 h-5 opacity-80" alt="" />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]">Cifrado Neural</p>
-                                <p className="text-sm text-white">Protección HS-256</p>
+                                <p className="text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]">Motor de Datos</p>
+                                <p className="text-xs text-white">V1.0 ML Models</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* --- Lado del Formulario --- */}
-                <div className="bg-(--surface-container) p-8 md:p-12 lg:p-16 flex flex-col justify-center relative">
-                    <div className="mb-10">
-                        <h3 className="text-2xl font-bold text-white mb-2 tracking-tight uppercase">Crear Cuenta</h3>
-                        <p className="text-sm text-[#bec8d2]/70">Despliegue su terminal de diagnóstico personalizado.</p>
+                {/* --- Lado Formulario (Acción principal de reducción) --- */}
+                <div className="bg-(--surface-container) p-6 md:p-10 lg:p-12 flex flex-col justify-center relative">
+                    <div className="mb-6">
+                        <h3 className="text-xl font-bold text-white mb-1 tracking-tight uppercase">Crear Cuenta</h3>
+                        <p className="text-xs text-[#bec8d2]/70">Despliegue su terminal de diagnóstico.</p>
                     </div>
 
-                    <form onSubmit={handleRegister} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Nombre</label>
+                    <form onSubmit={handleRegister} className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Nombre</label>
                                 <input 
-                                    className="input-data-entry w-full" 
+                                    className="input-data-entry w-full py-2.5 text-sm" 
                                     placeholder="Iberia" 
                                     type="text" 
                                     name='name' 
@@ -120,10 +106,10 @@ export default function Register() {
                                     required 
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Apellidos</label>
+                            <div className="space-y-1">
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Apellidos</label>
                                 <input 
-                                    className="input-data-entry w-full" 
+                                    className="input-data-entry w-full py-2.5 text-sm" 
                                     placeholder="Drive Insights" 
                                     type="text" 
                                     name='surname' 
@@ -134,11 +120,11 @@ export default function Register() {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Email Address</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Email Address</label>
                                 <input 
-                                    className="input-data-entry w-full" 
+                                    className="input-data-entry w-full py-2.5 text-sm" 
                                     placeholder="iberia@drive.com" 
                                     type="email" 
                                     name='email' 
@@ -147,10 +133,10 @@ export default function Register() {
                                     required 
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar Email</label>
+                            <div className="space-y-1">
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar Email</label>
                                 <input 
-                                    className="input-data-entry w-full" 
+                                    className="input-data-entry w-full py-2.5 text-sm" 
                                     placeholder="iberia@drive.com" 
                                     type="email" 
                                     name='confirmEmail' 
@@ -161,11 +147,11 @@ export default function Register() {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Contraseña</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Contraseña</label>
                                 <input 
-                                    className="input-data-entry w-full" 
+                                    className="input-data-entry w-full py-2.5 text-sm" 
                                     placeholder="••••••••" 
                                     type="password" 
                                     name='password' 
@@ -174,10 +160,10 @@ export default function Register() {
                                     required 
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar Contraseña</label>
+                            <div className="space-y-1">
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar</label>
                                 <input 
-                                    className="input-data-entry w-full" 
+                                    className="input-data-entry w-full py-2.5 text-sm" 
                                     placeholder="••••••••" 
                                     type="password" 
                                     name='confirmPassword' 
@@ -188,29 +174,29 @@ export default function Register() {
                             </div>
                         </div>
 
-                        <div className="flex items-start gap-3 py-2">
+                        <div className="flex items-start gap-3 py-1">
                             <input 
-                                className="mt-1 w-4 h-4 rounded-sm bg-black/40 border-white/10 text-(--primary-container) focus:ring-0 cursor-pointer" 
+                                className="w-3.5 h-3.5 rounded-sm bg-black/40 border-white/10 text-(--primary-container) focus:ring-0 cursor-pointer" 
                                 id="terms" 
                                 type="checkbox" 
                                 required 
                             />
-                            <label className="text-xs text-[#bec8d2]/80 leading-normal" htmlFor="terms">
-                                Acepto los <Link to="/" className="text-(--secondary) hover:text-(--primary-container) font-bold transition-colors">Términos y Condiciones</Link> de procesamiento de datos del motor predictivo.
+                            <label className="text-[10px] text-[#bec8d2]/80 leading-tight" htmlFor="terms">
+                                Acepto los <Link to="/" className="text-(--secondary) hover:text-(--primary-container) font-bold transition-colors">Términos y Condiciones</Link> del motor predictivo.
                             </label>
                         </div>
 
                         <div className="pt-2">
-                            <button className="btn-primary-engine w-full py-4 flex items-center justify-center gap-3 group" type="submit">
-                                <span className="font-bold tracking-[0.2em] text-xs">REGISTRAR CUENTA</span>
-                                <img src={ArrowRight} alt="" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            <button className="btn-primary-engine w-full py-3.5 flex items-center justify-center gap-3 group" type="submit">
+                                <span className="font-bold tracking-[0.2em] text-[10px]">REGISTRAR CUENTA</span>
+                                <img src={ArrowRight} alt="" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
 
-                        <div className="text-center pt-8 border-t border-white/5">
-                            <p className="text-xs text-[#bec8d2]">
-                                ¿YA TIENES UNA CUENTA? 
-                                <Link className="font-bold ml-2 text-(--secondary) hover:text-white transition-colors uppercase tracking-widest" to="/login">Inicia Sesión</Link>
+                        <div className="text-center pt-4 border-t border-white/5">
+                            <p className="text-[10px] text-[#bec8d2] uppercase tracking-wider">
+                                ¿YA TIENES CUENTA? 
+                                <Link className="font-bold ml-2 text-(--secondary) hover:text-white transition-colors" to="/login">Inicia Sesión</Link>
                             </p>
                         </div>
                     </form>

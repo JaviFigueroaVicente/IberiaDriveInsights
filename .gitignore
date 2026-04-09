@@ -263,3 +263,4 @@ backend/datasets/seed_modelos.csv
 backend/datasets/seed_versiones.csv
 
 CLAUDE.md
+.claudeignore
