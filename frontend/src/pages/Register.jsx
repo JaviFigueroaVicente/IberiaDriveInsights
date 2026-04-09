@@ -33,7 +33,7 @@ export default function Register(){
             // console.log(response);
             navigate('/login')
         }catch(error){
-            console.log(error);
+            // console.log(error);
         }
     }
 

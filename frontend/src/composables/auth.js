@@ -28,7 +28,7 @@ const loginUser = async (email, password) => {
     // console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error("Error 422:", error.response?.data);
+    // console.error("Error 422:", error.response?.data);
     throw error;
   }
 }
@@ -47,7 +47,7 @@ const logoutUser = async () => {
   try {
     const token = localStorage.getItem('token');
     if(!token){
-      console.log('No token found');
+      // console.log('No token found');
       return;
     }
     await apiClient.post('/auth/logout', {}, {
@@ -60,7 +60,7 @@ const logoutUser = async () => {
     // console.log('Logout successful');
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     localStorage.removeItem('token');
     throw error;
   }
@@ -76,22 +76,10 @@ const getUserProfile = async () => {
 };
 
 
-const getPredictions = async () => {
-  const response = await apiClient.get('/cars/');
-  return response.data;
-};
-
-const predictPrice = async (carData) => {
-    const response = await apiClient.post('/cars/predict', carData);
-    return response.data;
-};
-
 export {
   apiClient,
   loginUser,
   registerUser,
   logoutUser,
-  getUserProfile,
-  getPredictions,
-  predictPrice
+  getUserProfile
 }

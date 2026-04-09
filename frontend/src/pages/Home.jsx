@@ -23,13 +23,17 @@ export default function Home(){
                              Arquitecturas avanzadas de Machine Learning para ofrecer las valoraciones más precisas del mercado ibérico con latencia de milisegundos.
                         </p>
                         <div className='flex flex-wrap gap-4'>
-                            <button className='prediciton-button h-14 px-10 font-bold tracking-wide flex items-center gap-3'>
-                                Empezar Predicción
-                                <img src={Trending} alt='' />
-                            </button>
-                            <button className='accuracy-button h-14 px-8 not-[]:text-base font-semibold border-b-2'>
-                                Ver Precisión
-                            </button>
+                            <Link to='/predict'>
+                                <button className='prediciton-button h-14 px-10 font-bold tracking-wide flex items-center gap-3'>
+                                    Empezar Predicción
+                                    <img src={Trending} alt='' />
+                                </button>
+                            </Link>
+                            <Link to='/'>
+                                <button className='accuracy-button h-14 px-8 not-[]:text-base font-semibold border-b-2'>
+                                    Ver Precisión
+                                </button>
+                            </Link>
                         </div>
                     </div>
                     {/* Buscar componenete animado de una gráfica */}

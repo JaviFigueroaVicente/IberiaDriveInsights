@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, List
+from typing import Optional
 from datetime import datetime
 
 
@@ -59,6 +59,32 @@ class CarResponse(BaseModel):
     make: str
     model: str
     price: int
+
+    class Config:
+        from_attributes = True
+
+# Makes
+class MakeResponse(BaseModel):
+    id: int
+    nombre: str
+
+    class Config:
+        from_attributes = True
+
+# Models
+class ModelResponse(BaseModel):
+    id: int
+    nombre: str
+    id_marca: int
+
+    class Config:
+        from_attributes = True
+
+# Versions
+class VersionResponse(BaseModel):
+    id: int
+    nombre: str
+    id_modelo: int
 
     class Config:
         from_attributes = True
