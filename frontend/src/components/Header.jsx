@@ -1,96 +1,119 @@
 import Logo from '../assets/icons/logo.png'
 import { Link } from 'react-router-dom'
-import '../styles/header.css'
 import Perfil from '../assets/icons/perfil.svg'
 import { useState } from 'react'
 
-export default function Header({isAuthenticated, currentUser, onLogout}){
+export default function Header({ isAuthenticated, currentUser, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    return(
-        <header className="flex justify-between border-b border-white/20 py-4 px-3 md:px-6">
-            <div className='flex items-center pl-3'>
-                <Link to='/' className='flex justify-center items-center '>
-                    <img src={Logo} alt="" className="logo w-10 h-10 rounded"/>
-                    <h1 className="pl-2 text-l bold">IBERIA DRIVE <span className="text-[#0EA5E9]">INSIGHTS</span></h1>
+    return (
+        <header className="sticky top-0 z-50 flex items-center justify-between border-b border-white/10 bg-(--surface)/80 backdrop-blur-md py-4 px-4 md:px-10">
+            {/* Sección Logo */}
+            <div className='flex items-center'>
+                <Link to='/' className='flex items-center gap-3 group'>
+                    <div className="h-9 w-9 p-1 bg-(--primary-container)/20 border border-(--primary-container)/40 rounded-sm transition-transform group-hover:scale-105">
+                        <img src={Logo} alt="Logo" className="w-full h-full object-contain" />
+                    </div>
+                    <h1 className="hidden sm:block text-lg font-bold tracking-tighter text-white uppercase">
+                        Iberia Drive <span className="text-(--primary-container)">Insights</span>
+                    </h1>
                 </Link>
             </div>
-            <nav className="relative flex items-center">
-                <div className="md:hidden flex justify-end p-4">
+
+            {/* Navegación Central */}
+            <nav className="flex items-center">
+                {/* Botón Hamburguesa Móvil */}
+                <div className="md:hidden flex justify-end">
                     <button 
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="text-[#BEC8D2] focus:outline-none"
+                        className="text-[#BEC8D2] hover:text-white transition-colors focus:outline-none"
                     >
-                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            {isMenuOpen ? (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            ) : (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                            )}
-                        </svg>
+                        <span className="material-symbols-outlined text-3xl">
+                            {isMenuOpen ? 'close' : 'menu'}
+                        </span>
                     </button>
                 </div>
+
+                {/* Lista de Enlaces */}
                 <ul className={`
                     md:flex md:flex-row md:items-center md:gap-8 md:static md:w-auto md:bg-transparent md:p-0 md:shadow-none
                     ${isMenuOpen ? 'flex' : 'hidden'} 
-                    flex-col absolute top-full left-0 w-100 bg-[#111116] p-6 gap-6 z-50
-                    font-bold text-space tracking-widest navegador
+                    flex-col absolute top-full left-0 w-full bg-[#0d0d12]  p-8 gap-6 z-50
+                    font-bold text-[11px] tracking-[0.2em] uppercase
                 `}>
-                    <li><Link className='link block' to='/predict' onClick={() => setIsMenuOpen(false)}>Predecir</Link></li>
-                    <li><Link className='link block' to='/' onClick={() => setIsMenuOpen(false)}>Análisis</Link></li>
-                    <li><Link className='link block' to='/' onClick={() => setIsMenuOpen(false)}>Modelo</Link></li>
+                    <li><Link className='hover:text-(--primary-container) transition-colors' to='/predict' onClick={() => setIsMenuOpen(false)}>Predecir</Link></li>
+                    <li><Link className='hover:text-(--primary-container) transition-colors' to='/' onClick={() => setIsMenuOpen(false)}>Análisis</Link></li>
+                    <li><Link className='hover:text-(--primary-container) transition-colors' to='/' onClick={() => setIsMenuOpen(false)}>Modelo</Link></li>
                     
                     {isAuthenticated && currentUser && (
-                        <li><Link className='link block' to='/' onClick={() => setIsMenuOpen(false)}>Mis Predicciones</Link></li>
+                        <li><Link className='hover:text-(--primary-container) transition-colors' to='/' onClick={() => setIsMenuOpen(false)}>Mis Predicciones</Link></li>
                     )}
                 </ul>
             </nav>
-            <ul className='flex items-center gap-2 pr-3'>
-                <li className='mr-4 font-bold activo flex items-center'><span className='pr-2'>•</span> SERVICIO ACTIVO</li>
-                <li className="relative list-none">
+
+            {/* Sección Usuario / Status */}
+            <div className='flex items-center gap-6'>
+                {/* Status Indicator (Oculto en móvil pequeño) */}
+                <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-black/20 border border-white/5 rounded-full">
+                    <span className="h-1.5 w-1.5 rounded-full bg-(--secondary) animate-pulse"></span>
+                    <span className="text-[9px] font-bold tracking-widest text-[#bec8d2] uppercase">Servicio Activo</span>
+                </div>
+
+                <div className="relative">
                     {isAuthenticated && currentUser ? (
                         <>
                             <button 
                                 onClick={() => setIsOpen(!isOpen)}
-                                className="flex items-center focus:outline-none active:scale-95 foto-perfil"
+                                className="flex items-center gap-3 focus:outline-none group"
                             >
-                                <img src={Perfil} alt="Perfil" className="h-10 w-10 "/>
+                                <div className="text-right hidden sm:block">
+                                    <p className="text-[10px] font-bold text-[#bec8d2] uppercase tracking-wider">{currentUser.name}</p>
+                                    <p className="text-[8px] text-(--primary-container) font-mono uppercase">Operator</p>
+                                </div>
+                                <div className="h-10 w-10 rounded-full border-2 border-white/10 p-0.5 group-hover:border-(--primary-container) transition-all">
+                                    <img src={Perfil} alt="Perfil" className="h-full w-full rounded-full bg-surface-low"/>
+                                </div>
                             </button>
+
+                            {/* Dropdown del Perfil */}
                             {isOpen && (
                                 <>
                                     <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)}></div>                                    
-                                    <ul className="absolute right-0 mt-3 w-48 bg-[#111116] border border-white/10 rounded shadow-2xl z-20 py-2 animate-in fade-in slide-in-from-top-2">
-                                        <li className="px-4 py-2 border-b border-white/5 mb-2">
-                                            <p className="text-[10px] text-[#606070] font-bold">USUARIO</p>
-                                            <p className="text-sm text-white truncate">{currentUser.name}</p>
+                                    <ul className="absolute right-0 mt-4 w-52 bg-[#0d0d12] border border-white/10 shadow-2xl z-20 py-3 animate-in fade-in zoom-in-95 duration-200">
+                                        {/* Esquinas decorativas en el dropdown */}
+                                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-(--primary-container)/40"></div>
+                                        
+                                        <li className="px-5 py-3 border-b border-white/5 mb-2">
+                                            <p className="text-[9px] text-[#606070] font-bold tracking-widest uppercase">ID de Sistema</p>
+                                            <p className="text-xs text-white font-mono truncate">{currentUser.email || 'USR-404'}</p>
                                         </li>
                                         
                                         <li>
-                                            <Link to="/profile" className="block px-4 py-2 text-sm text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors">
-                                                Mi Perfil
+                                            <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors uppercase tracking-wider">
+                                                <span className="material-symbols-outlined text-sm">person</span> Mi Perfil
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link to="/settings" className="block px-4 py-2 text-sm text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors">
-                                                Configuración
+                                            <Link to="/settings" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors uppercase tracking-wider">
+                                                <span className="material-symbols-outlined text-sm">settings</span> Configuración
                                             </Link>
                                         </li>
-                                        <li>
-                                        </li>
+                                        
                                         {currentUser.role == '1' && (
                                             <li>
-                                                <Link to="/admin" className="block px-4 py-2 text-sm text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors">
-                                                    Admin Panel
+                                                <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold text-(--secondary) hover:bg-(--secondary)/10 transition-colors uppercase tracking-wider">
+                                                    <span className="material-symbols-outlined text-sm">terminal</span> Admin Panel
                                                 </Link>
                                             </li>
                                         )}
-                                        <li className="mt-2 pt-2 border-t border-white/5">
+                                        
+                                        <li className="mt-2 pt-2 border-t border-white/5 px-2">
                                             <button 
-                                                onClick={onLogout}
-                                                className="w-full text-left px-4 py-2 text-sm logout"
+                                                onClick={() => { onLogout(); setIsOpen(false); }}
+                                                className="w-full flex items-center gap-3 px-3 py-2 text-[11px] font-bold text-red-400 hover:bg-red-500/10 rounded transition-all uppercase tracking-wider"
                                             >
-                                                Cerrar Sesión
+                                                <span className="material-symbols-outlined text-sm">logout</span> Cerrar Sesión
                                             </button>
                                         </li>
                                     </ul>
@@ -99,13 +122,13 @@ export default function Header({isAuthenticated, currentUser, onLogout}){
                         </>
                     ) : (
                         <Link to="/login">
-                            <button className="px-6 py-2 font-bold">
+                            <button className="btn-primary-engine h-10 px-6 text-[11px] font-bold tracking-[0.2em] uppercase">
                                 EMPEZAR
                             </button>
                         </Link>
                     )}
-                </li>
-            </ul>
+                </div>
+            </div>
         </header>
     )
 }

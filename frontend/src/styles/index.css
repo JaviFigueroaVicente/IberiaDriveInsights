@@ -16,20 +16,160 @@
 
 h1, h2, h3, h4, h5{
     font-family: 'SpaceGrotesk';
-    color: white;
-    font-weight: bold;
 }
 
-button{
-    background-color: #0EA5E9;    
-    transition: all 0.2s ease-in-out;
+/* ==========================================================================
+   DESIGN SYSTEM: THE PRECISION ENGINE (NATIVE CSS VARIABLES)
+   ========================================================================== */
+:root {
+  /* Colors - The "After Dark" Palette */
+  --surface: #0b1326;
+  --surface-low: #131b2e;
+  --surface-container: #171f33;
+  --surface-high: #222a3d;
+  --surface-highest: #2d3449;
+  --surface-lowest: #060e20;
+  
+  --primary: #89ceff;
+  --primary-container: #0ea5e9;
+  --secondary: #5de6ff;
+  --on-surface: #dae2fd;
+  --on-surface-variant: #bec8d2;
+  
+  /* Typography Authority */
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  
+  /* Spacing & Borders */
+  --radius-default: 0.125rem; /* 2px - Sharp/Industrial */
 }
 
-button:hover{
-    background-color: #22D3EE;
-    cursor: pointer;
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
+body {
+  background-color: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body{
-    background-color: #0F172A;
+/* Material Symbols Config */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ==========================================================================
+   COMPONENT CLASSES (BLUEPRINT SPEC)
+   ========================================================================== */
+
+/* The Kinetic Blueprint Grid */
+.blueprint-grid {
+  background-image: 
+    linear-gradient(to right, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* The "Power" Button: Gradient + Ambient Glow */
+.btn-primary-engine {
+  background: linear-gradient(135deg, var(--primary), var(--primary-container));
+  color: #00344d;
+  font-family: var(--font-headline);
+  font-weight: 700;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-default);
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary-engine:hover {
+  box-shadow: 0 0 35px rgba(14, 165, 233, 0.4);
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-primary-engine:active {
+  transform: translateY(0);
+  filter: brightness(0.9);
+}
+
+/* Input Fields: Data Entry with Precision Underline */
+.input-data-entry {
+  width: 100%;
+  background-color: var(--surface-highest);
+  color: white;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 1rem 1rem 1rem 1rem; /* Adjust padding if icons are used */
+  border-radius: var(--radius-default);
+  outline: none;
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+}
+
+.input-data-entry:focus {
+  background-color: var(--surface-high);
+  border-bottom-color: var(--secondary);
+}
+
+.input-data-entry::placeholder {
+  color: rgba(190, 200, 210, 0.3);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+/* Neural Glow - Ambient Lighting (48px blur per spec) */
+.neural-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: var(--secondary);
+  opacity: 0.08;
+  filter: blur(48px);
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* Data Chips (Technical Specs) */
+.data-chip {
+  background-color: var(--surface-high);
+  color: var(--on-surface-variant);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   UTILITIES & ANIMATIONS
+   ========================================================================== */
+.glass-panel {
+  background: rgba(23, 31, 51, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-system-live {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

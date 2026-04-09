@@ -5,73 +5,141 @@ import Logo from '../assets/icons/logo.png'
 import Lock from '../assets/icons/lock.svg'
 import Email from '../assets/icons/alternate_email.svg'
 import ArrowRight from '../assets/icons/arrow_right.svg'
-import '../styles/login.css'
 
+export default function Login({ onLoginSuccess }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-export default function Login({onLoginSuccess}) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try{
-            const response = await loginUser(email, password);
-            // console.log(response);
-            await onLoginSuccess(response.access_token)
-        }catch(error){
-            console.log(error);
-        }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await loginUser(email, password);
+      await onLoginSuccess(response.access_token);
+    } catch (error) {
+      console.log(error);
     }
+  }
 
-    return (
-        <div className="min-h-screen">
-            <div className="blueprint-grid"></div>
-            <div className="kinetic-radial"></div>
-            <section className="flex flex-col items-center justify-center align-middle relative min-h-screen">
-                <div className="flex flex-col items-start">
-                    <div className="mb-4 pl-2">
-                        <Link to='/' className='flex justify-center items-center '>
-                            <img src={Logo} alt="" className="logo w-14 h-14 rounded"/>
-                            <h1 className="pl-4 text-l bold">IBERIA DRIVE <span className="text-[#0EA5E9]">INSIGHTS</span></h1>
-                        </Link>
-                    </div>
-                    <div className="login-card">
-                        <div className="flex flex-col p-10 md:p-12 align-middle">
-                            <h2 className="text-3xl mb-8">INICIO DE SESIÓN</h2>
-                            <form onSubmit={handleLogin} className="flex flex-col space-y-6">
-                                <div className="space-y-2">
-                                    <label className="block font-label text-[10px] font-semibold" htmlFor="email">DIRECCIÓN E-MAIL</label>
-                                    <div className="form-input relative">
-                                        <img src={Email} alt="" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4"/>
-                                        <input id="email" type="email" placeholder="Email" className="w-full border-none pl-11 pr-4 py-4 transition-all border-b-2 border-transparent" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-                                    </div>
-                                </div>
-                                <div className="space-y-2 relative">
-                                    <div className="flex justify-between">
-                                        <label className="block font-label text-[10px] font-semibold" htmlFor="password">CONTRASEÑA</label>
-                                        <label className='contra-olvidada block font-label text-[10px] font-semibold'><Link to=''>¿OLVIDASTE TU CONTRASEÑA?</Link></label>
-                                    </div>
-                                    <div className="form-input relative">
-                                        <img src={Lock} alt="" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4"/>
-                                        <input id="password" type="password" placeholder="•••••••" className="w-full border-none pl-11 pr-4 py-4 border-b-2 border-transparent" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-                                    </div>
-                                </div>
-                                <button type="submit" className="flex text-center items-center justify-center font-bold py-3 mt-2">
-                                    <span>ENTRAR</span> 
-                                    <img src={ArrowRight} alt="" className="w-7 h-7 pl-1"/>
-                                </button>
-                            </form>
-                            <p className="flex justify-center text-[11px] mt-7">¿No tienes una cuenta?<Link to={'/register'} className='link pl-2'>Regístrate aquí</Link></p>
-                        </div>
-                        <div className="login-card-bottom flex flex-col mt p-6 md:p-7 align-middle">
-                            <p className="flex justify-end text-[11px] mr-3"><span className='pr-1 activo'>•</span>  SERVICIO ACTIVO</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="derechos flex justify-center text-[9px] mt-7">
-                    <p>© 2026 IBERIA DRIVE INSIGHTS. TODOS LOS DERECHOS RESERVADOS</p>
-                </div>
-            </section>
+  return (
+    <div className="relative flex min-h-screen items-center justify-center bg-(--surface) font-['Inter'] text-[#dae2fd] overflow-hidden">
+      {/* Background decorativo */}
+      <div className="blueprint-grid pointer-events-none absolute inset-0 opacity-40"></div>
+      <div className="kinetic-radial pointer-events-none absolute inset-0 opacity-20"></div>
+
+      <main className="z-10 w-full max-w-120 px-6 py-8">
+        {/* Cabecera de Marca */}
+        <div className="mb-8 flex flex-col items-start gap-4">
+          <Link to="/" className="flex items-center gap-4 group">
+            <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-(--primary-container)/20 p-1 border border-(--primary-container)/40 transition-transform group-hover:scale-105">
+              <img src={Logo} alt="Logo" className="w-full h-full object-contain rounded" />
+            </div>
+            <span className="text-2xl font-bold tracking-tighter text-white uppercase">
+              Iberia Drive <span className="text-(--primary-container)">Insights</span>
+            </span>
+          </Link>
+          <div className="h-0.5 w-16 bg-(--primary-container)"></div>
         </div>
-    )
+
+        {/* Tarjeta de Formulario Principal */}
+        <div className="login-card relative bg-(--surface-low) shadow-2xl border border-white/5">
+          {/* ESQUINAS DECORATIVAS REQUERIDAS */}
+          <div className="absolute -top-1 -left-1 h-8 w-8 border-t-2 border-l-2 border-(--primary-container)/40"></div>
+          <div className="absolute -bottom-1 -right-1 h-8 w-8 border-b-2 border-r-2 border-(--secondary)/40"></div>
+
+          <div className="p-10 md:p-12">
+            <div className="mb-10">
+              <h1 className="text-3xl font-bold tracking-tight text-white uppercase">
+                Autenticación
+              </h1>
+              <p className="text-[10px] font-semibold tracking-widest text-[#bec8d2] uppercase"></p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-6">
+              {/* Campo de Email */}
+              <div className="space-y-2">
+                <label className="block text-[10px] font-semibold tracking-widest text-[#bec8d2] uppercase" htmlFor="email">
+                  Dirección E-mail
+                </label>
+                <div className="form-input relative">
+                  <img src={Email} alt="" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60" />
+                  <input 
+                    id="email" 
+                    type="email" 
+                    placeholder="iberia@drive.com" 
+                    className="w-full bg-black/20 border-b border-white/10 pl-11 pr-4 py-4 text-white focus:border-(--primary-container) transition-all outline-none" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required 
+                  />
+                </div>
+              </div>
+
+              {/* Campo de Password */}
+              <div className="space-y-2 relative">
+                <div className="flex justify-between items-end">
+                  <label className="block text-[10px] font-semibold tracking-widest text-[#bec8d2] uppercase" htmlFor="password">
+                    Contraseña
+                  </label>
+                  <Link to='' className="text-[10px] font-bold tracking-wider text-(--secondary) uppercase hover:text-(--primary) transition-colors">
+                    ¿Olvidaste tu contraseña?
+                  </Link>
+                </div>
+                <div className="form-input relative">
+                  <img src={Lock} alt="" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60" />
+                  <input 
+                    id="password" 
+                    type="password" 
+                    placeholder="••••••••••••" 
+                    className="w-full bg-black/20 border-b border-white/10 pl-11 pr-4 py-4 text-white focus:border-(--primary-container) transition-all outline-none" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    required 
+                  />
+                </div>
+              </div>
+
+              {/* Botón de Entrada */}
+              <div className="pt-4">
+                <button type="submit" className="btn-primary-engine w-full flex items-center justify-center gap-2 py-4 font-bold tracking-widest uppercase transition-all">
+                  <span>Entrar</span>
+                  <img src={ArrowRight} alt="" className="w-5 h-5" />
+                </button>
+              </div>
+            </form>
+
+            <p className="flex justify-center text-[11px] mt-8 text-[#bec8d2]">
+              ¿No tienes una cuenta?
+              <Link to={'/register'} className="pl-2 font-bold text-(--secondary) hover:text-(--primary) transition-colors">
+                Regístrate aquí
+              </Link>
+            </p>
+          </div>
+
+          {/* Pie de Tarjeta Técnico (Adaptado del Login Card Bottom) */}
+          <div className="flex items-center justify-between bg-black/20 px-8 py-4 border-t border-white/5">
+            <div className="flex items-center gap-6">
+              <div className="flex flex-col">
+                <span className="text-[8px] text-[#bec8d2] uppercase tracking-tighter">Estado</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-(--secondary) animate-pulse"></span>
+                  <span className="text-[9px] font-bold tracking-widest text-(--secondary) uppercase">Activo</span>
+                </div>
+              </div>
+              <div className="flex flex-col border-l border-[#3e4850]/30 pl-6">
+                <span className="text-[8px] text-[#bec8d2] uppercase tracking-tighter">Encriptado</span>
+                <span className="text-[9px] font-bold text-white">AES-256</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Derechos Reservados */}
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 px-2 md:flex-row opacity-40">
+          <p className="text-[9px] tracking-[0.2em] text-[#bec8d2] uppercase">
+            © 2026 IBERIA DRIVE INSIGHTS // TODOS LOS DERECHOS RESERVADOS
+          </p>
+        </div>
+      </main>
+    </div>
+  )
 }
