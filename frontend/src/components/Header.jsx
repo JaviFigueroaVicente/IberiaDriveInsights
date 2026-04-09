@@ -2,6 +2,10 @@ import Logo from '../assets/icons/logo.png'
 import { Link } from 'react-router-dom'
 import Perfil from '../assets/icons/perfil.svg'
 import { useState } from 'react'
+import Person from '../assets/icons/person.svg'
+import Logout from '../assets/icons/logout.svg'
+import Terminal from '../assets/icons/terminal.svg'
+import Settings from '../assets/icons/settings.svg'
 
 export default function Header({ isAuthenticated, currentUser, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +43,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                 <ul className={`
                     md:flex md:flex-row md:items-center md:gap-8 md:static md:w-auto md:bg-transparent md:p-0 md:shadow-none
                     ${isMenuOpen ? 'flex' : 'hidden'} 
-                    flex-col absolute top-full left-0 w-full bg-[#0d0d12]  p-8 gap-6 z-50
+                    flex-col absolute top-full left-0 w-full p-8 gap-6 z-50
                     font-bold text-[11px] tracking-[0.2em] uppercase
                 `}>
                     <li><Link className='hover:text-(--primary-container) transition-colors' to='/predict' onClick={() => setIsMenuOpen(false)}>Predecir</Link></li>
@@ -91,19 +95,19 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                                         
                                         <li>
                                             <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors uppercase tracking-wider">
-                                                <span className="material-symbols-outlined text-sm">person</span> Mi Perfil
+                                                <img src={Person} alt="Person" /> Mi Perfil
                                             </Link>
                                         </li>
                                         <li>
                                             <Link to="/settings" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold text-[#BEC8D2] hover:bg-white/5 hover:text-white transition-colors uppercase tracking-wider">
-                                                <span className="material-symbols-outlined text-sm">settings</span> Configuración
+                                                <img src={Settings} alt="Settings" /> Configuración
                                             </Link>
                                         </li>
                                         
                                         {currentUser.role == '1' && (
                                             <li>
                                                 <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold text-(--secondary) hover:bg-(--secondary)/10 transition-colors uppercase tracking-wider">
-                                                    <span className="material-symbols-outlined text-sm">terminal</span> Admin Panel
+                                                    <img src={Terminal} alt="Terminal" /> Admin Panel
                                                 </Link>
                                             </li>
                                         )}
@@ -113,7 +117,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                                                 onClick={() => { onLogout(); setIsOpen(false); }}
                                                 className="w-full flex items-center gap-3 px-3 py-2 text-[11px] font-bold text-red-400 hover:bg-red-500/10 rounded transition-all uppercase tracking-wider"
                                             >
-                                                <span className="material-symbols-outlined text-sm">logout</span> Cerrar Sesión
+                                                <img src={Logout} alt="Logout" /> Cerrar Sesión
                                             </button>
                                         </li>
                                     </ul>

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import { predictCar } from '../composables/predict';
+import { predictCar } from '../composables/predict';
 import { getMakes, getModelsByMake, getVersionsByModel, make, model, version } from '../composables/cars';
+import VerifiedUser from '../assets/icons/verified_user.svg'
+import Bolt from '../assets/icons/bolt.svg'
 
 export default function Predict() {
     const navigate = useNavigate();
@@ -88,7 +90,7 @@ export default function Predict() {
                     <div className="space-y-2">
                         <div className="flex items-center gap-3">
                             <span className="h-px w-8 bg-(--secondary)"></span>
-                            <span className="text-[10px] font-bold tracking-[0.3em] text-(--secondary) uppercase">Module: Valuation_Init_v2</span>
+                            <span className="text-[10px] font-bold tracking-[0.3em] text-(--secondary) uppercase">Modulo: Evaluación de Mercado</span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-white uppercase leading-none">
                             Motor de <span className="text-(--primary-container)">Predicción</span>
@@ -206,10 +208,6 @@ export default function Predict() {
                                         <span className="text-[#bec8d2]/60 uppercase">Estado Entrada</span>
                                         <span className="text-white font-mono">{formData.make ? 'DATOS_RECUPERADOS' : 'ESPERANDO...'}</span>
                                     </div>
-                                    <div className="flex justify-between text-[11px]">
-                                        <span className="text-[#bec8d2]/60 uppercase">Nodos Península</span>
-                                        <span className="text-white font-mono">Iberia_v4.2</span>
-                                    </div>
                                 </div>
                             </div>
 
@@ -218,7 +216,7 @@ export default function Predict() {
                                     El cálculo se basará en el análisis de gradiente sobre {selectedVersion.nombre || 'el modelo seleccionado'}.
                                 </p>
                                 <div className="flex items-center gap-2 text-(--primary-container)">
-                                    <span className="material-symbols-outlined text-sm">verified_user</span>
+                                    <img src={VerifiedUser} alt="Verified User" />
                                     <span className="text-[9px] font-bold uppercase tracking-widest">Cifrado de grado industrial</span>
                                 </div>
                             </div>
@@ -230,8 +228,8 @@ export default function Predict() {
                                 disabled={!formData.version}
                                 className={`btn-primary-engine w-full flex items-center justify-center gap-3 py-4 transition-all ${!formData.version ? 'opacity-30 grayscale cursor-not-allowed' : 'hover:scale-[1.02]'}`}
                             >
-                                <span className="tracking-[0.2em] font-bold">EJECUTAR PREDICCIÓN</span>
-                                <span className="material-symbols-outlined text-xl">bolt</span>
+                                <span className="tracking-[0.2em] font-bold">PREDECIR PRECIO</span>
+                                <img src={Bolt} alt="Bolt" />
                             </button>
                             <p className="text-[8px] text-center text-[#bec8d2]/30 uppercase tracking-[0.15em]">
                                 Margen de precisión estimado: ±2.1%

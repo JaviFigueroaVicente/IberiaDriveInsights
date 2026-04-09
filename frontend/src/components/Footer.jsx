@@ -1,3 +1,7 @@
+import Monitoring from '../assets/icons/monitoring.svg'
+import SettingsInputComponent from '../assets/icons/settings_input_component.svg'
+import Share from '../assets/icons/share.svg'
+
 export default function Footer() {
   return (
     <footer className="relative bg-(--surface-lowest) border-t border-white/5 py-16 px-6 md:px-20 overflow-hidden">
@@ -48,21 +52,24 @@ export default function Footer() {
       
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-[#bec8d2]/40 uppercase tracking-[0.2em] font-mono">
         <div className="flex items-center gap-4">
-          <p>© 2026 IBERIA DRIVE INSIGHTS // NODO_CENTRAL_ACTIVO</p>
+          <p>© 2026 IBERIA DRIVE INSIGHTS</p>
           <span className="hidden md:inline text-white/10">|</span>
-          <p className="text-(--secondary) opacity-80">v2.6.4-stable</p>
+          <p className="text-(--secondary) opacity-80">v1.0-Estable</p>
         </div>
 
         <div className="flex gap-8 items-center">
           {/* Iconos sociales/técnicos */}
           <div className="flex gap-6 items-center text-[#bec8d2]/60">
-            {['share', 'monitoring', 'settings_input_component'].map(icon => (
-              <span 
-                key={icon} 
-                className="material-symbols-outlined cursor-pointer hover:text-(--secondary) transition-all duration-300 text-[20px]"
+            {[{ id: 'Share', src: Share },
+              { id: 'Monitoring', src: Monitoring },
+              { id: 'Settings', src: SettingsInputComponent }].map(icon => (
+              <img 
+                key={icon.id} 
+                src={icon.src}
+                alt={icon.id}
+                className="cursor-pointer"
               >
-                {icon}
-              </span>
+              </img>
             ))}
           </div>
         </div>
