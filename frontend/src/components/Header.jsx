@@ -47,11 +47,11 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                     font-bold text-[11px] tracking-[0.2em] uppercase
                 `}>
                     <li><Link className='hover:text-(--primary-container) transition-colors' to='/predict' onClick={() => setIsMenuOpen(false)}>Predecir</Link></li>
-                    <li><Link className='hover:text-(--primary-container) transition-colors' to='/' onClick={() => setIsMenuOpen(false)}>Análisis</Link></li>
-                    <li><Link className='hover:text-(--primary-container) transition-colors' to='/' onClick={() => setIsMenuOpen(false)}>Modelo</Link></li>
+                    <li><Link className='hover:text-(--primary-container) transition-colors' to='/analysis' onClick={() => setIsMenuOpen(false)}>Análisis</Link></li>
+                    <li><Link className='hover:text-(--primary-container) transition-colors' to='/models' onClick={() => setIsMenuOpen(false)}>Modelos</Link></li>
                     
                     {isAuthenticated && currentUser && (
-                        <li><Link className='hover:text-(--primary-container) transition-colors' to='/' onClick={() => setIsMenuOpen(false)}>Mis Predicciones</Link></li>
+                        <li><Link className='hover:text-(--primary-container) transition-colors' to='/profile/my-predictions' onClick={() => setIsMenuOpen(false)}>Mis Predicciones</Link></li>
                     )}
                 </ul>
             </nav>

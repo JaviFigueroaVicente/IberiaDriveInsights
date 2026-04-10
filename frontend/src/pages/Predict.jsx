@@ -81,10 +81,10 @@ export default function Predict() {
     }
 
     return (
-        <div className="min-h-screen bg-(--surface) text-[#dae2fd] p-4 md:p-10 blueprint-grid relative overflow-hidden flex items-center justify-center">
+        <div className="min-h-screen bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid relative overflow-hidden flex items-center justify-center">
             <div className="neural-glow top-0 right-0 opacity-5"></div>
 
-            <main className="z-10 w-full max-w-6xl">
+            <main className="z-10 w-full max-w-7xl">
                 {/* Cabecera */}
                 <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div className="space-y-2">

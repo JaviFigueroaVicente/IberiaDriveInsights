@@ -75,6 +75,54 @@ body {
   background-size: 40px 40px;
 }
 
+
+/* Fondo de rejilla técnica (puntos) */
+.blueprint-grid-dots {
+  background-image: radial-gradient(circle, var(--surface-highest) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* El número con degradado: Corregido para v4 y navegadores modernos */
+.step-number {
+  font-family: var(--font-headline);
+  background: linear-gradient(135deg, var(--primary-container), var(--secondary));
+  background-clip: text;
+  -webkit-background-clip: text; /* Indispensable para Chrome/Edge/Safari */
+  -webkit-text-fill-color: transparent; /* Indispensable para ver el degradado */
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Tarjeta Bento: Borde izquierdo cinético y efectos de cristal */
+.architecture-card {
+  background-color: var(--surface-low);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 4px solid var(--primary-container);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%; /* Asegura que llenen el slot del grid */
+}
+
+.architecture-card:hover {
+  background-color: var(--surface-container);
+  border-left-color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Contenedor de métricas internas */
+.metric-tile {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 0.75rem;
+  border-radius: 2px;
+  transition: border-color 0.2s ease;
+}
+
+.architecture-card:hover .metric-tile {
+  border-color: rgba(93, 230, 255, 0.1);
+}
+
+
 /* The "Power" Button: Gradient + Ambient Glow */
 .btn-primary-engine {
   background: linear-gradient(135deg, var(--primary), var(--primary-container));
@@ -143,6 +191,27 @@ body {
   z-index: 0;
 }
 
+/* index.css adicional */
+
+.architecture-gradient-border {
+  border-left: 2px solid transparent;
+  border-image: linear-gradient(to bottom, var(--secondary), transparent) 1;
+}
+
+.step-number {
+  font-family: var(--font-headline);
+  background: linear-gradient(135deg, var(--primary-container), var(--secondary));
+  
+  background-clip: text;
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(93, 230, 255, 0.2));
+}
+
+.glow-icon {
+  text-shadow: 0 0 15px var(--secondary);
+}
+
 /* Data Chips (Technical Specs) */
 .data-chip {
   background-color: var(--surface-high);
@@ -172,4 +241,16 @@ body {
 
 .animate-system-live {
   animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
+/* Animación de crecimiento de barras */
+@keyframes barGrow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.bar-grow {
+  animation: barGrow 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: bottom;
 }
