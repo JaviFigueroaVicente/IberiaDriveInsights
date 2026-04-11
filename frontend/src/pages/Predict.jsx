@@ -81,7 +81,7 @@ export default function Predict() {
     }
 
     return (
-        <div className="min-h-screen bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid relative overflow-hidden flex items-center justify-center">
+        <div className="min-h-screen bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid relative overflow-hidden flex items-center justify-center mb-6">
             <div className="neural-glow top-0 right-0 opacity-5"></div>
 
             <main className="z-10 w-full max-w-7xl">

@@ -29,24 +29,24 @@ export default function Analysis() {
         
         {/* Header Principal */}
         <header className="mb-12">
-            {/* --- Cuerpo Principal: Título + Widget de Datos --- */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div className="space-y-4">
-                {/* Sub-etiqueta con línea característica */}
-                <div className="flex items-center gap-3">
-                    <span className="h-px w-8 bg-(--secondary)"></span>
-                    <span className="text-[10px] font-bold tracking-[0.3em] text-(--secondary) uppercase">
-                        Módulo: Evaluación de Modelos
-                    </span>
-                </div>
-                
-                {/* Título Principal con Énfasis */}
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-white uppercase leading-none">
-                    Análisis de Modelos & <br />
-                    <span className="text-(--primary-container)">Dashboard de Comparación</span>
-                </h1>
-                </div>
-            </div>
+          {/* --- Cuerpo Principal: Título + Widget de Datos --- */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="space-y-4">
+              {/* Sub-etiqueta con línea característica */}
+              <div className="flex items-center gap-3">
+                  <span className="h-px w-8 bg-(--secondary)"></span>
+                  <span className="text-[10px] font-bold tracking-[0.3em] text-(--secondary) uppercase">
+                      Módulo: Evaluación de Modelos
+                  </span>
+              </div>
+              
+              {/* Título Principal con Énfasis */}
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-white uppercase leading-none">
+                  Análisis de Modelos & <br />
+                  <span className="text-(--primary-container)">Dashboard de Comparación</span>
+              </h1>
+              </div>
+          </div>
         </header>
 
         <div className="grid grid-cols-12 gap-6">

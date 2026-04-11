@@ -9,6 +9,7 @@ import Analysis from './Analysis'
 import Models from './Models'
 import Profile from './profile/Profile'
 import MyPredictions from './profile/MyPredictions'
+import ChangePassword from './profile/ChangePassword'
 import { Routes, Route, BrowserRouter, useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { getUserProfile, logoutUser } from '../composables/auth'
 
@@ -77,8 +78,9 @@ function AppContent() {
         <Route path="/analysis" element={<Analysis />} />
         <Route path="/models" element={<Models />} />
         <Route path="/profile">
-          <Route index element={<Profile />} />
-          <Route path="my-predictions" element={<MyPredictions />} />
+          <Route index element={isAuthenticated ? <Profile currentUser={currentUser}/> : <Navigate to="/login" replace />}/>
+          <Route path="my-predictions" element={isAuthenticated ? <MyPredictions currentUser={currentUser}/> : <Navigate to="/login" replace />} />
+          <Route path="change-password" element={isAuthenticated ? <ChangePassword currentUser={currentUser}/> : <Navigate to="/login" replace />} />
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>

@@ -135,14 +135,14 @@ export default function Models() {
             {/* Encabezado del Pipeline */}
             <div className="flex items-center gap-4 mb-10">
                 <div className="flex flex-col">
-                <span className="text-(--secondary) text-[10px] font-bold uppercase tracking-[0.4em] mb-1">Workflow Terminal</span>
-                <h2 className="text-2xl font-bold font-headline uppercase tracking-tight text-white">Pipeline de Procesamiento</h2>
-                </div>
-                <div className="h-px grow bg-linear-to-r from-white/20 to-transparent"></div>
-                <div className="flex gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <div className="w-2 h-2 rounded-full bg-white/10"></div>
-                <div className="w-2 h-2 rounded-full bg-white/10"></div>
+                  <span className="text-(--secondary) text-[10px] font-bold uppercase tracking-[0.4em] mb-1">Workflow Terminal</span>
+                  <h2 className="text-2xl font-bold font-headline uppercase tracking-tight text-white">Pipeline de Procesamiento</h2>
+                  </div>
+                  <div className="h-px grow bg-linear-to-r from-white/20 to-transparent"></div>
+                  <div className="flex gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <div className="w-2 h-2 rounded-full bg-white/10"></div>
+                  <div className="w-2 h-2 rounded-full bg-white/10"></div>
                 </div>
             </div>
 
@@ -182,27 +182,27 @@ export default function Models() {
                     }
                 ].map((item, index) => (
                     <div key={index} className="bg-(--surface-container)/50 border border-white/5 p-6 rounded-sm relative z-10 group hover:border-(--secondary)/30 transition-all duration-300">
-                    <div className="flex justify-between items-start mb-6">
-                        {/* Contenedor de la Imagen */}
-                        <div className={`w-12 h-12 rounded-xs flex items-center justify-center border transition-all duration-500 ${index === 1 ? 'border-(--secondary) bg-(--secondary)/10' : 'border-white/10'}`}>
-                        <img 
-                            src={item.img} 
-                            alt={item.step} 
-                            className={`w-6 h-6 object-contain transition-all ${index === 1 ? 'brightness-110 drop-shadow-[0_0_8px_rgba(93,230,255,0.6)]' : 'opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-100'}`} 
-                        />
-                        </div>
-                        <span className="font-mono text-[10px] text-white/20 group-hover:text-(--secondary)/40">STEP_{item.id}</span>
-                    </div>
-                    
-                    <h4 className="text-white text-xs font-bold uppercase mb-2 tracking-widest">{item.step}</h4>
-                    <p className="text-[11px] text-(--on-surface-variant) leading-relaxed mb-4 opacity-70 group-hover:opacity-100">
-                        {item.desc}
-                    </p>
+                      <div className="flex justify-between items-start mb-6">
+                          {/* Contenedor de la Imagen */}
+                          <div className={`w-12 h-12 rounded-xs flex items-center justify-center border transition-all duration-500 ${index === 1 ? 'border-(--secondary) bg-(--secondary)/10' : 'border-white/10'}`}>
+                          <img 
+                              src={item.img} 
+                              alt={item.step} 
+                              className={`w-6 h-6 object-contain transition-all ${index === 1 ? 'brightness-110 drop-shadow-[0_0_8px_rgba(93,230,255,0.6)]' : 'opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-100'}`} 
+                          />
+                          </div>
+                          <span className="font-mono text-[10px] text-white/20 group-hover:text-(--secondary)/40">STEP_{item.id}</span>
+                      </div>
+                      
+                      <h4 className="text-white text-xs font-bold uppercase mb-2 tracking-widest">{item.step}</h4>
+                      <p className="text-[11px] text-(--on-surface-variant) leading-relaxed mb-4 opacity-70 group-hover:opacity-100">
+                          {item.desc}
+                      </p>
 
-                    <div className="flex items-center gap-2 pt-4 border-t border-white/5">
-                        <div className={`w-1.5 h-1.5 rounded-full ${index === 0 ? 'bg-green-500' : index === 1 ? 'bg-(--secondary) animate-pulse' : 'bg-white/10'}`}></div>
-                        <span className="text-[8px] font-bold uppercase tracking-tighter opacity-50">{item.status}</span>
-                    </div>
+                      <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                          <div className={`w-1.5 h-1.5 rounded-full ${index === 0 ? 'bg-green-500' : index === 1 ? 'bg-(--secondary) animate-pulse' : 'bg-white/10'}`}></div>
+                          <span className="text-[8px] font-bold uppercase tracking-tighter opacity-50">{item.status}</span>
+                      </div>
                     </div>
                 ))}
                 </div>
@@ -210,29 +210,29 @@ export default function Models() {
 
             {/* --- FOOTER DE ACCIÓN MEJORADO --- */}
             <footer className="mt-20 p-10 border border-(--secondary)/20 bg-linear-to-b from-(--secondary)/5 to-transparent rounded-sm flex flex-col md:flex-row justify-between items-center gap-8">
-                <div className="flex items-center gap-6">
-                    <div className="text-right border-r border-white/10 pr-6 hidden md:block">
-                    <p className="text-[9px] text-white/30 uppercase font-mono leading-none mb-1">System Health</p>
-                    <p className="text-xs text-green-400 font-bold font-mono tracking-tighter uppercase">99.98% Stable</p>
-                    </div>
-                    <div className="max-w-md">
-                    <h3 className="text-white font-bold uppercase text-sm mb-1 tracking-tight">¿Listo para procesar una unidad?</h3>
-                    <p className="text-[11px] text-(--on-surface-variant) uppercase opacity-60">El motor de inferencia está listo para recibir nuevos parámetros.</p>
-                    </div>
-                </div>
-                
-                <div className="flex gap-4">
-                    <Link to="my-predictions">
-                        <button className="border border-white/10 text-white text-[10px] font-bold uppercase px-8 py-4 rounded-xs hover:bg-white/5 transition-all tracking-widest">
-                            Ver Registros
-                        </button>
-                    </Link>
-                    <Link to="/predict">
-                        <button className="bg-(--primary-container) text-black text-[10px] font-bold uppercase px-8 py-4 rounded-xs hover:bg-(--secondary) transition-all tracking-widest shadow-[0_0_25px_rgba(14,165,233,0.4)] hover:scale-105 active:scale-95">
-                            Nueva Valoración VIN
-                        </button>
-                    </Link>
-            </div>
+              <div className="flex items-center gap-6">
+                  <div className="text-right border-r border-white/10 pr-6 hidden md:block">
+                  <p className="text-[9px] text-white/30 uppercase font-mono leading-none mb-1">System Health</p>
+                  <p className="text-xs text-(--secondary) font-bold font-mono tracking-tighter uppercase">99.98% Stable</p>
+                  </div>
+                  <div className="max-w-md">
+                  <h3 className="text-white font-bold uppercase text-sm mb-1 tracking-tight">¿Listo para procesar una unidad?</h3>
+                  <p className="text-[11px] text-(--on-surface-variant) uppercase opacity-60">El motor de inferencia está listo para recibir nuevos parámetros.</p>
+                  </div>
+              </div>
+              
+              <div className="flex gap-4">
+                  <Link to="my-predictions">
+                      <button className="border border-white/10 text-white text-[10px] font-bold uppercase px-8 py-4 rounded-xs hover:bg-white/5 transition-all tracking-widest">
+                          Ver Registros
+                      </button>
+                  </Link>
+                  <Link to="/predict">
+                      <button className="bg-(--primary-container) text-black text-[10px] font-bold uppercase px-8 py-4 rounded-xs hover:bg-(--secondary) transition-all tracking-widest shadow-[0_0_25px_rgba(14,165,233,0.4)] hover:scale-105 active:scale-95">
+                          Nueva Valoración VIN
+                      </button>
+                  </Link>
+              </div>
             </footer>
       </div>
     </div>
