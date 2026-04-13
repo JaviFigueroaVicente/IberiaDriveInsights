@@ -10,7 +10,11 @@ import Models from './Models'
 import Profile from './profile/Profile'
 import MyPredictions from './profile/MyPredictions'
 import ChangePassword from './profile/ChangePassword'
-import { Routes, Route, BrowserRouter, useLocation, useNavigate, Navigate } from 'react-router-dom'
+import AdminDashboard from './admin/AdminDashboard'
+import AdminUsers from './admin/AdminUsers'
+import AdminCars from './admin/AdminCars'
+import Error from './Error'
+import { Routes, Route, BrowserRouter, useLocation, useNavigate, Navigate, Outlet } from 'react-router-dom'
 import { getUserProfile, logoutUser } from '../composables/auth'
 
 function AppContent() {
@@ -77,10 +81,17 @@ function AppContent() {
         <Route path="/predict" element={<Predict />} />
         <Route path="/analysis" element={<Analysis />} />
         <Route path="/models" element={<Models />} />
-        <Route path="/profile">
-          <Route index element={isAuthenticated ? <Profile currentUser={currentUser}/> : <Navigate to="/login" replace />}/>
-          <Route path="my-predictions" element={isAuthenticated ? <MyPredictions currentUser={currentUser}/> : <Navigate to="/login" replace />} />
-          <Route path="change-password" element={isAuthenticated ? <ChangePassword currentUser={currentUser}/> : <Navigate to="/login" replace />} />
+        <Route path="/profile" element={isAuthenticated && currentUser ? <Outlet /> : <Navigate to="/login" replace />}>
+          <Route index element={<Profile currentUser={currentUser} handleLogout={handleLogout}/>} />
+          <Route path="my-predictions" element={<MyPredictions currentUser={currentUser} handleLogout={handleLogout}/>} />
+          <Route path="change-password" element={<ChangePassword currentUser={currentUser} handleLogout={handleLogout}/>} />
+          <Route path="*" element={<Error />} />
+        </Route>
+        <Route path="/admin" element={isAuthenticated && currentUser?.role == 1 ? <Outlet /> : <Navigate to="/login" replace />} >
+          <Route index element={<AdminDashboard currentUser={currentUser} handleLogout={handleLogout}/>} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="cars" element={<AdminCars />} />
+          <Route path="*" element={<Error />} />
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>

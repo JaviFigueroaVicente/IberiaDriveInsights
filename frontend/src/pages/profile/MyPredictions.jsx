@@ -10,7 +10,7 @@ import Share from '../../assets/icons/share.svg';
 import ChevronRight from '../../assets/icons/chevron_right.svg';
 import TrendingUp from '../../assets/icons/trending_up.svg';
 
-export default function MyPredictions({isAuthenticated, currentUser}) {
+export default function MyPredictions({ currentUser, handleLogout}) {
     // 01. Structural Logic: State for predictions and UI controls
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +79,7 @@ export default function MyPredictions({isAuthenticated, currentUser}) {
 
     return (
         <div className="flex items-start min-h-screen bg-(--surface) text-(--on-surface) selection:bg-(--primary-container) selection:text-white">
-            <SideBar />
+            <SideBar currentUser={currentUser} onLogout={handleLogout}/>
             
             <main className="flex-1 flex flex-col min-h-screen relative overflow-hidden p-8 max-w-7xl mx-auto w-full space-y-12">
                 

@@ -4,7 +4,7 @@ import Camera from '../../assets/icons/camera.svg'
 import Verified from '../../assets/icons/verified_check.svg'
 import SubHeaderProfile from '../../components/SubHeaderProfile';
 
-export default function Profile({ isAuthenticated, currentUser }) {
+export default function Profile({ currentUser, handleLogout }) {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -13,7 +13,7 @@ export default function Profile({ isAuthenticated, currentUser }) {
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-(--surface) text-(--on-surface) selection:bg-(--primary-container) selection:text-white">
-            <SideBar />
+            <SideBar currentUser={currentUser} onLogout={handleLogout}/>
             
             {/* Main Content */}
             <main className="flex-1 flex flex-col w-full overflow-x-hidden">

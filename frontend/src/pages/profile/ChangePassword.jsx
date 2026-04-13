@@ -5,7 +5,7 @@ import Sync from '../../assets/icons/sync.svg';
 import SideBar from '../../components/SideBar';
 import SubHeaderProfile from '../../components/SubHeaderProfile';
 
-export default function ChangePassword({ currentUser }) {
+export default function ChangePassword({ currentUser, handleLogout }) {
     const [formData, setFormData] = useState({
         currentPassword: '',
         newPassword: '',
@@ -36,7 +36,7 @@ export default function ChangePassword({ currentUser }) {
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-(--surface) text-(--on-surface) selection:bg-(--primary-container) selection:text-white">
-            <SideBar />
+            <SideBar currentUser={currentUser} onLogout={handleLogout}/>
             
             <main className="flex-1 flex flex-col w-full overflow-x-hidden">
                 <SubHeaderProfile />
