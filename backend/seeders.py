@@ -24,13 +24,13 @@ def generar_seeders():
         df_cars_kaffle = pd.read_csv('datasets/data_clean.csv')
         df_cars_kaffle.to_sql('cars_kaffle', con=engine, if_exists='append', index=False)
 
-        df_makes = pd.read_csv('datasets/seed_marcas.csv')
+        df_makes = pd.read_csv('datasets/seed_marcas_bbdd.csv')
         df_makes.to_sql('makes', con=engine, if_exists='append', index=False)
 
-        df_models = pd.read_csv('datasets/seed_modelos.csv')
+        df_models = pd.read_csv('datasets/seed_modelos_bbdd.csv')
         df_models.to_sql('models', con=engine, if_exists='append', index=False)
         
-        df_versions = pd.read_csv('datasets/seed_versiones.csv')
+        df_versions = pd.read_csv('datasets/seed_versiones_bbdd.csv')
         df_versions.to_sql('versions', con=engine, if_exists='append', index=False)
 
         df_gear_types = pd.read_csv('datasets/seed_gear_types.csv')
