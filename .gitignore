@@ -261,6 +261,9 @@ backend/datasets/data_compramostucoche.csv
 backend/datasets/seed_marcas.csv
 backend/datasets/seed_modelos.csv
 backend/datasets/seed_versiones.csv
+backend/datasets/seed_marcas_bbdd.csv
+backend/datasets/seed_modelos_bbdd.csv
+backend/datasets/seed_versiones_bbdd.csv
 
 CLAUDE.md
 .claudeignore

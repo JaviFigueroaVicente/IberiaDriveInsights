@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
-
+from datetime import date
 
 # Token Models
 class Token(BaseModel):
@@ -39,13 +39,15 @@ class CarBase(BaseModel):
     make: str
     model: str
     version: str
-    months_old: int
+    registration: date
     power: int
-    sale_type: str
     gear_type: str
     fuel_type: str
     kms: int
     price: int
+    is_prediction: bool
+    created_at: datetime
+    updated_at: Optional[datetime]
 
     class Config:
         from_attributes = True

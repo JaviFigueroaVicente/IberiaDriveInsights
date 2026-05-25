@@ -17,6 +17,19 @@ apiClient.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+const car = {
+    id: 0,
+    make: '',
+    model: '',
+    version: '',
+    months_old: 0,
+    power: 0,
+    gear_type: '',
+    fuel_type: '',
+    kms: 0,
+    price: 0
+}
+
 const make = {
     make_id: 0,
     nombre: ''
@@ -34,39 +47,39 @@ const version = {
     id_modelo: 0
 }
 
-const getMake = async (carData) => {
+const getMakes = async () => {
+    const response = await apiClient.get('/cars/make');
+    return response.data;
+};
+
+const getModelsByMake = async(id) => {
+    const response = await apiClient.get(`/cars/make/${id}/models`);
+    return response.data;
+}
+
+const getVersionsByModel = async(id) => {
+    const response = await apiClient.get(`/cars/model/${id}/versions`);
+    return response.data;
+}
+
+
+const getCars = async () => {
     try {
-        const response = await apiClient.get('/cars/make', { params: carData });
+        const response = await apiClient.get('/cars');
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-const getMakes = async () => {
-    const response = await apiClient.get('/cars/make');
-    return response.data;
-};
-
-const getModelsByMake = async (makeId) => {
-    if (!makeId) return [];
-    const response = await apiClient.get(`/cars/make/${makeId}/models`);
-    return response.data;
-};
-
-const getVersionsByModel = async (modelId) => {
-    if (!modelId) return [];
-    const response = await apiClient.get(`/cars/model/${modelId}/versions`);
-    return response.data;
-};
-
 
 export{
     apiClient,
     getMakes,
-    getMake,
     getModelsByMake,
     getVersionsByModel,
+    getCars,
+    car,
     make,
     model,
     version

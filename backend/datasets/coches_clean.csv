@@ -34,9 +34,11 @@ Peugeot,2025-03-01,22630,Automático,Gasolina,136,23999,1.2 Mild-Hybrid,2008,Fal
 Ford,2019-04-01,101231,Manual,Gasolina,100,12999,1.0 EcoBoost,Tourneo courier,False,1
 Fiat,2017-04-01,85727,Automático,Gasolina,70,10599,1.2,500,False,1
 Volkswagen,2018-02-01,118025,Automático,Gasolina,150,20999,1.4 TSI,Touran,False,1
+Toyota,2020-12-01,25844,Automático,Híbrido,220,33299,2.5 Hybrid,Rav 4,False,1
 Volkswagen,2015-05-01,49252,Manual,Gasolina,110,12899,1.2 TSI,Polo,False,1
 Mazda,2023-06-01,32757,Manual,Gasolina,165,29299,2.0 Skyactiv-G Mild-Hybrid,Cx-5,False,1
 Audi,2018-02-01,73186,Automático,Diésel,115,16999,1.6 TDI,A1 sportback,False,1
+Kia,2025-10-01,2952,Automático,Híbrido,239,35499,1.6 Hybrid,Sportage,False,1
 Dacia,2021-12-01,27962,Manual,Gasolina,91,13599,1.0 TCe,Sandero,False,1
 Peugeot,2020-01-01,72459,Manual,Diésel,131,16899,1.5 Blue-HDi,Rifter,False,1
 Citroen,2022-12-01,6098,Automático,Gasolina,181,24099,1.6 PureTech,C5 x,False,1
@@ -61,9 +63,11 @@ Peugeot,2019-11-01,65309,Manual,Gasolina,130,13999,1.2 PureTech,3008,False,1
 Ford,2023-11-01,14920,Manual,Gasolina,125,19299,1.0 EcoBoost Mild-Hybrid,Puma,False,1
 Seat,2020-12-01,68917,Automático,Diésel,177,30599,2.0 TDI,Alhambra,False,1
 Renault,2018-11-01,46569,Manual,Gasolina,140,15799,1.3 TCe,Kadjar,False,1
+Renault,2024-07-01,45199,Automático,Híbrido,200,35299,1.2 Hybrid E-Tech,Rafale,False,1
 Jeep,2022-05-01,20299,Automático,Gasolina,150,19499,1.3 TGDi,Renegade,False,1
 Audi,2016-06-01,110070,Automático,Gasolina,150,16999,1.4 TFSI ACT,A3 sportback,False,1
 Volkswagen,2014-03-01,11948,Manual,Gasolina,90,11899,1.2 TSI,Polo,False,1
+Seat,2022-04-01,62389,Automático,Diésel,150,32899,2.0 TDI,Tarraco,False,1
 Peugeot,2016-03-01,56734,Manual,Gasolina,82,8099,1.2 PureTech,208,False,1
 Peugeot,2019-04-01,57606,Manual,Gasolina,82,10099,1.2 PureTech,208,False,1
 Peugeot,2016-10-01,110356,Manual,Gasolina,110,8099,1.2 PureTech,208,False,1
@@ -154,6 +158,7 @@ Volkswagen,2016-06-01,81079,Automático,Gasolina,280,23599,2.0 TSI,Passat,False,
 Lexus,2019-10-01,145399,Automático,Híbrido,197,26599,NX 300h,Nx-serie,False,1
 BMW,2017-11-01,153507,Automático,Diésel,258,28999,xDrive 30d,X5,False,1
 Opel,2019-07-01,130792,Manual,Gasolina,130,9499,1.2 Turbo,Crossland x,False,1
+Mercedes-Benz,2021-12-01,40258,Automático,Diésel,190,33699,CLA 220 d,Clase cla,False,1
 Peugeot,2018-09-01,96030,Automático,Diésel,180,20799,2.0 Blue-HDi,5008,False,1
 Toyota,2016-09-01,62235,Manual,Gasolina,132,14799,1.6,Verso,False,1
 Ford,2015-09-01,57258,Manual,Gasolina,82,8899,1.25,Fiesta,False,1
@@ -178,6 +183,7 @@ Citroen,2021-08-01,66679,Automático,Híbrido,224,18899,1.6 Plug-in Hybrid,C5 ai
 Fiat,2017-05-01,109088,Automático,Gasolina,70,9399,1.2,500,False,1
 Citroen,2018-02-01,72445,Manual,Diésel,100,11699,1.6 Blue-HDi,C4 cactus,False,1
 Hyundai,2023-09-01,25473,Automático,Gasolina,67,14999,1.0,I10,False,1
+Kia,2025-01-01,19791,Automático,Híbrido,215,35299,1.6 TGDI Hybrid,Sportage,False,1
 DS Automobiles,2020-02-01,77765,Automático,Gasolina,181,21099,1.6 PureTech,Ds7 crossback,False,1
 Peugeot,2017-07-01,133864,Manual,Gasolina,130,10499,1.2 PureTech,3008,False,1
 Peugeot,2019-04-01,86230,Manual,Diésel,130,13699,1.5 Blue-HDi,3008,False,1
@@ -255,6 +261,7 @@ Renault,2019-03-01,107831,Manual,Diésel,116,15499,1.5 BLUE dCi,Kadjar,False,1
 Opel,2021-05-01,58642,Automático,Gasolina,101,12899,1.2 Turbo,Corsa,False,1
 Renault,2018-07-01,96323,Manual,Diésel,110,13299,1.5 dCi Energy,Megane,False,1
 Mercedes-Benz,2016-08-01,105959,Automático,Diésel,135,17799,B 200 d,Clase b,False,1
+Mercedes-Benz,2020-02-01,88709,Automático,Diésel,163,35999,GLC 200 d,Clase glc,False,1
 Peugeot,2020-07-01,45962,Manual,Gasolina,75,10499,1.2 PureTech,208,False,1
 Ford,2019-12-01,76366,Automático,Gasolina,125,15499,1.0 EcoBoost,Focus,False,1
 BMW,2019-06-01,95307,Automático,Diésel,150,21599,318d,Serie 3,False,1
@@ -295,12 +302,14 @@ Mercedes-Benz,2018-03-01,51200,Automático,Diésel,110,17499,B 180 CDI,Clase b,F
 Mercedes-Benz,2023-05-01,23351,Automático,Diésel,150,31499,A 200 d,Clase a,False,1
 BMW,2014-03-01,146552,Automático,Diésel,258,19499,530d,Serie 5,False,1
 Fiat,2022-02-01,65625,Manual,Gasolina,70,9999,1.0 Mild-Hybrid,Panda,False,1
+Kia,2022-07-01,64486,Automático,Híbrido,230,33299,1.6 TGDI Hybrid,Sorento,False,1
 Citroen,2016-06-01,46203,Manual,Gasolina,82,7999,1.2 PureTech,C 3,False,1
 Volkswagen,2020-09-01,125872,Manual,Diésel,95,14199,1.6 TDI,Polo,False,1
 BMW,2020-08-01,71992,Automático,Gasolina,140,24199,sDrive 18i,X2,False,1
 Hyundai,2023-07-01,20674,Automático,Gasolina,101,18999,1.0 T-GDI Mild-Hybrid,I20,False,1
 Hyundai,2016-05-01,124210,Automático,Gasolina,100,11199,1.4,I20,False,1
 Citroen,2021-12-01,51119,Automático,Gasolina,131,16899,1.2 PureTech,C4,False,1
+Toyota,2021-10-01,92298,Automático,Híbrido,306,35999,2.5 Plug-in Hybrid,Rav 4,False,1
 Nissan,2022-07-01,28895,Manual,Gasolina,131,22499,1.3 DIG-T,Townstar,False,1
 Peugeot,2019-06-01,79796,Manual,Gasolina,82,9399,1.2 PureTech,2008,False,1
 Peugeot,2019-10-01,78065,Automático,Diésel,131,20999,1.5 Blue-HDi,5008,False,1
@@ -407,6 +416,7 @@ Peugeot,2015-02-01,153415,Manual,Diésel,150,8999,2.0 Blue-HDi,308,False,1
 Suzuki,2023-04-01,81219,Manual,Gasolina,83,15499,1.2 DualJet Mild-Hybrid,Swift,False,1
 Renault,2018-06-01,56196,Automático,Gasolina,205,18399,1.6 TCe Energy,Megane,False,1
 Toyota,2022-04-01,88370,Automático,Híbrido,122,18699,1.8 Hybrid,Corolla,False,1
+Mercedes-Benz,2023-09-01,84407,Automático,Diésel,150,35599,GLA 200 d,Clase gla,False,1
 Citroen,2016-12-01,94266,Manual,Gasolina,110,9899,1.2 PureTech,Berlingo,False,1
 Ford,2020-06-01,39429,Manual,Diésel,100,16099,1.5 TDCi,Tourneo courier,False,1
 Opel,2020-11-01,43095,Manual,Diésel,102,16599,1.5 CDTI,Combo life,False,1
@@ -431,6 +441,7 @@ Kia,2015-10-01,118522,Manual,Diésel,115,12699,1.7 CRDi,Sportage,False,1
 Nissan,2019-06-01,64213,Automático,Gasolina,159,18499,1.3 DIG-T,Qashqai,False,1
 Citroen,2020-09-01,27410,Manual,Gasolina,110,11299,1.2 PureTech,C3 aircross,False,1
 Seat,2020-03-01,28774,Manual,Gasolina,131,16699,1.5 TSI ACT,León,False,1
+Hyundai,2022-01-01,42562,Manual,Gasolina,280,32599,2.0 T-GDI,I30,False,1
 Opel,2017-01-01,82205,Manual,Diésel,135,12199,1.6 CDTI DPF,Insignia,False,1
 Renault,2018-11-01,59805,Manual,Diésel,110,14499,1.5 dCi Energy,Megane,False,1
 Mazda,2023-06-01,67110,Automático,Gasolina,165,28099,2.0 Skyactiv-G Mild-Hybrid,Cx-5,False,1
@@ -515,6 +526,7 @@ Seat,2021-01-01,76462,Automático,Gasolina,150,20999,1.5 eTSI ACT,León,False,1
 Seat,2024-06-01,22460,Automático,Gasolina,150,23399,1.5 eTSI ACT,León,False,1
 Mercedes-Benz,2022-05-01,78618,Automático,Gasolina,163,32299,GLA 200,Clase gla,False,1
 Opel,2017-06-01,31690,Manual,Gasolina,75,8599,1.0,Karl,False,1
+Volkswagen,2022-02-01,56802,Manual,Diésel,150,32699,2.0 TDI,Tiguan,False,1
 Volkswagen,2015-12-01,156078,Automático,Gasolina,90,10499,1.2 TSI,Polo,False,1
 Audi,2019-01-01,131673,Automático,Diésel,150,22499,35 TDI,A5 sportback,False,1
 Honda,2014-06-01,108099,Manual,Diésel,120,12299,1.6 DTEC,Civic,False,1
@@ -604,6 +616,7 @@ DS Automobiles,2022-03-01,58044,Automático,Gasolina,181,22199,1.6 PureTech,Ds4,
 Hyundai,2022-02-01,14264,Manual,Gasolina,84,15399,1.2,I20,False,1
 BMW,2019-04-01,58480,Automático,Gasolina,192,26599,sDrive 20i,X2,False,1
 Peugeot,2018-03-01,98358,Automático,Diésel,180,17799,2.0 Blue-HDi,3008,False,1
+Audi,2023-09-01,15286,Automático,Diésel,150,32799,35 TDI,Q2,False,1
 Citroen,2019-04-01,70330,Manual,Gasolina,82,8499,1.2 PureTech,C-elysée,False,1
 Ford,2022-06-01,103568,Manual,Diésel,120,16599,1.5 TDCi EcoBlue,Puma,False,1
 Peugeot,2014-12-01,82095,Manual,Diésel,120,9599,1.6 Blue-HDi,3008,False,1
@@ -630,8 +643,10 @@ Mazda,2020-11-01,31227,Manual,Gasolina,121,19399,2.0 Skyactiv-G,Cx-3,False,1
 Volkswagen,2020-08-01,49789,Automático,Gasolina,150,25799,1.5 TSI ACT,Tiguan,False,1
 Citroen,2025-03-01,14335,Automático,Gasolina,136,21099,1.2 PureTech Mild-Hybrid,C4,False,1
 Peugeot,2016-03-01,121131,Manual,Diésel,120,10499,1.6 Blue-HDi,308,False,1
+Audi,2022-06-01,48456,Automático,Diésel,150,34199,35 TDI,Q3,False,1
 Citroen,2021-06-01,34738,Manual,Gasolina,110,11199,1.2 PureTech,C 3,False,1
 Volkswagen,2018-02-01,109107,Automático,Gasolina,95,13699,1.0 TSI,Polo,False,1
+Cupra,2021-02-01,56841,Automático,Gasolina,310,32899,2.0 TSI,Formentor,False,1
 Ford,2017-07-01,103266,Automático,Diésel,180,16499,2.0 TDCi,Mondeo,False,1
 Volkswagen,2015-09-01,77255,Manual,Diésel,110,13499,1.6 TDI,Golf vii,False,1
 Kia,2017-08-01,121351,Manual,Diésel,140,13699,1.7 CRDi,Carens,False,1
@@ -660,6 +675,7 @@ Peugeot,2018-04-01,87654,Manual,Diésel,100,13499,1.6 Blue-HDi,Partner,False,1
 Hyundai,2014-04-01,120409,Manual,Diésel,115,11299,1.7 CRDi,Ix35,False,1
 Skoda,2022-06-01,94376,Automático,Diésel,150,23299,2.0 TDI,Karoq,False,1
 Opel,2016-05-01,88301,Manual,Gasolina,140,11299,1.4 Turbo,Insignia,False,1
+Mercedes-Benz,2019-01-01,54893,Automático,Diésel,170,32799,GLC 220,Clase glc,False,1
 Citroen,2017-04-01,66378,Manual,Gasolina,115,8599,1.6 VTi,C-elysée,False,1
 Mazda,2022-01-01,74783,Automático,Gasolina,121,19799,2.0 Skyactiv-G,Cx-3,False,1
 Peugeot,2017-05-01,110454,Automático,Gasolina,165,15299,1.6 THP,3008,False,1
@@ -754,6 +770,7 @@ Audi,2022-05-01,41248,Automático,Gasolina,150,28699,35 TFSI Mild-Hybrid,A3 spor
 Volvo,2018-07-01,132071,Manual,Gasolina,155,20499,1.5,Xc40,False,1
 Seat,2017-03-01,127971,Manual,Diésel,115,11099,1.6 TDI,León,False,1
 Audi,2019-03-01,121802,Automático,Gasolina,150,23999,35 TFSI,Q3,False,1
+Toyota,2022-04-01,89072,Automático,Híbrido,222,34899,2.5 Hybrid,Rav 4,False,1
 Seat,2022-03-01,51037,Manual,Gasolina,110,18599,1.0 TSI,Ateca,False,1
 Fiat,2016-07-01,121419,Manual,Gasolina,110,10599,1.6,500x,False,1
 DS Automobiles,2019-10-01,140685,Automático,Diésel,180,18799,2.0 Blue-HDi,Ds7 crossback,False,1
@@ -931,6 +948,7 @@ Toyota,2025-08-01,10135,Automático,Híbrido,131,26099,1.5 Hybrid,Yaris,False,1
 Mazda,2017-06-01,58710,Manual,Gasolina,100,14799,1.5,3,False,1
 Audi,2015-10-01,121260,Manual,Diésel,150,15999,2.0 TDI,A3 sportback,False,1
 Citroen,2018-10-01,64316,Manual,Gasolina,82,8499,1.2 PureTech,C 3,False,1
+Toyota,2022-03-01,102451,Automático,Híbrido,306,34499,2.5 Hybrid,Rav 4,False,1
 Seat,2015-08-01,40097,Manual,Gasolina,70,8699,1.2,Ibiza,False,1
 Honda,2023-01-01,40621,Automático,Híbrido,109,20899,1.5 i-MMD Hybrid,Jazz,False,1
 Audi,2022-02-01,132467,Automático,Diésel,200,32299,40 TDI,Q3 sportback,False,1
@@ -941,6 +959,7 @@ Nissan,2017-03-01,98320,Manual,Diésel,110,11599,1.5 Turbodiesel,Juke,False,1
 Toyota,2017-02-01,145081,Manual,Diésel,90,10799,1.4,Auris,False,1
 Peugeot,2020-08-01,86959,Manual,Gasolina,101,11199,1.2 PureTech,208,False,1
 Mitsubishi,2023-06-01,20412,Manual,Gasolina,71,11699,1.2,Space star,False,1
+Toyota,2017-09-01,117640,Manual,Diésel,177,34599,2.8 D-4D,Land cruiser,False,1
 Fiat,2017-02-01,141801,Manual,Diésel,120,11399,1.6 JTDM,500x,False,1
 Ford,2018-04-01,98675,Manual,Gasolina,85,7999,1.2 Ti-VCT,Ka+,False,1
 Mazda,2019-01-01,50077,Automático,Gasolina,150,19499,2.0,Cx-3,False,1
@@ -971,6 +990,7 @@ Alfa Romeo,2017-09-01,82254,Automático,Diésel,150,20899,2.2 JTDM,Stelvio,False
 Peugeot,2020-01-01,75422,Automático,Diésel,131,19699,1.5 Blue-HDi,Rifter,False,1
 Kia,2017-03-01,122475,Manual,Diésel,115,14199,1.7 CRDi,Sportage,False,1
 Mercedes-Benz,2019-06-01,95287,Automático,Gasolina,136,25399,CLA 180,Clase cla,False,1
+Mercedes-Benz,2019-12-01,90521,Automático,Gasolina,211,34699,GLC 200 Mild-Hybrid,Clase glc,False,1
 Kia,2020-09-01,85606,Automático,Híbrido,230,30999,1.6 TGDI Hybrid,Sorento,False,1
 Dacia,2015-05-01,22408,Manual,Gasolina,75,8599,1.2,Sandero,False,1
 BMW,2022-02-01,85587,Automático,Diésel,150,27599,sDrive 18d,X1,False,1
@@ -1010,6 +1030,7 @@ Seat,2017-07-01,100219,Manual,Gasolina,150,14699,1.4 TSI ACT,León,False,1
 Volvo,2021-07-01,92397,Automático,Diésel,197,30099,2.0 B4 Mild-Hybrid,Xc60,False,1
 Opel,2020-04-01,60227,Manual,Gasolina,101,11099,1.2 Turbo,Corsa,False,1
 BMW,2019-11-01,114602,Automático,Diésel,190,24399,420d Gran Coupé,Serie 4,False,1
+Toyota,2022-09-01,68889,Automático,Híbrido,218,32799,2.5 Hybrid,Rav 4,False,1
 Mercedes-Benz,2024-05-01,13632,Automático,Gasolina,136,29999,A 180 Mild-Hybrid,Clase a,False,1
 Nissan,2019-11-01,78226,Manual,Diésel,116,16599,1.5 dCi,Qashqai,False,1
 Audi,2015-04-01,133036,Manual,Diésel,110,13899,1.6 TDI,A3,False,1
@@ -1101,6 +1122,7 @@ Toyota,2019-03-01,88169,Automático,Híbrido,101,15099,1.5 Hybrid,Yaris,False,1
 Nissan,2014-11-01,146080,Manual,Diésel,110,8199,1.5 Turbodiesel,Pulsar,False,1
 Volvo,2020-07-01,68879,Automático,Híbrido,392,31599,2.0 T8 Plug-in Hybrid,Xc60,False,1
 Peugeot,2018-03-01,137585,Manual,Diésel,150,15399,2.0 Blue-HDi,3008,False,1
+Toyota,2024-09-01,3228,Automático,Híbrido,197,34299,2.0 Hybrid,C-hr,False,1
 Citroen,2022-06-01,85670,Automático,Gasolina,131,13999,1.2 PureTech,C4,False,1
 Renault,2020-12-01,50872,Manual,Gasolina,140,15499,1.3 TCe,Megane,False,1
 Mazda,2016-09-01,105203,Manual,Diésel,105,11399,1.5 Diesel,3,False,1
@@ -1129,6 +1151,7 @@ Ford,2023-05-01,80307,Manual,Gasolina,155,18299,1.0 EcoBoost Mild-Hybrid,Focus,F
 DR,2023-12-01,52107,Automático,Híbrido,170,23899,electric drive 125 kW,Mx-30,False,1
 Kia,2022-04-01,43677,Automático,Diésel,193,31599,2.2 CRDi,Sorento,False,1
 Citroen,2016-05-01,134144,Manual,Diésel,120,10899,1.6 Blue-HDi,C4 grand picasso,False,1
+Audi,2022-02-01,49012,Automático,Diésel,150,35199,35 TDI,Q3 sportback,False,1
 Smart,2016-11-01,20191,Automático,Gasolina,90,12799,0.9 Turbo,Forfour,False,1
 Kia,2020-02-01,59662,Manual,Gasolina,132,16399,1.6 GDI,Sportage,False,1
 Toyota,2016-03-01,56176,Manual,Gasolina,115,13099,1.2 Turbo,Auris,False,1
@@ -1219,6 +1242,7 @@ Citroen,2023-03-01,79474,Automático,Gasolina,131,14099,1.2 PureTech,C4 x,False,
 Peugeot,2016-03-01,26947,Automático,Gasolina,70,9899,1.0 VTi,108,False,1
 Renault,2014-09-01,62061,Manual,Gasolina,90,9199,0.9 TCe,Clio,False,1
 Volkswagen,2018-07-01,57294,Manual,Diésel,110,15199,2.0 TDI,Beetle,False,1
+Mercedes-Benz,2022-04-01,80951,Automático,Gasolina,163,33099,GLB 200,Clase glb,False,1
 Ford,2017-07-01,75535,Manual,Gasolina,85,8999,1.1,Fiesta,False,1
 Subaru,2019-09-01,132451,Automático,Gasolina,115,14999,1.6,Xv,False,1
 Dacia,2017-05-01,97692,Automático,Diésel,110,12799,1.5 dCi,Duster,False,1
@@ -1250,11 +1274,13 @@ Hyundai,2021-11-01,58357,Manual,Gasolina,280,32399,2.0 T-GDI,I30,False,1
 Skoda,2016-07-01,108881,Automático,Gasolina,110,10099,1.2 TSI,Fabia,False,1
 Alfa Romeo,2018-10-01,36299,Automático,Gasolina,280,26199,2.0 Turbo,Stelvio,False,1
 Mitsubishi,2022-04-01,64566,Manual,Gasolina,71,11099,1.2,Space star,False,1
+Kia,2023-10-01,63076,Automático,Híbrido,265,35699,1.6 TGDI Plug-in Hybrid,Sorento,False,1
 Mitsubishi,2014-02-01,113954,Automático,Diésel,150,11499,2.2 DI-D,Asx,False,1
 Citroen,2020-12-01,50924,Manual,Gasolina,130,13799,1.2 PureTech,C4 grand spacetourer,False,1
 Ford,2018-04-01,83275,Manual,Gasolina,85,8499,1.2 Ti-VCT,Ka+,False,1
 Seat,2019-01-01,26393,Manual,Gasolina,75,9199,1.0,Mii,False,1
 Peugeot,2017-09-01,137943,Manual,Diésel,100,9499,1.6 Blue-HDi,308,False,1
+BMW,2020-02-01,115766,Automático,Diésel,190,33099,xDrive 20d,X4,False,1
 Ford,2020-12-01,77815,Automático,Híbrido,190,21199,2.5 Hybrid,Kuga,False,1
 Mazda,2019-04-01,56942,Manual,Gasolina,120,16399,2.0,Cx-3,False,1
 Dacia,2022-04-01,58446,Manual,Gasolina,110,17199,1.0 TCe,Jogger,False,1
@@ -1318,6 +1344,7 @@ Mazda,2019-07-01,75178,Automático,Gasolina,122,17699,2.0 Skyactiv-G Mild-Hybrid
 Volkswagen,2019-01-01,89550,Automático,Gasolina,150,25099,1.5 TSI ACT,Tiguan,False,1
 Ford,2019-12-01,45643,Manual,Diésel,120,17099,2.0 TDCi,Kuga,False,1
 Kia,2018-04-01,63916,Manual,Gasolina,100,9999,1.0 TGDI,Picanto,False,1
+Cupra,2025-03-01,16505,Automático,Híbrido,204,34799,1.5 e-HYBRID,León,False,1
 Renault,2014-06-01,25254,Manual,Gasolina,73,8799,1.2,Clio,False,1
 Ford,2018-10-01,147487,Automático,Diésel,180,13599,2.0 TDCi,Mondeo,False,1
 Peugeot,2023-03-01,90443,Automático,Diésel,131,23899,1.5 Blue-HDi,5008,False,1
@@ -1331,6 +1358,7 @@ Opel,2018-06-01,99728,Manual,Gasolina,125,10299,1.4 SIDI Turbo,Astra,False,1
 Lexus,2016-07-01,96457,Automático,Híbrido,223,26399,RC 300h,Rc-serie,False,1
 Peugeot,2019-03-01,82467,Automático,Gasolina,181,17099,1.6 PureTech,3008,False,1
 Seat,2022-07-01,33849,Manual,Gasolina,110,15599,1.0 TSI,Arona,False,1
+Toyota,2022-01-01,45147,Automático,Híbrido,218,34299,2.5 Hybrid,Rav 4,False,1
 Seat,2018-03-01,156274,Manual,Diésel,115,10999,1.6 TDI,León,False,1
 Mazda,2022-09-01,28644,Automático,Gasolina,186,24799,2.0 e-Skyactiv-X Mild-Hybrid,Cx-30,False,1
 Opel,2022-12-01,42638,Manual,Gasolina,75,11399,1.2,Corsa,False,1
@@ -1354,6 +1382,7 @@ Fiat,2019-07-01,29333,Manual,Gasolina,120,12699,1.4 Turbo,Tipo,False,1
 Toyota,2016-09-01,136606,Automático,Híbrido,200,19399,2.5 Hybrid,Rav 4,False,1
 Peugeot,2019-06-01,83179,Manual,Gasolina,130,12699,1.2 PureTech,3008,False,1
 Volkswagen,2019-01-01,34629,Manual,Diésel,115,29299,2.0 TDI,T6 caravelle,False,1
+Toyota,2025-06-01,7756,Automático,Híbrido,140,34999,1.8 Hybrid,Corolla cross,False,1
 Seat,2016-03-01,54656,Manual,Diésel,115,10899,1.6 TDI,Toledo,False,1
 Volvo,2020-06-01,104221,Manual,Diésel,150,20499,2.0 D3,Xc40,False,1
 Citroen,2018-06-01,62353,Manual,Gasolina,82,8299,1.2 PureTech,C 3,False,1
@@ -1413,7 +1442,9 @@ Opel,2021-05-01,30317,Manual,Diésel,100,17499,1.5 CDTI,Combo life,False,1
 Seat,2023-04-01,45618,Manual,Diésel,150,22199,2.0 TDI,Ateca,False,1
 Audi,2017-03-01,122823,Automático,Diésel,190,19899,2.0 TDI,A6,False,1
 Skoda,2018-09-01,49470,Manual,Gasolina,95,10699,1.0 TSI,Fabia,False,1
+Mercedes-Benz,2021-10-01,58126,Automático,Diésel,190,35199,GLA 220 d,Clase gla,False,1
 Hyundai,2022-10-01,56881,Manual,Gasolina,120,16299,1.0 T-GDI Mild-Hybrid,I30,False,1
+Audi,2023-11-01,13440,Automático,Híbrido,204,32899,40 TFSIe,A3 sportback,False,1
 Citroen,2016-03-01,141943,Manual,Diésel,100,7199,1.6 Blue-HDi,C-elysée,False,1
 Citroen,2018-10-01,100206,Automático,Gasolina,110,9899,1.2 PureTech,C 3,False,1
 Volkswagen,2014-08-01,81748,Automático,Diésel,150,16499,2.0 TDI,Golf vii,False,1
@@ -1507,6 +1538,7 @@ Renault,2015-04-01,51219,Automático,Diésel,90,12399,1.5 dCi,Captur,False,1
 Opel,2017-06-01,23238,Manual,Gasolina,90,10399,1.4,Corsa,False,1
 Peugeot,2019-04-01,26631,Automático,Gasolina,72,10499,1.0 VTi,108,False,1
 Seat,2019-10-01,65850,Manual,Gasolina,116,13699,1.0 TSI,Arona,False,1
+Lexus,2024-07-01,2031,Automático,Híbrido,199,32799,UX 300h,Ux-serie,False,1
 BMW,2022-07-01,34636,Automático,Diésel,116,24599,216d Gran Coupe,Serie 2,False,1
 Peugeot,2018-07-01,121738,Automático,Gasolina,225,14099,1.6 PureTech,308,False,1
 Seat,2021-06-01,125136,Automático,Diésel,150,19499,2.0 TDI,León,False,1
@@ -1581,6 +1613,7 @@ Volkswagen,2021-10-01,66204,Automático,Diésel,150,29199,2.0 TDI,Arteon,False,1
 Jeep,2023-04-01,50960,Manual,Gasolina,101,18899,1.2 T-GDI,Avenger,False,1
 Citroen,2016-07-01,71025,Manual,Gasolina,130,9099,1.2 PureTech,C4 picasso,False,1
 Hyundai,2019-05-01,121078,Automático,Diésel,136,14299,1.6 CRDi,Kona,False,1
+BMW,2021-06-01,75686,Automático,Diésel,190,32999,xDrive 20d Mild-Hybrid,X3,False,1
 Kia,2024-11-01,12333,Manual,Gasolina,160,25599,1.6 TGDI,Sportage,False,1
 Ford,2018-03-01,46890,Manual,Gasolina,140,12199,1.0 EcoBoost,Ecosport,False,1
 Citroen,2022-04-01,71387,Manual,Gasolina,110,11899,1.2 PureTech,C3 aircross,False,1
@@ -1626,6 +1659,7 @@ MAN,2019-04-01,137830,Automático,Gasolina,224,16099,1.8 TCe,Talisman,False,1
 Opel,2015-08-01,137227,Manual,Diésel,110,7999,1.6 CDTI DPF,Astra,False,1
 Toyota,2019-09-01,69462,Automático,Híbrido,122,17399,1.8 Hybrid,Corolla,False,1
 Audi,2016-04-01,60912,Automático,Gasolina,190,18799,2.0 TFSI,A4,False,1
+Mercedes-Benz,2023-06-01,29049,Automático,Híbrido,218,33499,CLA 250e,Clase cla,False,1
 Mazda,2017-08-01,86498,Manual,Gasolina,165,18399,2.0,Cx-5,False,1
 Opel,2022-12-01,22830,Manual,Gasolina,101,12299,1.2 Turbo,Corsa,False,1
 BMW,2022-05-01,89255,Automático,Gasolina,185,30499,320i,Serie 3,False,1
@@ -1672,6 +1706,7 @@ MINI,2018-11-01,63187,Automático,Gasolina,102,14999,One,Mini,False,1
 Volkswagen,2019-07-01,87227,Automático,Gasolina,190,25199,2.0 TSI,Tiguan allspace,False,1
 Peugeot,2021-01-01,77819,Manual,Diésel,100,12599,1.5 Blue-HDi,308,False,1
 Opel,2020-10-01,88792,Manual,Diésel,102,12199,1.5 CDTI,Corsa,False,1
+Mercedes-Benz,2020-12-01,120629,Automático,Diésel,195,32899,E 220 d,Clase e,False,1
 Volkswagen,2024-04-01,18500,Manual,Gasolina,116,20499,1.0 TSI,T-cross,False,1
 Peugeot,2019-02-01,82292,Manual,Gasolina,130,9899,1.2 PureTech,2008,False,1
 Audi,2017-05-01,153969,Automático,Diésel,190,18499,2.0 TDI,A4 allroad,False,1
@@ -1698,6 +1733,7 @@ Citroen,2021-05-01,55195,Manual,Gasolina,110,10699,1.2 PureTech,C 3,False,1
 Citroen,2021-10-01,66495,Manual,Gasolina,82,9799,1.2 PureTech,C 3,False,1
 Nissan,2016-10-01,122079,Manual,Gasolina,115,7999,1.2,Pulsar,False,1
 Peugeot,2023-02-01,44932,Automático,Diésel,131,24299,1.5 Blue-HDi,5008,False,1
+Mazda,2022-09-01,25098,Automático,Híbrido,328,34199,2.5 e-Skyactiv Plug-in Hybrid,Cx-60,False,1
 Audi,2018-12-01,122979,Automático,Diésel,190,26599,40 TDI,Q5,False,1
 Peugeot,2015-11-01,63607,Manual,Gasolina,110,8899,1.2 PureTech,2008,False,1
 Mercedes-Benz,2016-02-01,139295,Automático,Diésel,135,13999,B 200 d,Clase b,False,1
@@ -1733,6 +1769,7 @@ MINI,2017-10-01,98185,Manual,Diésel,95,12599,One D,Mini,False,1
 Lexus,2017-08-01,120972,Automático,Híbrido,223,24899,RC 300h,Rc-serie,False,1
 Audi,2016-10-01,144314,Automático,Diésel,150,14799,2.0 TDI,A3 sportback,False,1
 Citroen,2022-10-01,49363,Automático,Gasolina,131,14199,1.2 PureTech,C3 aircross,False,1
+BMW,2021-01-01,149101,Automático,Diésel,190,33099,xDrive 20d Mild-Hybrid,X4,False,1
 Nissan,2016-11-01,64766,Manual,Gasolina,115,11099,1.2,Juke,False,1
 Opel,2015-11-01,79515,Manual,Gasolina,100,7999,1.4 Turbo,Corsa,False,1
 Fiat,2022-04-01,81964,Manual,Gasolina,70,8899,1.0 Mild-Hybrid,Panda,False,1
@@ -1769,6 +1806,7 @@ Kia,2020-02-01,116678,Manual,Gasolina,140,15799,1.4 TGDI,Pro_cee'd,False,1
 Ford,2016-09-01,107156,Manual,Diésel,150,13499,2.0 TDCi,Kuga,False,1
 Fiat,2022-10-01,32720,Manual,Gasolina,70,9999,1.0 Mild-Hybrid,Panda,False,1
 Peugeot,2021-01-01,77259,Manual,Gasolina,101,11899,1.2 PureTech,208,False,1
+BMW,2023-04-01,89086,Automático,Diésel,190,34799,420d Gran Coupe Mild-Hybrid,Serie 4,False,1
 Toyota,2024-05-01,33699,Automático,Híbrido,131,23199,1.5 Hybrid,Yaris,False,1
 Opel,2018-08-01,95026,Manual,Diésel,100,10699,1.6 CDTI DPF,Crossland x,False,1
 Toyota,2019-03-01,138287,Automático,Híbrido,125,17599,1.8 Hybrid,C-hr,False,1
@@ -1778,6 +1816,7 @@ Mazda,2019-03-01,87734,Manual,Gasolina,121,15399,2.0 Skyactiv-G,Cx-3,False,1
 BMW,2018-09-01,125336,Automático,Híbrido,252,23399,530e,Serie 5,False,1
 Citroen,2022-06-01,59593,Manual,Gasolina,82,10499,1.2 PureTech,C 3,False,1
 Mazda,2022-03-01,49684,Manual,Gasolina,184,25999,2.0,Mx-5,False,1
+Mercedes-Benz,2018-02-01,99014,Automático,Diésel,163,34399,V 220 d,Clase v,False,1
 Citroen,2022-07-01,70015,Manual,Gasolina,110,11299,1.2 PureTech,C3 aircross,False,1
 Seat,2022-03-01,74628,Manual,Gasolina,110,13399,1.0 TSI,Ibiza,False,1
 Mazda,2022-03-01,72402,Manual,Gasolina,186,20099,2.0 e-Skyactiv-X Mild-Hybrid,Cx-30,False,1
@@ -1837,6 +1876,7 @@ Volkswagen,2025-07-01,13232,Automático,Gasolina,116,22199,1.0 TSI,Taigo,False,1
 Volkswagen,2014-02-01,130157,Manual,Diésel,105,11099,1.6 TDI,Touran,False,1
 Ford,2023-03-01,38840,Automático,Híbrido,190,25999,2.5 Hybrid,Kuga,False,1
 Toyota,2021-06-01,85064,Automático,Híbrido,122,17999,1.8 Hybrid,Corolla,False,1
+Volkswagen,2023-09-01,52774,Automático,Diésel,150,34699,2.0 TDI,Tiguan,False,1
 Seat,2014-07-01,153116,Manual,Diésel,140,13899,2.0 TDI,Alhambra,False,1
 DS Automobiles,2017-05-01,131211,Automático,Diésel,180,11699,2.0 Blue-HDi,Ds5,False,1
 Peugeot,2015-03-01,87799,Manual,Diésel,92,9099,1.6 HDi,308,False,1
@@ -1871,6 +1911,7 @@ Alfa Romeo,2018-01-01,158535,Automático,Diésel,150,15799,2.2 JTDM,Giulia,False
 Peugeot,2016-07-01,121454,Manual,Diésel,150,10499,2.0 Blue-HDi,308,False,1
 Hyundai,2018-05-01,118318,Manual,Gasolina,120,11499,1.0 TGDI,I30,False,1
 Citroen,2021-04-01,70231,Manual,Diésel,100,16999,1.5 Blue-HDi,Berlingo,False,1
+Mercedes-Benz,2020-09-01,68114,Automático,Diésel,150,32899,GLB 200 d,Clase glb,False,1
 DS Automobiles,2017-08-01,153773,Automático,Diésel,180,11799,2.0 Blue-HDi,Ds5,False,1
 BMW,2020-02-01,96652,Automático,Gasolina,185,25499,520i,Serie 5,False,1
 Peugeot,2014-06-01,145005,Manual,Diésel,115,8199,1.6 HDi,3008,False,1
@@ -1890,12 +1931,14 @@ MG,2025-05-01,11531,Manual,Gasolina,106,14999,1.5 VTi,Zs,False,1
 Skoda,2022-04-01,54760,Automático,Gasolina,150,26099,1.5 TSI ACT,Karoq,False,1
 Nissan,2015-09-01,86406,Manual,Gasolina,115,9799,1.2,Juke,False,1
 Opel,2020-08-01,88233,Automático,Gasolina,130,15199,1.2 Turbo,Grandland x,False,1
+Mercedes-Benz,2020-09-01,99713,Automático,Gasolina,163,32799,GLB 200,Clase glb,False,1
 Audi,2023-08-01,17503,Automático,Gasolina,150,27899,35 TFSI,Q2,False,1
 Citroen,2018-08-01,103924,Manual,Gasolina,82,7999,1.2 PureTech,C 3,False,1
 Ebro,2025-02-01,30030,Automático,Gasolina,147,25799,1.6 TGDI,S700,False,1
 Opel,2020-01-01,79596,Manual,Gasolina,130,13299,1.2 Turbo,Grandland x,False,1
 Citroen,2016-05-01,82163,Manual,Gasolina,110,8099,1.2 PureTech,C4 cactus,False,1
 Citroen,2019-03-01,122912,Manual,Diésel,102,8999,1.5 Blue-HDi,C 3,False,1
+Mercedes-Benz,2022-02-01,40966,Automático,Diésel,150,33399,CLA 200 d,Clase cla,False,1
 BMW,2022-02-01,124070,Automático,Diésel,150,24799,sDrive 18d,X1,False,1
 Skoda,2022-10-01,63294,Manual,Gasolina,95,13199,1.0 TSI,Scala,False,1
 Toyota,2023-03-01,97573,Automático,Híbrido,122,22299,1.8 Hybrid,C-hr,False,1
@@ -1974,11 +2017,13 @@ Audi,2018-08-01,152125,Automático,Diésel,163,19599,2.0 TDI,A4 allroad,False,1
 Mercedes-Benz,2021-12-01,103414,Automático,Diésel,116,23999,A 180 d,Clase a,False,1
 Peugeot,2021-05-01,87306,Manual,Diésel,102,15399,1.5 Blue-HDi,Rifter,False,1
 Mercedes-Benz,2013-12-01,158986,Automático,Diésel,110,10599,B 180 CDI,Clase b,False,1
+Ford,2021-01-01,70962,Automático,Diésel,212,34399,2.0 TDCi,Ranger,False,1
 MINI,2019-04-01,55118,Automático,Gasolina,135,18699,Cooper,Cabrio,False,1
 Dacia,2025-02-01,16753,Automático,Híbrido,141,24599,1.6 Hybrid,Duster,False,1
 Peugeot,2016-04-01,93758,Manual,Gasolina,110,8599,1.2 PureTech,2008,False,1
 Kia,2023-02-01,51777,Automático,Híbrido,182,23299,1.6 Plug-in Hybrid,Niro,False,1
 DS Automobiles,2023-10-01,46361,Automático,Híbrido,299,29399,1.6 E-Tense Hybrid,Ds7,False,1
+Volvo,2022-04-01,115309,Automático,Híbrido,349,35999,2.0 T6 Recharge Plug-in Hybrid,Xc60,False,1
 Citroen,2016-10-01,42444,Manual,Gasolina,110,11299,1.2 PureTech,Berlingo,False,1
 Peugeot,2021-12-01,33754,Manual,Gasolina,131,17399,1.2 PureTech,3008,False,1
 Renault,2020-12-01,57334,Manual,Diésel,150,16399,1.7 BLUE dCi,Scenic,False,1
@@ -2007,6 +2052,7 @@ BMW,2017-12-01,132414,Manual,Diésel,115,14499,116d,Serie 1,False,1
 Hyundai,2020-01-01,48328,Manual,Gasolina,75,10499,1.2,I20,False,1
 Fiat,2015-12-01,22774,Manual,Gasolina,110,10899,1.6,500x,False,1
 Peugeot,2014-12-01,125400,Manual,Diésel,150,9999,2.0 Blue-HDi,5008,False,1
+Mercedes-Benz,2022-02-01,54340,Automático,Diésel,150,32599,CLA 200 d,Clase cla,False,1
 Audi,2021-12-01,78520,Automático,Diésel,150,26199,35 TDI,Q3,False,1
 Nissan,2022-04-01,24141,Automático,Gasolina,92,14299,1.0 IG-T,Micra,False,1
 Peugeot,2025-03-01,7005,Automático,Gasolina,136,23199,1.2 Mild-Hybrid,308,False,1
@@ -2054,7 +2100,9 @@ Seat,2021-02-01,92904,Manual,Gasolina,150,17499,1.5 TSI ACT,Ateca,False,1
 Opel,2018-03-01,103341,Automático,Gasolina,90,9099,1.4,Corsa,False,1
 Dacia,2021-11-01,20757,Manual,Diésel,116,16999,1.5 Blue dCi,Duster,False,1
 Toyota,2023-04-01,9464,Manual,Gasolina,72,13899,1.0,Aygo x,False,1
+Toyota,2022-01-01,61878,Automático,Híbrido,306,33899,2.5 Hybrid,Rav 4,False,1
 Mercedes-Benz,2022-01-01,82153,Automático,Diésel,150,25599,B 200 d,Clase b,False,1
+Skoda,2023-05-01,32151,Automático,Diésel,200,32799,2.0 TDI,Octavia,False,1
 Volkswagen,2019-01-01,52661,Automático,Gasolina,150,24799,1.5 TSI ACT,Tiguan,False,1
 Peugeot,2021-05-01,76669,Automático,Gasolina,131,12599,1.2 PureTech,308,False,1
 Audi,2022-01-01,110082,Automático,Diésel,150,29099,35 TDI,Q3,False,1
@@ -2135,6 +2183,7 @@ MG,2023-04-01,44703,Manual,Gasolina,106,13499,1.5 VTi,Zs,False,1
 Peugeot,2014-01-01,98278,Manual,Gasolina,120,7899,1.6,2008,False,1
 Peugeot,2021-06-01,62664,Automático,Diésel,131,20899,1.5 Blue-HDi,5008,False,1
 Citroen,2019-09-01,58156,Manual,Diésel,102,11499,1.5 Blue-HDi,C3 aircross,False,1
+Cupra,2023-06-01,42300,Automático,Gasolina,300,34799,2.0 TSI,Ateca,False,1
 Toyota,2017-01-01,159162,Automático,Híbrido,197,17399,2.5 Hybrid,Rav 4,False,1
 Honda,2021-03-01,68513,Automático,Híbrido,109,16599,1.5 i-MMD Hybrid,Jazz,False,1
 Audi,2022-02-01,61213,Automático,Diésel,150,30099,35 TDI,Q3,False,1
@@ -2185,6 +2234,7 @@ Volkswagen,2025-04-01,6420,Automático,Gasolina,116,26199,1.5 eTSI,Golf viii,Fal
 BMW,2016-07-01,76583,Automático,Gasolina,135,16099,318i,Serie 3,False,1
 Seat,2020-03-01,75625,Manual,Gasolina,131,14599,1.5 TSI ACT,León,False,1
 Audi,2014-02-01,73362,Manual,Diésel,143,15199,2.0 TDI,A4,False,1
+BMW,2021-12-01,96206,Automático,Diésel,190,32699,xDrive 20d Mild-Hybrid,X3,False,1
 Skoda,2023-01-01,50578,Manual,Gasolina,150,18999,1.5 TSI ACT,Scala,False,1
 Audi,2018-08-01,81051,Manual,Gasolina,95,12899,1.0 TFSI,A1 sportback,False,1
 Jeep,2017-11-01,67966,Manual,Gasolina,140,13999,1.4 M-Air,Compass,False,1
@@ -2255,6 +2305,7 @@ Hyundai,2019-04-01,94075,Manual,Diésel,115,13599,1.6 CRDi,I30,False,1
 Audi,2018-07-01,78030,Manual,Gasolina,95,12999,1.0 TFSI,A1 sportback,False,1
 Audi,2019-10-01,111047,Manual,Gasolina,116,17899,30 TFSI,Q2,False,1
 Suzuki,2019-08-01,2509,Manual,Gasolina,90,13099,1.2 DualJet,Ignis,False,1
+Seat,2024-03-01,54767,Automático,Diésel,150,33199,2.0 TDI,Tarraco,False,1
 Toyota,2021-05-01,31446,Manual,Gasolina,125,15299,1.5 Dual VVT-iE,Yaris,False,1
 Seat,2018-11-01,90751,Manual,Gasolina,150,17399,1.5 TSI ACT,Ateca,False,1
 Renault,2015-06-01,141135,Manual,Diésel,110,7599,1.5 dCi,Fluence,False,1
@@ -2293,6 +2344,7 @@ Hyundai,2022-07-01,106713,Manual,Diésel,136,19499,1.6 CRDi Mild-Hybrid,Tucson,F
 Audi,2014-03-01,154080,Automático,Gasolina,225,14899,2.0 TFSI,A4 allroad,False,1
 Toyota,2017-09-01,70760,Manual,Gasolina,115,12699,1.2 Turbo,Auris,False,1
 MINI,2023-06-01,12552,Automático,Gasolina,178,28199,Cooper S,Cabrio,False,1
+Honda,2024-12-01,13552,Automático,Híbrido,184,35099,2.0 i-MMD Hybrid,Zr-v,False,1
 Volvo,2020-12-01,114538,Automático,Diésel,197,28499,2.0 B4 Mild-Hybrid,Xc60,False,1
 Toyota,2025-08-01,2459,Manual,Gasolina,72,15099,1.0,Aygo x,False,1
 Volkswagen,2020-09-01,32734,Automático,Gasolina,95,15099,1.0 TSI,Polo,False,1
@@ -2309,6 +2361,7 @@ Audi,2019-01-01,111892,Automático,Diésel,190,25599,2.0 TDI,Q5,False,1
 MAN,2016-05-01,138699,Manual,Diésel,110,10299,Cooper D,Countryman,False,1
 Toyota,2022-05-01,71233,Automático,Gasolina,72,13399,1.0,Aygo x,False,1
 Mitsubishi,2018-01-01,135956,Manual,Diésel,115,11699,1.6 DI-D,Asx,False,1
+BMW,2022-09-01,68732,Automático,Diésel,190,34699,520d Mild-Hybrid,Serie 5,False,1
 Volkswagen,2020-07-01,135134,Automático,Diésel,150,22299,2.0 TDI,Tiguan,False,1
 Opel,2015-02-01,136198,Manual,Diésel,110,8099,1.6 CDTI DPF,Astra,False,1
 Peugeot,2022-03-01,30806,Manual,Gasolina,100,13899,1.2 PureTech,2008,False,1
@@ -2439,6 +2492,7 @@ BMW,2021-05-01,50787,Automático,Gasolina,136,22199,sDrive 18i,X1,False,1
 Peugeot,2023-03-01,33923,Manual,Gasolina,101,14799,1.2 PureTech,2008,False,1
 Kia,2020-06-01,105224,Automático,Híbrido,141,16299,1.6 Plug-in Hybrid,Niro,False,1
 MAN,2018-12-01,114598,Automático,Diésel,150,16199,Cooper D,Countryman,False,1
+Skoda,2024-11-01,26813,Automático,Gasolina,265,34199,2.0 TSI,Octavia,False,1
 Kia,2021-05-01,60250,Manual,Gasolina,101,13299,1.0 TGDI Mild-Hybrid,Stonic,False,1
 Peugeot,2021-08-01,30331,Manual,Gasolina,130,13999,1.2 PureTech,2008,False,1
 Hyundai,2018-09-01,157045,Manual,Gasolina,101,7799,1.0 TDGI,I20,False,1
@@ -2576,6 +2630,7 @@ Ford,2018-05-01,124637,Manual,Gasolina,70,6399,1.2 Ti-VCT,Ka+,False,1
 Renault,2019-10-01,71591,Manual,Gasolina,116,11499,1.3 TCe,Megane,False,1
 Volkswagen,2018-06-01,97437,Manual,Gasolina,110,12699,1.0 TSI,Golf vii,False,1
 Skoda,2016-09-01,152808,Automático,Diésel,190,15399,2.0 TDI,Superb,False,1
+Mercedes-Benz,2022-08-01,94321,Automático,Diésel,150,32799,GLB 200 d,Clase glb,False,1
 Opel,2015-03-01,62439,Manual,Gasolina,140,7399,1.4 Turbo,Meriva,False,1
 Toyota,2020-12-01,120191,Automático,Híbrido,184,19299,2.0 Hybrid,C-hr,False,1
 Mercedes-Benz,2019-04-01,113604,Automático,Gasolina,122,18699,GLA 180,Clase gla,False,1
@@ -2686,6 +2741,7 @@ Ford,2020-06-01,93945,Manual,Gasolina,125,14799,1.0 EcoBoost,Focus,False,1
 BMW,2018-06-01,117314,Manual,Diésel,115,15199,sDrive 16d,X1,False,1
 Mercedes-Benz,2024-03-01,31135,Automático,Diésel,190,30799,A 220 d,Clase a,False,1
 Mercedes-Benz,2017-11-01,127146,Automático,Diésel,135,15499,A 200 d,Clase a,False,1
+Hyundai,2023-05-01,37457,Automático,Diésel,177,35199,2.2 CRDi,Staria,False,1
 BMW,2022-02-01,69555,Automático,Diésel,150,30499,sDrive 18d,X1,False,1
 Seat,2018-02-01,109329,Manual,Gasolina,150,13299,1.5 TSI ACT,Ibiza,False,1
 BMW,2014-11-01,119471,Manual,Diésel,143,11699,sDrive 18d,X1,False,1
@@ -2790,8 +2846,10 @@ Renault,2014-10-01,73851,Manual,Diésel,90,9399,1.5 dCi Energy,Captur,False,1
 Audi,2019-03-01,115843,Automático,Diésel,150,17999,35 TDI,A3 limousine,False,1
 Cupra,2020-02-01,89564,Automático,Gasolina,300,24499,2.0 TSI,Ateca,False,1
 Seat,2016-05-01,119017,Manual,Gasolina,110,9299,1.2 TSI,León,False,1
+Mercedes-Benz,2023-11-01,33180,Automático,Híbrido,161,35699,GLA 250e,Clase gla,False,1
 Renault,2015-04-01,73511,Manual,Gasolina,115,8099,1.2,Scenic,False,1
 Opel,2017-04-01,96377,Manual,Gasolina,140,9199,1.4 Turbo,Mokka x,False,1
+Mercedes-Benz,2024-06-01,51136,Automático,Diésel,150,32799,CLA 200 d,Clase cla,False,1
 Peugeot,2019-03-01,67470,Manual,Diésel,102,9699,1.5 Blue-HDi,208,False,1
 Alfa Romeo,2020-02-01,121014,Manual,Gasolina,120,10899,1.4 Turbo,Giulietta,False,1
 Peugeot,2022-12-01,18194,Manual,Diésel,102,13899,1.5 Blue-HDi,208,False,1
@@ -2814,6 +2872,7 @@ Citroen,2021-01-01,43628,Automático,Diésel,120,13599,1.5 Blue-HDi,C3 aircross,
 Ford,2018-07-01,53513,Manual,Gasolina,100,8099,1.0 EcoBoost,B-max,False,1
 Dacia,2019-10-01,66857,Manual,Diésel,95,10699,1.5 Blue dCi,Sandero,False,1
 Citroen,2021-11-01,54085,Automático,Diésel,131,15399,1.5 Blue-HDi,C4,False,1
+Cupra,2024-12-01,31915,Automático,Híbrido,272,34599,1.5 e-HYBRID,Formentor,False,1
 Subaru,2021-11-01,81753,Automático,Gasolina,150,19799,2.0 Mild-Hybrid,Xv,False,1
 Audi,2016-12-01,110958,Manual,Gasolina,150,14899,1.4 TFSI ACT,Q3,False,1
 Skoda,2021-11-01,53943,Automático,Diésel,150,26599,2.0 TDI,Kodiaq,False,1
@@ -2874,6 +2933,7 @@ Audi,2015-10-01,149091,Automático,Diésel,110,14199,1.6 TDI,A3,False,1
 Kia,2018-06-01,75776,Manual,Diésel,115,17399,1.7 CRDi,Sportage,False,1
 Mazda,2019-01-01,65775,Manual,Gasolina,121,16299,2.0 Skyactiv-G,Cx-3,False,1
 Fiat,2018-12-01,37544,Manual,Gasolina,69,10099,1.2,500,False,1
+Renault,2021-09-01,46483,Manual,Diésel,150,34299,2.0 BLUE dCi,Trafic,False,1
 Fiat,2020-07-01,45140,Manual,Gasolina,69,9999,1.0 Mild-Hybrid,500,False,1
 Seat,2019-07-01,69739,Manual,Gasolina,150,15399,1.5 TSI ACT,León,False,1
 Volkswagen,2019-04-01,68844,Manual,Gasolina,116,18799,1.0 TSI,Touran,False,1
@@ -2885,6 +2945,7 @@ Renault,2018-07-01,84909,Manual,Gasolina,132,11899,1.2 TCe Energy,Megane,False,1
 Seat,2019-10-01,30828,Manual,Gasolina,115,12999,1.0 TSI,Ibiza,False,1
 Seat,2015-06-01,35852,Manual,Gasolina,95,9799,1.0 TSI,Ibiza,False,1
 BMW,2017-12-01,110695,Automático,Diésel,190,26299,xDrive 20d,X4,False,1
+Mercedes-Benz,2015-03-01,100067,Automático,Diésel,163,35399,V 220 CDI,Clase v,False,1
 Citroen,2019-07-01,12690,Manual,Gasolina,82,11499,1.2 PureTech,C-elysée,False,1
 Kia,2019-09-01,5060,Manual,Gasolina,67,9999,1.0,Picanto,False,1
 Seat,2017-08-01,34092,Manual,Gasolina,75,9499,1.0,Ibiza,False,1
