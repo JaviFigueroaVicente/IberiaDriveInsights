@@ -3,8 +3,12 @@ from sqlalchemy.orm import Session
 from typing import Annotated, List
 import models
 from database import SessionLocal
-from schemas import CarBase, CarResponse, MakeResponse, ModelResponse, VersionResponse
+from schemas import CarBase, CarResponse, MakeResponse, ModelResponse, VersionResponse, CarPrediction, PredictionResponse, FuelResponse, GearResponse
 from api.auth import get_current_user, get_admin_user
+import joblib
+import pandas as pd
+from datetime import datetime
+import os
 
 router = APIRouter()
 
@@ -33,6 +37,16 @@ async def get_versions(model_id: int, db: db_dependency):
     result = db.query(models.Version).filter(models.Version.id_modelo == model_id).all()
     return result
 
+@router.get("/fuel", response_model=List[FuelResponse])
+async def get_fuels(db: db_dependency):
+    result = db.query(models.FuelType).all()
+    return result
+
+@router.get("/gear", response_model=List[GearResponse])
+async def get_gears(db: db_dependency):
+    result = db.query(models.GearType).all()
+    return result
+
 @router.post("/", response_model=CarResponse)
 async def create_car(car: CarBase, db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
     new_car = models.Car(**car.model_dump(), rep_id=current_user.id)
@@ -58,56 +72,64 @@ async def delete_car(id: int, admin: Annotated[models.User, Depends(get_admin_us
     return {"message": "Coche borrado"}
 
 
+DIR_API = os.path.dirname(os.path.abspath(__file__))
+DIR_BACKEND = os.path.dirname(DIR_API)
 
-import pandas as pd
-import joblib
-from datetime import datetime
-import requests
+PATH_MODELO = os.path.join(DIR_BACKEND, "ai_models", "compra_coches", "modelo_compra_coches_iberia.pkl")
+PATH_TRANSFORMADORES = os.path.join(DIR_BACKEND, "ai_models", "compra_coches", "transformadores.pkl")
 
-# # Cargar el cerebro del proyecto
-# modelo = joblib.load('../ai_models/compra_coches/modelo_compra_coches_iberia.pkl')
-# procesadores = joblib.load('../ai_models/compra_coches/transformadores.pkl')
+try:
+    model = joblib.load(PATH_MODELO)
+    transformadores = joblib.load(PATH_TRANSFORMADORES)
+except Exception as e:
+    print(f"Error al cargar archivos: {e}")
+    model = None
+    transformadores = None
 
-# def preparar_datos(datos):
-#     """Convierte el JSON de la web al formato que entiende el modelo"""
-#     df = pd.DataFrame([datos])
+@router.post("/predict", response_model=CarResponse)
+async def predict_car(car: CarPrediction, db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
+    if not model:
+        raise HTTPException(status_code=404, detail="Modelo no encontrado")
+    if not transformadores:
+        raise HTTPException(status_code=404, detail="Transformadores no encontrados")
     
-#     # 1. Recrear columnas combinadas (igual que en el entrenamiento)
-#     df['model_unique'] = df['make'] + "_" + df['model']
-#     df['version_unique'] = df['model_unique'] + "_" + df['version']
-    
-#     # 2. Transformar categorías a números (usando .transform, NO fit)
-#     df['make_num'] = procesadores['le_make'].transform(df['make'])
-#     df['model_num'] = procesadores['le_model'].transform(df['model_unique'])
-#     df['version_num'] = procesadores['le_version'].transform(df['version_unique'])
-    
-#     # 3. Aplicar OneHotEncoder (cambio y combustible)
-#     encoded_cols = procesadores['oe'].transform(df[['gear_type', 'fuel_type']])
-#     df_encoded = pd.DataFrame(encoded_cols, columns=procesadores['oe'].get_feature_names_out())
-    
-#     # 4. Calcular antigüedad en meses
-#     fecha_reg = pd.to_datetime(datos['registration'])
-#     hoy = datetime.now()
-#     df['antiguedad_meses'] = (hoy.year - fecha_reg.year) * 12 + (hoy.month - fecha_reg.month)
-    
-#     # 5. Unir y ordenar columnas EXACTAMENTE como el modelo espera
-#     # Seleccionamos las columnas numéricas originales + las del OneHot
-#     df_final = pd.concat([df[['kms', 'power', 'make_num', 'model_num', 'version_num', 'antiguedad_meses']], df_encoded], axis=1)
-    
-#     # Reordenar según la lista guardada en el entrenamiento
-#     df_final = df_final[procesadores['features_names']]
-    
-#     return df_final
-
-# @router.post('/predecir')
-# async def predict():
-#         # Recibir datos del formulario web
-#         datos_usuario = requests.json 
-#         # Ejemplo esperado: {"make": "Kia", "model": "cee'd", "version": "1.6 CRDi", ...}
+    try:
+        fecha = pd.to_datetime(car.registration)
+        hoy = datetime.now()
+        antiguedad = (hoy.year - fecha.year) * 12 + (hoy.month - fecha.month)
+        if antiguedad < 0:
+            antiguedad = 0
         
-#         input_modelo = preparar_datos(datos_usuario)
-        
-#         # Realizar predicción
-#         prediccion = modelo.predict(input_modelo)[0]
-        
-#         return prediccion
+        input_dict = {
+            'make': car.make,
+            'model': car.model,
+            'version': car.version,
+            'gear_type': car.gear_type,
+            'fuel_type': car.fuel_type,
+            'power': car.power,
+            'kms': car.kms,
+            'antiguedad_meses': antiguedad
+        }
+
+        columnas_modelo = transformadores['features_names']
+        df_predict = pd.DataFrame([input_dict])[columnas_modelo].astype('int64')
+
+        precio = int(model.predict(df_predict)[0])
+
+        car_bbdd = car.model_dump()
+
+        car_bbdd['price'] = precio
+        car_bbdd['is_prediction'] = True
+
+        new_car = models.Car(**car_bbdd, rep_id=current_user.id)
+
+        db.add(new_car)
+        db.commit()
+        db.refresh(new_car)
+
+        return new_car
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")

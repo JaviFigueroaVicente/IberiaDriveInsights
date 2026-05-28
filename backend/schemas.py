@@ -65,6 +65,20 @@ class CarResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class CarPrediction(BaseModel):
+    make: str
+    model: str
+    version: str
+    registration: date
+    power: int
+    gear_type: str
+    fuel_type: str
+    kms: int
+
+class PredictionResponse(BaseModel):
+    price: int
+
+
 # Makes
 class MakeResponse(BaseModel):
     id: int
@@ -87,6 +101,22 @@ class VersionResponse(BaseModel):
     id: int
     nombre: str
     id_modelo: int
+
+    class Config:
+        from_attributes = True
+
+# Fuel Types
+class FuelResponse(BaseModel):
+    id: int
+    nombre: str
+
+    class Config:
+        from_attributes = True
+
+# Gear Types
+class GearResponse(BaseModel):
+    id: int
+    nombre: str
 
     class Config:
         from_attributes = True

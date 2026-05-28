@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { predictCar } from '../composables/predict';
-import { getMakes, getModelsByMake, getVersionsByModel, make, model, version } from '../composables/cars';
+import { getMakes, getModelsByMake, getVersionsByModel, getFuelTypes, getGearTypes, predictCar, make, model, version, fuel_type, gear_type } from '../composables/cars';
 import VerifiedUser from '../assets/icons/verified_user.svg'
 import Bolt from '../assets/icons/bolt.svg'
 
@@ -22,13 +21,20 @@ export default function Predict() {
     const [makes, setMakes] = useState([]);
     const [models, setModels] = useState([]);
     const [versions, setVersions] = useState([]);
+    const [fuelTypes, setFuelTypes] = useState([]);
+    const [gearTypes, setGearTypes] = useState([]);
 
     const [selectedMake, setSelectedMake] = useState(make);
     const [selectedModel, setSelectedModel] = useState(model);
     const [selectedVersion, setSelectedVersion] = useState(version);
+    const [selectedFuelType, setSelectedFuelType] = useState(fuel_type);
+    const [selectedGearType, setSelectedGearType] = useState(gear_type);
+
 
     useEffect(() => {
         getMakes().then(setMakes).catch(console.error);
+        getFuelTypes().then(setFuelTypes).catch(console.error);
+        getGearTypes().then(setGearTypes).catch(console.error);
     }, []);
 
     useEffect(() => {
@@ -68,15 +74,25 @@ export default function Predict() {
             const found = versions.find(v => v.id === parseInt(value));
             if (found) setSelectedVersion({ version_id: found.id, nombre: found.nombre, id_modelo: found.id_modelo });
         }
+        if (name === 'fuel_type') {
+            const found = fuelTypes.find(f => f.id === parseInt(value));
+            if (found) setSelectedFuelType({ fuel_id: found.id, nombre: found.nombre });
+        }
+        if (name === 'gear_type') {
+            const found = gearTypes.find(g => g.id === parseInt(value));
+            if (found) setSelectedGearType({ gear_id: found.id, nombre: found.nombre });
+        }
     }
 
     const handlePredict = async (e) => {
         e.preventDefault();
         try {
-            await predictCar(formData);
-            navigate('/login');
+            const result = await predictCar(formData);
+            console.log('Predicción completada:', result);
+            navigate('/');
         } catch (error) {
             console.error("Error en la predicción", error);
+            alert(error.response?.data?.detail || 'Error al procesar el coche');
         }
     }
 
@@ -173,18 +189,14 @@ export default function Predict() {
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest">Combustible</label>
                                     <select name="fuel_type" value={formData.fuel_type} onChange={handleChange} className="input-data-entry w-full">
                                         <option value="">Tipo...</option>
-                                        <option value="Petrol">Gasolina</option>
-                                        <option value="Diesel">Diesel</option>
-                                        <option value="Electric">Eléctrico</option>
-                                        <option value="Hybrid">Híbrido</option>
+                                        {fuelTypes.map(f => <option key={f.id} value={f.id}>{f.nombre}</option>)}
                                     </select>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest">Transmisión</label>
                                     <select name="gear_type" value={formData.gear_type} onChange={handleChange} className="input-data-entry w-full">
                                         <option value="">Tipo...</option>
-                                        <option value="Manual">Manual</option>
-                                        <option value="Automatic">Automático</option>
+                                        {gearTypes.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
                                     </select>
                                 </div>
                                 <div className="space-y-2">

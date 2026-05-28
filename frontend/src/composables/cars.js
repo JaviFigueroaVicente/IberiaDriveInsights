@@ -47,6 +47,16 @@ const version = {
     id_modelo: 0
 }
 
+const fuel_type = {
+    fuel_id: 0,
+    nombre: ''
+}
+
+const gear_type = {
+    gear_id: 0,
+    nombre: ''
+}
+
 const getMakes = async () => {
     const response = await apiClient.get('/cars/make');
     return response.data;
@@ -62,6 +72,15 @@ const getVersionsByModel = async(id) => {
     return response.data;
 }
 
+const getGearTypes = async() => {
+    const response = await apiClient.get('/cars/gear');
+    return response.data;
+}
+
+const getFuelTypes = async() => {
+    const response = await apiClient.get('/cars/fuel');
+    return response.data;
+}
 
 const getCars = async () => {
     try {
@@ -72,15 +91,28 @@ const getCars = async () => {
     }
 };
 
+const predictCar = async (carData) => {
+    try {
+        const response = await apiClient.post('/cars/predict', carData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
 export{
     apiClient,
     getMakes,
     getModelsByMake,
     getVersionsByModel,
+    getGearTypes,
+    getFuelTypes,
     getCars,
+    predictCar,
     car,
     make,
     model,
-    version
+    version,
+    fuel_type,
+    gear_type
 }
