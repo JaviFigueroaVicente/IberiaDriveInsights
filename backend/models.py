@@ -26,17 +26,21 @@ class CarKaffle(Base):
 
     rep = relationship("User", back_populates="cars_kaffle")
 
+# Car Model Principal (Administración)
 class Car(Base):
     __tablename__ = "cars"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    make = Column(String(50), nullable=False)
-    model = Column(String(50), nullable=False)
-    version = Column(String(100), nullable=False)
+    
+    # Mantener como Integers (IDs que apuntan a los maestros)
+    make = Column(Integer, nullable=False)
+    model = Column(Integer, nullable=False)
+    version = Column(Integer, nullable=False)
+    gear_type = Column(Integer, nullable=False)
+    fuel_type = Column(Integer, nullable=False)
+    
     registration = Column(Date, nullable=False)
     power = Column(Integer, nullable=False)
-    gear_type = Column(String(30), nullable=False)
-    fuel_type = Column(String(30), nullable=False)
     kms = Column(Integer, nullable=False)
     price = Column(Integer, nullable=False)
     is_prediction = Column(Boolean, default=False)
@@ -44,7 +48,14 @@ class Car(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     rep_id = Column(Integer, ForeignKey("users.id"))
-
+    
+    # SOLUCIÓN: Especificar 'primaryjoin' de forma explícita para evitar la ausencia de FK físicas
+    make_rel = relationship("Make", primaryjoin="Car.make == Make.id", foreign_keys=[make])
+    model_rel = relationship("Model", primaryjoin="Car.model == Model.id", foreign_keys=[model])
+    version_rel = relationship("Version", primaryjoin="Car.version == Version.id", foreign_keys=[version])
+    gear_rel = relationship("GearType", primaryjoin="Car.gear_type == GearType.id", foreign_keys=[gear_type])
+    fuel_rel = relationship("FuelType", primaryjoin="Car.fuel_type == FuelType.id", foreign_keys=[fuel_type])
+    
     rep = relationship("User", back_populates="cars")
 
 

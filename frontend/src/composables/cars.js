@@ -20,9 +20,12 @@ apiClient.interceptors.request.use((config) => {
 const car = {
     id: 0,
     make: '',
+    make_name: '',
     model: '',
+    model_name: '',
     version: '',
-    months_old: 0,
+    version_name: '',
+    registration: '',
     power: 0,
     gear_type: '',
     fuel_type: '',
@@ -31,21 +34,34 @@ const car = {
 }
 
 const make = {
-    make_id: 0,
+    id: 0,
     nombre: ''
 }
 
 const model = {
-    model_id: 0,
+    id: 0,
     nombre: '',
     id_marca: 0
 }
 
 const version = {
-    version_id: 0,
+    id: 0,
     nombre: '',
     id_modelo: 0
 }
+
+// Función para obtener el nombre descriptivo de la make, model o version desde el objeto car
+const getMakeName = (car) => {
+    return car.make_name || car.make || '';
+};
+
+const getModelName = (car) => {
+    return car.model_name || car.model || '';
+};
+
+const getVersionName = (car) => {
+    return car.version_name || car.version || '';
+};
 
 const fuel_type = {
     fuel_id: 0,
@@ -100,6 +116,24 @@ const predictCar = async (carData) => {
     }
 };
 
+const updateCar = async(id,carData)=>{
+    try {
+        const response = await apiClient.put(`/cars/${id}`, carData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const deleteCar = async(id)=>{
+    try {
+        const response = await apiClient.delete(`/cars/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export{
     apiClient,
     getMakes,
@@ -109,6 +143,8 @@ export{
     getFuelTypes,
     getCars,
     predictCar,
+    updateCar,
+    deleteCar,
     car,
     make,
     model,

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from datetime import datetime
 from datetime import date
@@ -120,3 +120,41 @@ class GearResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class CarAdmin(BaseModel):
+    id: int
+    make: int
+    model: int
+    version: int
+    registration: date
+    power: int
+    gear_type: int
+    fuel_type: int
+    kms: int
+    price: int
+    is_prediction: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    
+    # Inyección automática de objetos usando las relaciones definidas en models.py
+    make_info: MakeResponse = Field(..., alias="make_rel")
+    model_info: ModelResponse = Field(..., alias="model_rel")
+    version_info: VersionResponse = Field(..., alias="version_rel")
+    gear_info: GearResponse = Field(..., alias="gear_rel")
+    fuel_info: FuelResponse = Field(..., alias="fuel_rel")
+    user: User = Field(..., alias="rep")
+
+    class Config:
+        from_attributes = True
+        populate_by_name = True
+
+class CarUpdate(BaseModel):
+    make: int
+    model: int
+    version: int
+    registration: date
+    power: int
+    gear_type: int
+    fuel_type: int
+    kms: int
+    price: int
