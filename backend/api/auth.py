@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from typing import Annotated
+from typing import Annotated, List
 import jwt
 from jwt.exceptions import InvalidTokenError
+from datetime import datetime
 
 import models, security, schemas
+from schemas import UserCreate, UserResponseWithCars, UserUpdate
 from database import SessionLocal
 
 router = APIRouter()
@@ -15,6 +17,7 @@ def get_db():
     db = SessionLocal()
     try: yield db
     finally: db.close()
+
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)], 
     db: Session = Depends(get_db)
@@ -40,7 +43,7 @@ async def get_current_user(
 async def get_admin_user(
     current_user: Annotated[models.User, Depends(get_current_user)]
 ):
-    if current_user.role != "admin":
+    if current_user.role != 1:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, 
             detail="No tienes permisos de administrador para esta acción"
@@ -88,3 +91,63 @@ async def read_users_me(
 @router.post("/logout")
 async def logout():
     return {"message": "Logout successful"}
+
+@router.get("/users", response_model=List[UserResponseWithCars])
+async def get_users(
+    db: Session = Depends(get_db), 
+    current_user: models.User = Depends(get_admin_user)
+):
+    users_data = db.query(models.User).all()
+    return users_data
+
+
+@router.put("/users/{user_id}", response_model=UserResponseWithCars)
+async def update_user(
+    user_id: int,
+    user_update: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_admin_user)
+):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="Identidad no encontrada en el sistema")
+    
+    # Actualizar campos dinámicamente
+    update_data = user_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        if key == "password":
+            db_user.password = security.get_password_hash(value)
+            continue
+        else:
+            if hasattr(user_update, key):
+                setattr(db_user, key, value)
+                continue
+        setattr(db_user, key, value)
+        
+    db_user.updated_at = datetime.now()
+    
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+@router.delete("/users/{user_id}", status_code=200)
+async def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_admin_user)
+):
+    """
+    Revoca el acceso y elimina de forma definitiva una identidad del sistema.
+    """
+    if user_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Protocolo denegado: No puedes auto-eliminar tu propia identidad raíz")
+
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="Identidad no encontrada")
+    
+    db.delete(db_user)
+    db.commit()
+    
+    return {"detail": f"Identidad USR-{user_id} revocada y eliminada correctamente"}

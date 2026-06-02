@@ -75,11 +75,42 @@ const getUserProfile = async () => {
   }
 };
 
+const getUsers = async () => {
+  try {
+    const response = await apiClient.get('/auth/users');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Actualizar los datos o el rol jerárquico de un usuario por su UID
+const updateUser = async (id, userData) => {
+  try {
+    const response = await apiClient.put(`/auth/users/${id}`, userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Eliminar/dar de baja un operario del sistema
+const deleteUser = async (id) => {
+  try {
+    const response = await apiClient.delete(`/auth/users/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   apiClient,
   loginUser,
   registerUser,
   logoutUser,
-  getUserProfile
+  getUserProfile,
+  getUsers,
+  updateUser,
+  deleteUser
 }

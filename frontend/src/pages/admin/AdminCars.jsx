@@ -285,7 +285,7 @@ export default function AdminCars({ currentUser, handleLogout }) {
     );
 
     return (
-        <div className="min-h-screen bg-(--surface) flex flex-col lg:flex-row overflow-x-hidden">
+        <div className="min-h-screen bg-(--surface) flex flex-col md:flex-row">
             <AdminSideBar currentUser={currentUser} handleLogout={handleLogout} />
 
             <main className="flex-1 bg-(--surface) p-4 sm:p-6 lg:p-8 overflow-y-auto relative scrollbar-hide w-full">

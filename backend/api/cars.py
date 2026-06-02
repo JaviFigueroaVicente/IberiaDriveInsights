@@ -47,29 +47,8 @@ async def get_gears(db: db_dependency):
     result = db.query(models.GearType).all()
     return result
 
-@router.post("/", response_model=CarResponse)
-async def create_car(car: CarBase, db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
-    new_car = models.Car(**car.model_dump(), rep_id=current_user.id)
-    db.add(new_car)
-    db.commit()
-    db.refresh(new_car)
-    return new_car
-
-@router.get("/", response_model=List[CarAdmin])
-async def get_cars(db: db_dependency):
-    cars_data = db.query(models.Car).options(
-        joinedload(models.Car.make_rel),
-        joinedload(models.Car.model_rel),
-        joinedload(models.Car.version_rel),
-        joinedload(models.Car.gear_rel),
-        joinedload(models.Car.fuel_rel),
-        joinedload(models.Car.rep)
-    ).all()
-    return cars_data
-
 @router.get("/{car_id}", response_model=CarResponse)
 async def get_cars(car_id: int, db: db_dependency):
-    # Obtener makes, models, versions por nombre
     makes_data = db.query(models.Make).all()
     make_dict = {m.nombre: m.nombre for m in makes_data}
 
@@ -92,12 +71,33 @@ async def get_cars(car_id: int, db: db_dependency):
         "version": version_dict.get(car.version, car.version) if car.version else car.version
     }
 
+# Funciones de administrador 
+@router.post("/", response_model=CarResponse)
+async def create_car(car: CarBase, db: db_dependency, current_user: Annotated[models.User, Depends(get_admin_user)]):
+    new_car = models.Car(**car.model_dump(), rep_id=current_user.id)
+    db.add(new_car)
+    db.commit()
+    db.refresh(new_car)
+    return new_car
+
+@router.get("/", response_model=List[CarAdmin])
+async def get_cars(db: db_dependency, current_user: Annotated[models.User, Depends(get_admin_user)]):
+    cars_data = db.query(models.Car).options(
+        joinedload(models.Car.make_rel),
+        joinedload(models.Car.model_rel),
+        joinedload(models.Car.version_rel),
+        joinedload(models.Car.gear_rel),
+        joinedload(models.Car.fuel_rel),
+        joinedload(models.Car.rep)
+    ).all()
+    return cars_data
+
 @router.put("/{car_id}", response_model=CarResponse)
 async def update_car(
     car_id: int, 
-    car_data: CarUpdate,  # Reutiliza CarPrediction si envías los mismos datos sin el ID en el cuerpo, o usa el esquema que prefieras
+    car_data: CarUpdate,
     db: db_dependency, 
-    current_user: Annotated[models.User, Depends(get_current_user)]  # Protegido para administradores
+    current_user: Annotated[models.User, Depends(get_admin_user)]
 ):
     # Buscar el coche existente en la base de datos
     db_car = db.query(models.Car).filter(models.Car.id == car_id).first()
@@ -113,7 +113,7 @@ async def update_car(
     if hasattr(car_data, 'price'):
         db_car.price = car_data.price
 
-    db_car.updated_at = datetime.now() # Actualiza el timestamp si tu modelo lo soporta
+    db_car.updated_at = datetime.now()
 
     db.commit()
     db.refresh(db_car)
@@ -124,7 +124,7 @@ async def update_car(
 async def delete_car(
     car_id: int, 
     db: db_dependency, 
-    current_user: Annotated[models.User, Depends(get_current_user)]  # Protegido para administradores
+    current_user: Annotated[models.User, Depends(get_admin_user)]
 ):
     # Buscar el coche existente en la base de datos
     db_car = db.query(models.Car).filter(models.Car.id == car_id).first()
@@ -152,6 +152,7 @@ except Exception as e:
     model = None
     transformadores = None
 
+# Función de predicción
 @router.post("/predict", response_model=CarResponse)
 async def predict_car(car: CarPrediction, db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
     if not model:

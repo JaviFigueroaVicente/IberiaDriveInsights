@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from datetime import date
 
@@ -28,10 +28,20 @@ class UserCreate(BaseModel):
     name: str
     surname: str
 
+class UserUpdate(BaseModel):
+    email: EmailStr
+    name: str
+    surname: str
+    password: str
+    role: int
+
+    class Config:
+        from_attributes = True
+
 class UserInDB(User):
     password: str
     created_at: datetime
-    updted_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 # Cars
 class CarBase(BaseModel):
@@ -158,3 +168,14 @@ class CarUpdate(BaseModel):
     fuel_type: int
     kms: int
     price: int
+
+class UserResponseWithCars(BaseModel):
+    id: int
+    email: EmailStr
+    name: str
+    surname: str
+    role: int
+    cars: List[CarResponse] = [] # Relación mapeada de SQLAlchemy
+
+    class Config:
+        from_attributes = True
