@@ -21,13 +21,13 @@ export default function UserRegistry({ currentUser, handleLogout }) {
     // Estados para el Modal Matricial de Identidad
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
-    const [backupPassword, setBackupPassword] = useState(""); // Almacena el hash antiguo temporalmente
+    const [backupPassword, setBackupPassword] = useState("");
     const [formData, setFormData] = useState({
         email: "",
         password: "",
         name: "",
         surname: "",
-        role: 2 // Por defecto BASIC_USER
+        role: 2
     });
 
     const Toast = Swal.mixin({

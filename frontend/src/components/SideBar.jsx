@@ -85,17 +85,17 @@ export default function SideBar({ currentUser, handleLogout }) {
                         <p className="text-[9px] text-[#606070] uppercase mb-1 font-bold">System Link</p>
                         <div className="flex items-center gap-2">
                             <div className="h-1.5 w-1.5 rounded-full bg-(--secondary) animate-pulse"></div>
-                            <p className="text-[10px] text-white font-mono uppercase tracking-widest">Active_Session</p>
+                            <p className="text-[10px] text-white font-mono uppercase tracking-widest">Activo</p>
                         </div>
                     </div>
                     
                     <NavLink to='/predict' onClick={() => setIsOpen(false)} className="block">
-                        <button className="w-full bg-linear-to-br from-(--primary-container) to-(--primary) text-white font-bold text-[10px] py-3.5 rounded-sm shadow-lg hover:brightness-105 transition-all flex items-center justify-center gap-2 uppercase tracking-widest">
+                        <button className="w-full bg-linear-to-br from-(--primary-container) to-(--primary) text-white font-bold text-[10px] py-3.5 rounded-sm shadow-lg hover:brightness-105 transition-all flex items-center justify-center gap-2 uppercase tracking-widest cursor-pointer">
                             PREDECIR <img src={Bolt} alt="Bolt" className="w-3.5"/>
                         </button>
                     </NavLink>
 
-                    <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-(--on-surface-variant) border border-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all rounded-sm">
+                    <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-(--on-surface-variant) border border-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all rounded-sm cursor-pointer">
                         <img src={LogoutRed} alt="Logout" className="w-3.5 opacity-60" />
                         Cerrar Sesión
                     </button>

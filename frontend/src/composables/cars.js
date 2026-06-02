@@ -134,6 +134,17 @@ const deleteCar = async(id)=>{
     }
 }
 
+
+// Perfil
+const getMyCars = async() => {
+    try {
+        const response = await apiClient.get('/cars/my-cars');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export{
     apiClient,
     getMakes,
@@ -145,6 +156,7 @@ export{
     predictCar,
     updateCar,
     deleteCar,
+    getMyCars,
     car,
     make,
     model,

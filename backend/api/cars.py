@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session, joinedload
 from typing import Annotated, List
 import models
 from database import SessionLocal
-from schemas import CarBase, CarResponse, MakeResponse, ModelResponse, VersionResponse, CarPrediction, CarUpdate, FuelResponse, GearResponse, CarAdmin
+from schemas import CarBase, CarResponse, MakeResponse, ModelResponse, VersionResponse, CarPrediction, CarUpdate, FuelResponse, GearResponse, CarAdmin, MyPredictions
 from api.auth import get_current_user, get_admin_user
 import joblib
 import pandas as pd
@@ -47,6 +47,23 @@ async def get_gears(db: db_dependency):
     result = db.query(models.GearType).all()
     return result
 
+
+# Funciones de perfil
+@router.get("/my-cars", response_model=List[MyPredictions])
+async def get_my_cars(db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
+    cars_data = db.query(models.Car).filter(
+        models.Car.rep_id == current_user.id
+    ).options(
+        joinedload(models.Car.make_rel),
+        joinedload(models.Car.model_rel),
+        joinedload(models.Car.version_rel),
+        joinedload(models.Car.gear_rel),
+        joinedload(models.Car.fuel_rel)
+    ).all()
+    
+    return cars_data
+
+
 @router.get("/{car_id}", response_model=CarResponse)
 async def get_cars(car_id: int, db: db_dependency):
     makes_data = db.query(models.Make).all()
@@ -70,6 +87,7 @@ async def get_cars(car_id: int, db: db_dependency):
         "model": model_dict.get(car.model, car.model) if car.model else car.model,
         "version": version_dict.get(car.version, car.version) if car.version else car.version
     }
+
 
 # Funciones de administrador 
 @router.post("/", response_model=CarResponse)

@@ -68,8 +68,9 @@ class CarCreate(CarBase):
 
 class CarResponse(BaseModel):
     id: int
-    make: str
-    model: str
+    make: int
+    model: int
+    version: int
     price: int
 
     class Config:
@@ -175,7 +176,31 @@ class UserResponseWithCars(BaseModel):
     name: str
     surname: str
     role: int
-    cars: List[CarResponse] = [] # Relación mapeada de SQLAlchemy
+    cars: List[CarResponse] = []
 
     class Config:
         from_attributes = True
+
+
+class MyPredictions(BaseModel):
+    id: int
+    make: int
+    model: int
+    version: int
+    registration: date
+    power: int
+    gear_type: int
+    fuel_type: int
+    kms: int
+    price: int
+    
+    # Inyección automática de objetos usando las relaciones definidas en models.py
+    make_info: MakeResponse = Field(..., alias="make_rel")
+    model_info: ModelResponse = Field(..., alias="model_rel")
+    version_info: VersionResponse = Field(..., alias="version_rel")
+    gear_info: GearResponse = Field(..., alias="gear_rel")
+    fuel_info: FuelResponse = Field(..., alias="fuel_rel")
+
+    class Config:
+        from_attributes = True
+        populate_by_name = True

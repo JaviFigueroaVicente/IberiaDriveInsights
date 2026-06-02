@@ -110,19 +110,18 @@ async def update_user(
 ):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if not db_user:
-        raise HTTPException(status_code=404, detail="Identidad no encontrada en el sistema")
+        raise HTTPException(status_code=404, detail="Usuario no encontrado en el sistema")
     
-    # Actualizar campos dinámicamente
     update_data = user_update.model_dump(exclude_unset=True)
+    
+    if "password" in update_data:
+        password_value = update_data.pop("password")
+        if password_value is not None and str(password_value).strip() != "":
+            db_user.password = security.get_password_hash(password_value)
+    
     for key, value in update_data.items():
-        if key == "password":
-            db_user.password = security.get_password_hash(value)
-            continue
-        else:
-            if hasattr(user_update, key):
-                setattr(db_user, key, value)
-                continue
-        setattr(db_user, key, value)
+        if hasattr(db_user, key):
+            setattr(db_user, key, value)
         
     db_user.updated_at = datetime.now()
     
@@ -137,9 +136,6 @@ async def delete_user(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_admin_user)
 ):
-    """
-    Revoca el acceso y elimina de forma definitiva una identidad del sistema.
-    """
     if user_id == current_user.id:
         raise HTTPException(status_code=400, detail="Protocolo denegado: No puedes auto-eliminar tu propia identidad raíz")
 
