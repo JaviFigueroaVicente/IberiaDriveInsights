@@ -5,9 +5,9 @@ from typing import Annotated, List
 import jwt
 from jwt.exceptions import InvalidTokenError
 from datetime import datetime
-
+from security import verify_password, get_password_hash
 import models, security, schemas
-from schemas import UserCreate, UserResponseWithCars, UserUpdate
+from schemas import UserCreate, UserResponseWithCars, UserUpdate, ProfileUpdate, UserResponse, PasswordUpdate
 from database import SessionLocal
 
 router = APIRouter()
@@ -82,11 +82,71 @@ async def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(db_user)
     return db_user
 
-@router.get("/me", response_model=schemas.User)
+@router.get("/me", response_model=UserResponse)
 async def read_users_me(
     current_user: Annotated[models.User, Depends(get_current_user)]
 ):
     return current_user
+
+@router.put("/me", response_model=schemas.User)
+async def update_user_me(
+    profile_data: ProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    try:
+        # 1. Modificar únicamente los campos permitidos en el objeto del usuario actual
+        current_user.name = profile_data.name
+        current_user.surname = profile_data.surname
+        
+        # 2. Persistir los cambios en la base de datos
+        db.add(current_user)
+        db.commit()
+        db.refresh(current_user)  # Recarga las relaciones y datos frescos (como cars, role, etc.)
+        
+        return current_user
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error interno al actualizar el perfil: {str(e)}"
+        )
+
+@router.put("/me/change-password")
+async def change_password(
+    password_data: PasswordUpdate,
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(get_current_user)
+):
+    
+    if not verify_password(password_data.current_password, current_user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="La contraseña actual provista es incorrecta. Protocolo denegado."
+        )
+    
+    if verify_password(password_data.new_password, current_user.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La nueva contraseña no puede ser igual a la contraseña actual."
+        )
+
+    # 2. Modificar la propiedad real del modelo persistido
+    current_user.password = get_password_hash(password_data.new_password)
+    
+    try:
+        db.add(current_user)
+        db.commit()
+        db.refresh(current_user)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al persistir los cambios en la base de datos: {str(e)}"
+        )
+
+    return {"status": "success", "message": "Contraseña cambiada con éxito"}
 
 @router.post("/logout")
 async def logout():

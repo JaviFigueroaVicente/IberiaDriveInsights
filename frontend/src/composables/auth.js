@@ -75,6 +75,28 @@ const getUserProfile = async () => {
   }
 };
 
+const updateProfile = async (userData) => {
+  try {
+    const response = await apiClient.put('/auth/me', userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const changePassword = async ({ current_password, new_password }) => {
+  try {
+    const response = await apiClient.put('/auth/me/change-password', {
+          current_password,
+          new_password
+      });
+      return response.data;
+  } catch (error) {
+      throw error;
+  }
+};
+
+// Administrador
 const getUsers = async () => {
   try {
     const response = await apiClient.get('/auth/users');
@@ -94,7 +116,7 @@ const updateUser = async (id, userData) => {
   }
 };
 
-// Eliminar/dar de baja un operario del sistema
+// Eliminar usuario del sistema
 const deleteUser = async (id) => {
   try {
     const response = await apiClient.delete(`/auth/users/${id}`);
@@ -110,6 +132,8 @@ export {
   registerUser,
   logoutUser,
   getUserProfile,
+  updateProfile,
+  changePassword,
   getUsers,
   updateUser,
   deleteUser

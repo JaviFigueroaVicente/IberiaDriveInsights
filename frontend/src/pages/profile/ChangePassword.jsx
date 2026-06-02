@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 import Exclamation from '../../assets/icons/exclamation.svg';
 import ShieldLock from '../../assets/icons/shield_lock.svg';
 import Sync from '../../assets/icons/sync.svg';
 import SideBar from '../../components/SideBar';
 import SubHeaderProfile from '../../components/SubHeaderProfile';
+
+// Importa el servicio correspondiente para la actualización de contraseñas
+import { changePassword } from '../../composables/auth';
 
 export default function ChangePassword({ currentUser, handleLogout }) {
     const [formData, setFormData] = useState({
@@ -12,6 +16,7 @@ export default function ChangePassword({ currentUser, handleLogout }) {
         confirmPassword: ''
     });
     const [isSyncing, setIsSyncing] = useState(true);
+    const [isUpdating, setIsUpdating] = useState(false);
     const [strength, setStrength] = useState(0);
 
     useEffect(() => {
@@ -19,19 +24,106 @@ export default function ChangePassword({ currentUser, handleLogout }) {
         return () => clearTimeout(timer);
     }, []);
 
+    // Configuración visual común para los modales de Swal (estética oscura e industrial)
+    const swalConfig = {
+        background: 'var(--surface-container-low, #1e1e1e)',
+        color: '#ffffff',
+        confirmButtonColor: 'var(--primary-container, #004a77)',
+        denyButtonColor: '#2a2a2a',
+        customClass: {
+            popup: 'border border-white/10 rounded-sm font-mono text-xs',
+            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
+            htmlContainer: 'text-xs text-(--on-surface-variant)',
+            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
+            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
+        }
+    };
+
     const handlePasswordChange = (e) => {
         const value = e.target.value;
         setFormData(prev => ({ ...prev, newPassword: value }));
         setStrength(Math.min(value.length * 10, 100));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isUpdating) return;
+
+        // Validación de coincidencia de contraseñas mediante SweetAlert2
         if (formData.newPassword !== formData.confirmPassword) {
-            alert("Protocol Error: Passwords do not match");
+            Swal.fire({
+                ...swalConfig,
+                title: 'Error de Protocolo',
+                text: 'La confirmación no coincide con la nueva contraseña introducida.',
+                icon: 'error',
+                iconColor: '#ff5252'
+            });
             return;
         }
-        console.log("Iniciando actualización de credenciales...");
+
+        // Validación de longitud mínima o reglas de seguridad adicionales si se requiere
+        if (formData.newPassword.length < 8) {
+            Swal.fire({
+                ...swalConfig,
+                title: 'Seguridad Insuficiente',
+                text: 'La nueva contraseña debe contener un mínimo de 8 caracteres.',
+                icon: 'warning',
+                iconColor: '#ffd700'
+            });
+            return;
+        }
+
+        // Confirmación explícita previa a la alteración de credenciales
+        const result = await Swal.fire({
+            ...swalConfig,
+            title: '¿Modificar Credenciales?',
+            text: 'Esta acción alterará tus tokens de acceso al sistema y requerirá validación posterior.',
+            icon: 'question',
+            iconColor: 'var(--secondary, #5de6ff)',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+            cancelButtonColor: '#3a3a3a'
+        });
+
+        if (!result.isConfirmed) return;
+
+        setIsUpdating(true);
+        try {
+            // Envío de las credenciales estructuradas al servicio del backend
+            await changePassword({
+                current_password: formData.currentPassword,
+                new_password: formData.newPassword
+            });
+
+            await Swal.fire({
+                ...swalConfig,
+                title: 'Éxito',
+                text: 'Las credenciales de acceso han sido actualizadas correctamente.',
+                icon: 'success',
+                iconColor: '#00e676'
+            });
+
+            // Limpieza del formulario tras una operación exitosa
+            setFormData({
+                currentPassword: '',
+                newPassword: '',
+                confirmPassword: ''
+            });
+            setStrength(0);
+
+        } catch (error) {
+            console.error("Error al actualizar contraseñas:", error);
+            Swal.fire({
+                ...swalConfig,
+                title: 'Fallo de Autenticación',
+                text: error.response?.data?.detail || 'La contraseña actual no es válida o el servidor rechazó los parámetros.',
+                icon: 'error',
+                iconColor: '#ff5252'
+            });
+        } finally {
+            setIsUpdating(false);
+        }
     };
 
     return (
@@ -76,8 +168,9 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                             <input 
                                                 type="password" 
                                                 required
+                                                disabled={isUpdating}
                                                 placeholder="••••••••"
-                                                className="w-full bg-black/40 border border-white/10 px-4 py-3 text-sm text-white focus:border-(--secondary) outline-none transition-all font-mono rounded-xs placeholder:opacity-20"
+                                                className="w-full bg-black/40 border border-white/10 px-4 py-3 text-sm text-white focus:border-(--secondary) outline-none transition-all font-mono rounded-xs placeholder:opacity-20 disabled:opacity-50"
                                                 value={formData.currentPassword}
                                                 onChange={(e) => setFormData({...formData, currentPassword: e.target.value})}
                                             />
@@ -90,7 +183,8 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                                 <input 
                                                     type="password" 
                                                     required
-                                                    className="w-full bg-black/40 border border-white/10 px-4 py-3 text-sm text-white focus:border-(--secondary) outline-none transition-all font-mono rounded-xs"
+                                                    disabled={isUpdating}
+                                                    className="w-full bg-black/40 border border-white/10 px-4 py-3 text-sm text-white focus:border-(--secondary) outline-none transition-all font-mono rounded-xs disabled:opacity-50"
                                                     value={formData.newPassword}
                                                     onChange={handlePasswordChange}
                                                 />
@@ -108,7 +202,8 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                                 <input 
                                                     type="password" 
                                                     required
-                                                    className={`w-full bg-black/40 border px-4 py-3 text-sm text-white outline-none transition-all font-mono rounded-xs ${
+                                                    disabled={isUpdating}
+                                                    className={`w-full bg-black/40 border px-4 py-3 text-sm text-white outline-none transition-all font-mono rounded-xs disabled:opacity-50 ${
                                                         formData.confirmPassword && formData.newPassword !== formData.confirmPassword 
                                                         ? 'border-red-500/50' 
                                                         : 'border-white/10 focus:border-(--secondary)'
@@ -121,9 +216,10 @@ export default function ChangePassword({ currentUser, handleLogout }) {
 
                                         <button 
                                             type="submit"
-                                            className="w-full bg-(--primary-container) py-4 mt-4 font-headline font-bold text-white uppercase tracking-[0.2em] text-[10px] md:text-xs hover:brightness-110 transition-all active:scale-[0.98] shadow-lg shadow-(--primary-container)/20 cursor-pointer"
+                                            disabled={isUpdating}
+                                            className="w-full bg-(--primary-container) py-4 mt-4 font-headline font-bold text-white uppercase tracking-[0.2em] text-[10px] md:text-xs hover:brightness-110 transition-all active:scale-[0.98] shadow-lg shadow-(--primary-container)/20 cursor-pointer disabled:opacity-50 flex items-center justify-center"
                                         >
-                                            Actualizar Credenciales
+                                            {isUpdating ? 'Procesando Sincronización...' : 'Actualizar Credenciales'}
                                         </button>
                                     </form>
                                 </div>
@@ -145,6 +241,10 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                     <div className="flex justify-between">
                                         <span className="text-(--on-surface-variant)">HASH_TYPE</span>
                                         <span className="text-white">ARGON2ID</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-(--on-surface-variant)">VERIFICATION</span>
+                                        <span className="text-white">HMAC_SHA256</span>
                                     </div>
                                     <div className="pt-4 border-t border-white/5">
                                         <p className="text-(--on-surface-variant) leading-relaxed italic">

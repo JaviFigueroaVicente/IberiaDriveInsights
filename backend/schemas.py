@@ -22,6 +22,8 @@ class User(BaseModel):
     class Config:
         from_attributes = True
 
+
+
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
@@ -42,6 +44,13 @@ class UserInDB(User):
     password: str
     created_at: datetime
     updated_at: Optional[datetime] = None
+
+class ProfileUpdate(BaseModel):
+    name: str
+    surname: str
+
+    class Config:
+        from_attributes = True
 
 # Cars
 class CarBase(BaseModel):
@@ -204,3 +213,19 @@ class MyPredictions(BaseModel):
     class Config:
         from_attributes = True
         populate_by_name = True
+
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    surname: str
+    email: EmailStr
+    role: int
+    created_at: datetime
+    cars: List[CarResponse] = []
+
+    class Config:
+        from_attributes = True
+
+class PasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
