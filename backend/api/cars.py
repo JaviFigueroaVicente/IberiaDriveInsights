@@ -59,7 +59,7 @@ async def get_my_cars(db: db_dependency, current_user: Annotated[models.User, De
         joinedload(models.Car.version_rel),
         joinedload(models.Car.gear_rel),
         joinedload(models.Car.fuel_rel)
-    ).all()
+    ).order_by(models.Car.created_at.desc()).all()
     
     return cars_data
 

@@ -49,7 +49,6 @@ class Car(Base):
 
     rep_id = Column(Integer, ForeignKey("users.id"))
     
-    # SOLUCIÓN: Especificar 'primaryjoin' de forma explícita para evitar la ausencia de FK físicas
     make_rel = relationship("Make", primaryjoin="Car.make == Make.id", foreign_keys=[make])
     model_rel = relationship("Model", primaryjoin="Car.model == Model.id", foreign_keys=[model])
     version_rel = relationship("Version", primaryjoin="Car.version == Version.id", foreign_keys=[version])

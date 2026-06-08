@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import FotoRegister from '../assets/register/chip-register.png'
 import Logo from '../assets/icons/logo.png'
 import Analytics from '../assets/icons/analytics.svg'
@@ -17,6 +18,22 @@ export default function Register() {
         password: '',
         confirmPassword: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Configuración visual común para los modales de Swal (estética oscura e industrial)
+    const swalConfig = {
+        background: 'var(--surface-container-low, #1e1e1e)',
+        color: '#ffffff',
+        confirmButtonColor: 'var(--primary-container, #004a77)',
+        denyButtonColor: '#2a2a2a',
+        customClass: {
+            popup: 'border border-white/10 rounded-sm font-mono text-xs',
+            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
+            htmlContainer: 'text-xs text-(--on-surface-variant)',
+            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
+            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
+        }
+    };
 
     const handleChange = (e) => {
         setFormData({
@@ -27,11 +44,71 @@ export default function Register() {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+
+        // 1. Validaciones del lado del cliente
+        if (formData.email !== formData.confirmEmail) {
+            Swal.fire({
+                ...swalConfig,
+                title: 'Error de Confirmación de Correo',
+                text: 'La confirmación no coincide con el correo electrónico introducido.',
+                icon: 'error',
+                iconColor: '#ff5252'
+            });
+            return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            Swal.fire({
+                ...swalConfig,
+                title: 'Error de Confirmación de Contraseña',
+                text: 'La confirmación no coincide con la contraseña introducida.',
+                icon: 'error',
+                iconColor: '#ff5252'
+            });
+            return;
+        }
+
+        if (formData.password.length < 8) {
+            Swal.fire({
+                ...swalConfig,
+                title: 'Seguridad Insuficiente',
+                text: 'La longitud de la clave debe ser igual o superior a 8 caracteres.',
+                icon: 'warning',
+                iconColor: '#ffd700'
+            });
+            return;
+        }
+
+        setIsSubmitting(true);
         try {
             await registerUser(formData);
-            navigate('/login')
+
+            await Swal.fire({
+                ...swalConfig,
+                title: 'Registro Completado',
+                text: 'Redirigiendo a incio de sesión...',
+                icon: 'success',
+                iconColor: '#00e676',
+                timer: 2500,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                confirmButtonText: null
+            });
+
+            navigate('/login');
         } catch (error) {
             console.error("Error en el despliegue del registro:", error);
+            
+            Swal.fire({
+                ...swalConfig,
+                title: 'Fallo de Registro',
+                text: error.response?.data?.detail || 'El servidor rechazó los datos de la cuenta o el email ya está en uso.',
+                icon: 'error',
+                iconColor: '#ff5252'
+            });
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -45,7 +122,6 @@ export default function Register() {
                 <div className="absolute -top-1 -left-1 h-8 w-8 border-t-2 border-l-2 border-(--primary-container)/40 z-30"></div>
                 <div className="absolute -bottom-1 -right-1 h-8 w-8 border-b-2 border-r-2 border-(--secondary)/40 z-30"></div>
 
-                {/* --- Lado Visual (Compactado) --- */}
                 <div className="hidden lg:flex flex-col justify-between p-10 relative border-r border-white/5 overflow-hidden">
                     <div className="absolute inset-0 opacity-10 pointer-events-none">
                         <img src={FotoRegister} alt="" className="w-full h-full object-cover grayscale" />
@@ -97,10 +173,11 @@ export default function Register() {
                             <div className="space-y-1">
                                 <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Nombre</label>
                                 <input 
-                                    className="input-data-entry w-full py-2.5 text-sm" 
+                                    className="input-data-entry w-full py-2.5 text-sm disabled:opacity-50" 
                                     placeholder="Iberia" 
                                     type="text" 
                                     name='name' 
+                                    disabled={isSubmitting}
                                     value={formData.name} 
                                     onChange={handleChange} 
                                     required 
@@ -109,10 +186,11 @@ export default function Register() {
                             <div className="space-y-1">
                                 <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Apellidos</label>
                                 <input 
-                                    className="input-data-entry w-full py-2.5 text-sm" 
+                                    className="input-data-entry w-full py-2.5 text-sm disabled:opacity-50" 
                                     placeholder="Drive Insights" 
                                     type="text" 
                                     name='surname' 
+                                    disabled={isSubmitting}
                                     value={formData.surname} 
                                     onChange={handleChange} 
                                     required 
@@ -124,10 +202,11 @@ export default function Register() {
                             <div className="space-y-1">
                                 <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Email Address</label>
                                 <input 
-                                    className="input-data-entry w-full py-2.5 text-sm" 
+                                    className="input-data-entry w-full py-2.5 text-sm disabled:opacity-50" 
                                     placeholder="iberia@drive.com" 
                                     type="email" 
                                     name='email' 
+                                    disabled={isSubmitting}
                                     value={formData.email} 
                                     onChange={handleChange} 
                                     required 
@@ -136,10 +215,15 @@ export default function Register() {
                             <div className="space-y-1">
                                 <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar Email</label>
                                 <input 
-                                    className="input-data-entry w-full py-2.5 text-sm" 
+                                    className={`input-data-entry w-full py-2.5 text-sm disabled:opacity-50 ${
+                                        formData.confirmEmail && formData.email !== formData.confirmEmail 
+                                        ? 'border-red-500/50 focus:border-red-500' 
+                                        : ''
+                                    }`} 
                                     placeholder="iberia@drive.com" 
                                     type="email" 
                                     name='confirmEmail' 
+                                    disabled={isSubmitting}
                                     value={formData.confirmEmail} 
                                     onChange={handleChange} 
                                     required 
@@ -151,10 +235,11 @@ export default function Register() {
                             <div className="space-y-1">
                                 <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Contraseña</label>
                                 <input 
-                                    className="input-data-entry w-full py-2.5 text-sm" 
+                                    className="input-data-entry w-full py-2.5 text-sm disabled:opacity-50" 
                                     placeholder="••••••••" 
                                     type="password" 
                                     name='password' 
+                                    disabled={isSubmitting}
                                     value={formData.password} 
                                     onChange={handleChange} 
                                     required 
@@ -163,10 +248,15 @@ export default function Register() {
                             <div className="space-y-1">
                                 <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar</label>
                                 <input 
-                                    className="input-data-entry w-full py-2.5 text-sm" 
+                                    className={`input-data-entry w-full py-2.5 text-sm disabled:opacity-50 ${
+                                        formData.confirmPassword && formData.password !== formData.confirmPassword 
+                                        ? 'border-red-500/50 focus:border-red-500' 
+                                        : ''
+                                    }`} 
                                     placeholder="••••••••" 
                                     type="password" 
                                     name='confirmPassword' 
+                                    disabled={isSubmitting}
                                     value={formData.confirmPassword} 
                                     onChange={handleChange} 
                                     required 
@@ -176,9 +266,10 @@ export default function Register() {
 
                         <div className="flex items-start gap-3 py-1">
                             <input 
-                                className="w-3.5 h-3.5 rounded-sm bg-black/40 border-white/10 text-(--primary-container) focus:ring-0 cursor-pointer" 
+                                className="w-3.5 h-3.5 rounded-sm bg-black/40 border-white/10 text-(--primary-container) focus:ring-0 cursor-pointer disabled:opacity-50" 
                                 id="terms" 
                                 type="checkbox" 
+                                disabled={isSubmitting}
                                 required 
                             />
                             <label className="text-[10px] text-[#bec8d2]/80 leading-tight" htmlFor="terms">
@@ -187,9 +278,15 @@ export default function Register() {
                         </div>
 
                         <div className="pt-2">
-                            <button className="btn-primary-engine w-full py-3.5 flex items-center justify-center gap-3 group" type="submit">
-                                <span className="font-bold tracking-[0.2em] text-[10px]">REGISTRAR CUENTA</span>
-                                <img src={ArrowRight} alt="" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            <button 
+                                className="btn-primary-engine w-full py-3.5 flex items-center justify-center gap-3 group disabled:opacity-50 cursor-pointer" 
+                                type="submit"
+                                disabled={isSubmitting}
+                            >
+                                <span className="font-bold tracking-[0.2em] text-[10px]">
+                                    {isSubmitting ? 'PROCESANDO REGISTRO...' : 'REGISTRAR CUENTA'}
+                                </span>
+                                {!isSubmitting && <img src={ArrowRight} alt="" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
                             </button>
                         </div>
 

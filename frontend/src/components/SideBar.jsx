@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'; // Importación para el control de confirmación
 import AccountCircle from "../assets/icons/account_circle.svg";
 import AccountCircleSelected from "../assets/icons/account_circle_selected.svg";
 import History from "../assets/icons/history.svg";
@@ -14,6 +15,52 @@ export default function SideBar({ currentUser, handleLogout }) {
     const location = useLocation();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+
+    // Configuración técnica para integrar Swal con el diseño oscuro
+    const swalConfig = {
+        background: 'var(--surface-container-low, #1e1e1e)',
+        color: '#ffffff',
+        confirmButtonColor: '#ff5252',
+        cancelButtonColor: 'rgba(255, 255, 255, 0.05)',
+        customClass: {
+            popup: 'border border-white/10 rounded-sm font-mono text-xs',
+            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
+            htmlContainer: 'text-xs text-[#bec8d2]',
+            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm',
+            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm border border-white/10 text-white'
+        }
+    };
+
+    // Interceptor para el flujo de desconexión del sistema
+    const confirmLogout = () => {
+        setIsOpen(false);
+        
+        Swal.fire({
+            ...swalConfig,
+            title: 'Confirmar Desconexión',
+            html: `
+                <div style="font-family: monospace; text-align: left; margin: 8px 0; padding: 8px;">
+                    <div style="background: rgba(0, 0, 0, 0.2); padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 4px;">
+                        <p style="font-size: 11px; color: #bec8d2; margin: 0; line-height: 1.6;">
+                            ¿Está seguro de que desea cerrar la sesión?
+                        </p>
+                    </div>
+                </div>
+            `,
+            icon: 'warning',
+            iconColor: '#ff5252',
+            showCancelButton: true,
+            confirmButtonText: 'CERRAR SESIÓN',
+            cancelButtonText: 'CANCELAR',
+            focusCancel: true,
+            allowOutsideClick: false,
+            allowEscapeKey: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleLogout();
+            }
+        });
+    };
 
     const baseLinkClasses = "flex items-center gap-3 px-6 py-4 text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 relative group";
     
@@ -95,7 +142,8 @@ export default function SideBar({ currentUser, handleLogout }) {
                         </button>
                     </NavLink>
 
-                    <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-(--on-surface-variant) border border-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all rounded-sm cursor-pointer">
+                    {/* Botón modificado para lanzar el modal de confirmación */}
+                    <button onClick={confirmLogout} className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-(--on-surface-variant) border border-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all rounded-sm cursor-pointer">
                         <img src={LogoutRed} alt="Logout" className="w-3.5 opacity-60" />
                         Cerrar Sesión
                     </button>

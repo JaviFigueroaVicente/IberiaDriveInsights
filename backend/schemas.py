@@ -81,6 +81,7 @@ class CarResponse(BaseModel):
     model: int
     version: int
     price: int
+    is_prediction: bool
 
     class Config:
         from_attributes = True

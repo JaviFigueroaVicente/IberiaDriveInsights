@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { loginUser } from '../composables/auth'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import Logo from '../assets/icons/logo.png'
 import Lock from '../assets/icons/lock.svg'
 import Email from '../assets/icons/alternate_email.svg'
@@ -9,14 +10,60 @@ import ArrowRight from '../assets/icons/arrow_right.svg'
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Configuración visual común para los modales de Swal (estética oscura e industrial)
+  const swalConfig = {
+    background: 'var(--surface-container-low, #1e1e1e)',
+    color: '#ffffff',
+    confirmButtonColor: 'var(--primary-container, #004a77)',
+    denyButtonColor: '#2a2a2a',
+    customClass: {
+      popup: 'border border-white/10 rounded-sm font-mono text-xs',
+      title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
+      htmlContainer: 'text-xs text-(--on-surface-variant)',
+      confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
+      cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       const response = await loginUser(email, password);
+      
+      // 3. Modal auto-cerrable de éxito (sin botones, con barra de progreso)
+      await Swal.fire({
+        ...swalConfig,
+        title: 'Acceso Correcto',
+        text: 'Sincronizando entorno de usuario...',
+        icon: 'success',
+        iconColor: '#00e676',
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        confirmButtonText: null
+      });
+
+      // 4. Delegación del token y cambio de estado global tras cerrarse el Swal
       await onLoginSuccess(response.access_token);
+
     } catch (error) {
       console.log(error);
+      
+      // Manejo de errores de autenticación del servidor
+      Swal.fire({
+        ...swalConfig,
+        title: 'Fallo de Autenticación',
+        text: error.response?.data?.detail || 'Los datos introducidos no coinciden con ningún registro del sistema.',
+        icon: 'error',
+        iconColor: '#ff5252'
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -60,8 +107,9 @@ export default function Login({ onLoginSuccess }) {
                   <input 
                     id="email" 
                     type="email" 
+                    disabled={isSubmitting}
                     placeholder="iberia@drive.com" 
-                    className="w-full bg-black/20 border-b border-white/10 pl-11 pr-4 py-3 text-sm text-white focus:border-(--primary-container) transition-all outline-none" 
+                    className="w-full bg-black/20 border-b border-white/10 pl-11 pr-4 py-3 text-sm text-white focus:border-(--primary-container) transition-all outline-none disabled:opacity-50" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
                     required 
@@ -83,8 +131,9 @@ export default function Login({ onLoginSuccess }) {
                   <input 
                     id="password" 
                     type="password" 
+                    disabled={isSubmitting}
                     placeholder="••••••••••••" 
-                    className="w-full bg-black/20 border-b border-white/10 pl-11 pr-4 py-3 text-sm text-white focus:border-(--primary-container) transition-all outline-none" 
+                    className="w-full bg-black/20 border-b border-white/10 pl-11 pr-4 py-3 text-sm text-white focus:border-(--primary-container) transition-all outline-none disabled:opacity-50" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
                     required 
@@ -93,9 +142,13 @@ export default function Login({ onLoginSuccess }) {
               </div>
 
               <div className="pt-2">
-                <button type="submit" className="btn-primary-engine w-full flex items-center justify-center gap-2 py-3.5 font-bold tracking-widest uppercase transition-all text-sm">
-                  <span>Entrar</span>
-                  <img src={ArrowRight} alt="" className="w-4 h-4" />
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="btn-primary-engine w-full flex items-center justify-center gap-2 py-3.5 font-bold tracking-widest uppercase transition-all text-sm disabled:opacity-50 cursor-pointer"
+                >
+                  <span>{isSubmitting ? 'Procesando...' : 'Entrar'}</span>
+                  {!isSubmitting && <img src={ArrowRight} alt="" className="w-4 h-4" />}
                 </button>
               </div>
             </form>

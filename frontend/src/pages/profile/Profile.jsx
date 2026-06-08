@@ -6,7 +6,6 @@ import Camera from '../../assets/icons/camera.svg';
 import Verified from '../../assets/icons/verified_check.svg';
 import SubHeaderProfile from '../../components/SubHeaderProfile';
 
-// Importa el servicio correspondiente para actualizar los datos en el backend
 import { updateProfile } from '../../composables/auth'; 
 
 export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
@@ -59,6 +58,25 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
             cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
         }
     };
+
+    // Configuración específica para Toast de notificación rápida
+    const toastConfig = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: 'var(--surface-container-low, #1e1e1e)',
+        color: '#ffffff',
+        customClass: {
+            popup: 'border border-white/10 rounded-sm font-mono text-xs',
+            title: 'text-xs uppercase tracking-wider text-white font-bold'
+        },
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    });
 
     // Función para restaurar los valores originales del formulario con confirmación de Swal
     const handleDiscard = async () => {
@@ -121,30 +139,40 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
 
         setIsSaving(true);
         try {
-            // Llama a la API pasándole únicamente los parámetros permitidos
+            // 1. Envía la actualización al backend
             const updatedUser = await updateProfile({
                 name: formData.name,
                 surname: formData.surname
             });
 
-            // Si la API devuelve el usuario modificado, actualiza el estado global de la aplicación
+            // 2. Actualiza el estado de la aplicación (como salvaguarda reactiva)
             if (updatedUser && setCurrentUser) {
                 setCurrentUser(updatedUser);
             }
 
-            Swal.fire({
+            // 3. Muestra el SweetAlert modal (esperando la interacción del usuario)
+            await Swal.fire({
                 ...swalConfig,
-                title: 'Éxito',
-                text: 'Datos de usuario actualizados correctamente.',
+                title: 'Perfil actualizado',
+                text: 'Los cambios se han guardado correctamente en el sistema.',
                 icon: 'success',
-                iconColor: '#00e676'
+                iconColor: '#00e676',
+                confirmButtonText: false,
+                timer: 2500,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                confirmButtonText: null
             });
+
+            // 4. La página se recarga exactamente cuando el usuario pulsa "Aceptar"
+            window.location.reload();
+
         } catch (error) {
             console.error("Error updating identity parameters:", error);
             Swal.fire({
                 ...swalConfig,
                 title: 'Error',
-                text: 'Hubo un fallo al guardar salvar las modificaciones en el servidor.',
+                text: 'Hubo un fallo al guardar las modificaciones en el servidor.',
                 icon: 'error',
                 iconColor: '#ff5252'
             });
@@ -184,9 +212,6 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                                         <img src={Camera} alt="Camera" />
                                     </div>
                                 </div>
-                                <div className="absolute -bottom-2 -right-2 bg-(--secondary) text-black px-2 py-1 rounded-xs text-[9px] font-black uppercase tracking-tighter shadow-xl">
-                                    {currentUser?.role === 1 ? 'Admin' : 'Básico'}
-                                </div>
                             </div>
 
                             <div className="space-y-4">
@@ -208,7 +233,7 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <span className="text-[9px] uppercase tracking-widest text-(--on-surface-variant) font-bold">Tipo de Cuenta</span>
-                                        <h3 className="text-xl md:text-2xl font-headline font-bold text-white tracking-tighter uppercase">Enterprise Tier</h3>
+                                        <h3 className="text-xl md:text-2xl font-headline font-bold text-white tracking-tighter uppercase">{currentUser?.role === 1 ? 'Admin' : 'Básico'}</h3>
                                     </div>
                                     <img src={Verified} alt="Verified User" className="w-6 h-6 md:w-auto" />
                                 </div>
@@ -223,7 +248,7 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                     <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                         {[
                             { label: 'Vehículos en BD', val: currentUser?.cars?.length || '0', sub: 'CARS' },
-                            { label: 'Predicciones', val: currentUser?.cars?.filter(c => c.is_prediction).length || '0', sub: 'AI_MODE', color: 'text-(--secondary)' },
+                            { label: 'Predicciones', val: currentUser?.cars?.filter(c => c.is_prediction).length || '0', color: 'text-(--secondary)' },
                             { label: 'Valor Promedio', val: calculateAverageValue(), sub: 'EUR' }
                         ].map((stat, i) => (
                             <div key={i} className="bg-black/20 p-6 md:p-8 rounded-sm relative overflow-hidden group border border-white/5 shadow-xl">

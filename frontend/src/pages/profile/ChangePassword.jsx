@@ -76,8 +76,8 @@ export default function ChangePassword({ currentUser, handleLogout }) {
         // Confirmación explícita previa a la alteración de credenciales
         const result = await Swal.fire({
             ...swalConfig,
-            title: '¿Modificar Credenciales?',
-            text: 'Esta acción alterará tus tokens de acceso al sistema y requerirá validación posterior.',
+            title: '¿Modificar Contraseña?',
+            text: 'Esta acción cambiará tu contraseña.',
             icon: 'question',
             iconColor: 'var(--secondary, #5de6ff)',
             showCancelButton: true,
@@ -96,21 +96,29 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                 new_password: formData.newPassword
             });
 
+            // Muestra el modal auto-cerrable sobreescribiendo el config global
             await Swal.fire({
                 ...swalConfig,
-                title: 'Éxito',
-                text: 'Las credenciales de acceso han sido actualizadas correctamente.',
+                title: 'Contraseña Actualizada',
+                text: 'La contraseña ha sido actualizada con exito.',
                 icon: 'success',
-                iconColor: '#00e676'
+                iconColor: '#00e676',
+                timer: 2500,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                confirmButtonText: null
             });
 
-            // Limpieza del formulario tras una operación exitosa
+            // Limpieza del formulario tras la expiración del temporizador del Swal
             setFormData({
                 currentPassword: '',
                 newPassword: '',
                 confirmPassword: ''
             });
             setStrength(0);
+            
+            // Redirección segura a la raíz del sitio
+            window.location.href = '/profile';
 
         } catch (error) {
             console.error("Error al actualizar contraseñas:", error);
@@ -153,11 +161,11 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                                 <img src={ShieldLock} alt="Shield" className="w-5 h-5" />
                                             </div>
                                             <h1 className="font-headline text-xl md:text-2xl font-bold tracking-tight text-white uppercase leading-tight">
-                                                Actualizar <br className="sm:hidden" /> Credenciales
+                                                Actualizar <br className="sm:hidden" /> Contraseña
                                             </h1>
                                         </div>
                                         <p className="text-(--on-surface-variant) text-[10px] md:text-xs uppercase tracking-widest leading-relaxed">
-                                            Modifica los tokens de acceso para <span className="text-white">{currentUser?.email || 'ANONYMOUS_USER'}</span>.
+                                            Modifica la contraseña para <span className="text-white">{currentUser?.email || 'ANONYMOUS_USER'}</span>.
                                         </p>
                                     </header>
 
@@ -219,7 +227,7 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                             disabled={isUpdating}
                                             className="w-full bg-(--primary-container) py-4 mt-4 font-headline font-bold text-white uppercase tracking-[0.2em] text-[10px] md:text-xs hover:brightness-110 transition-all active:scale-[0.98] shadow-lg shadow-(--primary-container)/20 cursor-pointer disabled:opacity-50 flex items-center justify-center"
                                         >
-                                            {isUpdating ? 'Procesando Sincronización...' : 'Actualizar Credenciales'}
+                                            {isUpdating ? 'Procesando Sincronización...' : 'Actualizar Contraseña'}
                                         </button>
                                     </form>
                                 </div>
@@ -230,21 +238,13 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                         <div className="lg:col-span-5 xl:col-span-4 space-y-4 md:space-y-6 order-2">
                             <section className="bg-(--surface-container-low) p-6 rounded-sm border border-white/5 font-mono">
                                 <div className="text-[10px] text-(--secondary) uppercase mb-6 border-b border-white/10 pb-2 flex justify-between font-bold tracking-tighter">
-                                    <span>Security Protocol</span>
+                                    <span>Protocólo de Seguridad</span>
                                     <img src={Sync} alt="Sync" className={`w-4 ${isSyncing ? 'animate-spin' : ''}`} />
                                 </div>
                                 <div className="space-y-4 text-[10px]">
                                     <div className="flex justify-between">
-                                        <span className="text-(--on-surface-variant)">ENCRYPTION</span>
-                                        <span className="text-white">AES-256-GCM</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-(--on-surface-variant)">HASH_TYPE</span>
-                                        <span className="text-white">ARGON2ID</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-(--on-surface-variant)">VERIFICATION</span>
-                                        <span className="text-white">HMAC_SHA256</span>
+                                        <span className="text-(--on-surface-variant)">ENCRIPTACIÓN</span>
+                                        <span className="text-white">AES-256</span>
                                     </div>
                                     <div className="pt-4 border-t border-white/5">
                                         <p className="text-(--on-surface-variant) leading-relaxed italic">

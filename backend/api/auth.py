@@ -102,7 +102,7 @@ async def update_user_me(
         # 2. Persistir los cambios en la base de datos
         db.add(current_user)
         db.commit()
-        db.refresh(current_user)  # Recarga las relaciones y datos frescos (como cars, role, etc.)
+        db.refresh(current_user)
         
         return current_user
 

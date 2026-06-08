@@ -2,6 +2,7 @@ import Logo from '../assets/icons/logo.png'
 import { NavLink, Link } from 'react-router-dom'
 import Perfil from '../assets/icons/perfil.svg'
 import { useState } from 'react'
+import Swal from 'sweetalert2' // Importación para el control de confirmación
 import Person from '../assets/icons/person.svg'
 import Logout from '../assets/icons/logout.svg'
 import Menu from '../assets/icons/menu.svg'
@@ -10,6 +11,53 @@ import PrecisionManufacturing from '../assets/icons/precision_manufacturing.svg'
 export default function Header({ isAuthenticated, currentUser, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    // Configuración técnica para integrar Swal con el diseño oscuro
+    const swalConfig = {
+        background: 'var(--surface-container-low, #1e1e1e)',
+        color: '#ffffff',
+        confirmButtonColor: '#ff5252', // Rojo para acciones destructivas
+        cancelButtonColor: 'rgba(255, 255, 255, 0.05)',
+        customClass: {
+            popup: 'border border-white/10 rounded-sm font-mono text-xs',
+            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
+            htmlContainer: 'text-xs text-[#bec8d2]',
+            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm',
+            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm border border-white/10 text-white'
+        }
+    };
+
+    // Interceptor para el flujo de desconexión del sistema
+    const confirmLogout = () => {
+        setIsOpen(false); // Cierra el menú desplegable de escritorio
+        setIsMenuOpen(false); // Cierra el menú móvil
+        
+        Swal.fire({
+            ...swalConfig,
+            title: 'Confirmar Desconexión',
+            html: `
+                <div style="font-family: monospace; text-align: left; margin: 8px 0; padding: 8px;">
+                    <div style="background: rgba(0, 0, 0, 0.2); padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 4px;">
+                        <p style="font-size: 11px; color: #bec8d2; margin: 0; line-height: 1.6;">
+                            ¿Está seguro de que desea cerrar la sesión?
+                        </p>
+                    </div>
+                </div>
+            `,
+            icon: 'warning',
+            iconColor: '#ff5252',
+            showCancelButton: true,
+            confirmButtonText: 'CERRAR SESIÓN',
+            cancelButtonText: 'CANCELAR',
+            focusCancel: true,
+            allowOutsideClick: false,
+            allowEscapeKey: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onLogout(); // Llama a la función de logout del Header
+            }
+        });
+    };
 
     const navLinkStyles = ({ isActive }) => 
         isActive 
@@ -38,7 +86,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                     </Link>
                 </div>
 
-                {/* 02. Navegación Central (Desktop) - USANDO NAVLINK */}
+                {/* 02. Navegación Central (Desktop) */}
                 <nav className="hidden md:block">
                     <ul className="flex items-center gap-8 font-bold text-[11px] tracking-[0.2em] uppercase text-[#BEC8D2]">
                         <li><NavLink className={navLinkStyles} to='/predict'>Predecir</NavLink></li>
@@ -97,7 +145,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                                                 </li>
                                             )}
                                             <li className="mt-2 pt-2 border-t border-white/5 px-2">
-                                                <button onClick={() => { onLogout(); setIsOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2 text-[11px] font-bold text-red-400 hover:bg-red-500/10 rounded transition-all uppercase tracking-wider cursor-pointer">
+                                                <button onClick={confirmLogout} className="w-full flex items-center gap-3 px-3 py-2 text-[11px] font-bold text-red-400 hover:bg-red-500/10 rounded transition-all uppercase tracking-wider cursor-pointer">
                                                     <img src={Logout} alt="Logout" /> Cerrar Sesión
                                                 </button>
                                             </li>
@@ -123,7 +171,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                 </div>
             </div>
 
-            {/* MENÚ DESPLEGABLE MÓVIL - USANDO NAVLINK */}
+            {/* MENÚ DESPLEGABLE MÓVIL */}
             <div className={`
                 md:hidden absolute top-20 left-0 w-full bg-[#0d0d12]/98 backdrop-blur-xl border-b border-white/10
                 transition-all duration-300 ease-in-out origin-top z-110 shadow-2xl
@@ -138,7 +186,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                         <>
                             <li><NavLink className={mobileNavLinkStyles} to='/profile/my-predictions' onClick={() => setIsMenuOpen(false)}>Mis Predicciones</NavLink></li>
                             <li><NavLink className={({isActive}) => `block py-2 ${isActive ? 'text-(--primary-container)' : 'text-(--secondary)'}`} to='/profile' onClick={() => setIsMenuOpen(false)}>Mi Perfil</NavLink></li>
-                            <li><button onClick={onLogout} className="text-red-400 font-bold uppercase tracking-widest text-left cursor-pointer">Cerrar Sesión</button></li>
+                            <li><button onClick={confirmLogout} className="text-red-400 font-bold uppercase tracking-widest text-left cursor-pointer">Cerrar Sesión</button></li>
                         </>
                     ) : (
                         <li><Link to="/login" className="block bg-(--primary-container) text-white text-center py-4 rounded-sm cursor-pointer" onClick={() => setIsMenuOpen(false)}>LOGIN / REGISTRO</Link></li>
