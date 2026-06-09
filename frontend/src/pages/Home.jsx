@@ -12,16 +12,42 @@ import AccountTree from '../assets/icons/account_tree.svg';
 import BlurOn from '../assets/icons/blur_on.svg';
 import Bolt from '../assets/icons/bolt.svg';
 
+import brainVideo from '../assets/videos/Brain_Hologram.mp4';
+
+// Variantes maestras para el bloque inicial (Hero)
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1, 
+    transition: { 
+      staggerChildren: 0.12,
+      when: "beforeChildren" 
+    } 
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.6, 
+      ease: [0.16, 1, 0.3, 1] // Easing cúbico cinemático de desaceleración fluida
+    } 
+  }
+};
+
 export default function Home() {
   const root = useRef(null);
   const scope = useRef(null);
 
-  // Animaciones Anime.js v4 para gráficos y barras de progreso
+  // Ciclo controlado de inicialización para Anime.js v4 sin fugas de memoria
   useEffect(() => {
     scope.current = createScope(root.current);
 
     scope.current.add(() => {
-      // Animación de flujo continuo para la línea del gráfico
+      // Flujo continuo infinito en la línea del SVG
       animate('.realtime-path', {
         strokeDashoffset: [200, 0],
         duration: 2500,
@@ -29,19 +55,19 @@ export default function Home() {
         loop: true
       });
 
-      // Efecto de pulso para los puntos del gráfico
+      // Pulso orgánico en nodos de datos
       animate('.data-point', {
         opacity: [0.3, 1, 0.3],
-        scale: [1, 1.2, 1],
+        scale: [1, 1.15, 1],
         duration: 2000,
         easing: 'easeInOutSine',
         loop: true
       });
 
-      // Animación de las barras de progreso
+      // Entrada inicial suave y progresiva para las barras de carga
       animate('.progress-bar', {
         scaleX: [0, 1],
-        duration: 1500,
+        duration: 1200,
         easing: 'easeOutQuad'
       });
     });
@@ -49,260 +75,264 @@ export default function Home() {
     return () => scope.current.revert();
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
-      transition: { 
-        staggerChildren: 0.15,
-        when: "beforeChildren" 
-      } 
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { 
-        duration: 0.6, 
-        ease: [0.22, 1, 0.36, 1]
-      } 
-    }
-  };
-
-  const metricsSectionVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
-  };
-
   return (
     <motion.main 
       ref={root}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="relative overflow-hidden bg-(--surface)"
+      className="relative overflow-hidden bg-(--surface) text-(--on-surface) font-body blueprint-grid-dots"
     >
       {/* --- HERO SECTION --- */}
-      <section className="relative min-h-[95vh] flex items-center px-6 md:px-20 py-24 overflow-hidden z-20 bg-(--surface)">
-        <div className="absolute inset-0 bg-linear-to-b from-transparent via-(--surface)/60 to-(--surface) pointer-events-none"></div>
+      <section className="relative w-full h-screen overflow-hidden z-20 flex items-center px-6 md:px-20">
+        
+        {/* Capa de Vídeo (Fondo acelerado y optimizado) */}
+        <div className="absolute inset-0 z-0 hidden md:block select-none pointer-events-none">
+          <video 
+            src={brainVideo} 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="absolute w-full h-full opacity-60"
+            style={{ 
+              objectPosition: '120% 50%',
+              transform: 'translateZ(0)',
+              scale: 1.1
+            }} 
+          />
+          <div className="absolute inset-0 bg-linear-to-r from-(--surface) via-(--surface)/90 to-transparent"></div>
+        </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-8">
+        {/* Contenido Técnico */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          <div className="lg:max-w-4xl">
             <motion.div variants={itemVariants} className="flex items-center gap-3 mb-6">
-              <span className="inline-block w-12 h-0.5 bg-[#22d3ee]"></span>
-              <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#22d3ee] uppercase">
+              <span className="inline-block w-12 h-0.5 bg-(--secondary)"></span>
+              <span className="font-mono text-[10px] font-bold tracking-[0.25em] text-(--secondary) uppercase">
                 MOTOR PREDICTIVO V1.0
               </span>
             </motion.div>
-            <motion.h1 variants={itemVariants} className="text-white text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-8 uppercase">
-              La Ciencia de Datos Aplicada al<br />
-              <span className="text-(--primary)">Mercado Automotriz.</span>
+            
+            <motion.h1 variants={itemVariants} className="text-white text-5xl md:text-7xl font-bold leading-[1.05] tracking-tighter mb-8 uppercase font-headline">
+              La Ciencia de Datos <br />Aplicada al{" "}
+              <span className="text-(--primary-container)">Mercado Automotriz.</span>
             </motion.h1>
-            <motion.p variants={itemVariants} className="text-xl md:text-2xl max-w-2xl mb-10 leading-relaxed text-[#bec8d2]">
+            
+            <motion.p variants={itemVariants} className="text-lg md:text-xl mb-10 leading-relaxed text-(--on-surface-variant) font-light max-w-3xl">
               Arquitecturas avanzadas de Machine Learning para ofrecer las valoraciones más precisas del mercado ibérico con latencia de milisegundos.
             </motion.p>
+            
             <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
               <Link to="/predict">
-                <button className="btn-primary-engine h-14 px-10 text-base flex items-center gap-3">
-                  Empezar Predicción <img src={Trending} alt="Trend" className="w-5 h-5" />
-                </button>
+                <motion.button 
+                  whileHover={{ scale: 1.03, boxShadow: "0 0 25px rgba(14,165,233,0.45)" }}
+                  whileTap={{ scale: 0.97 }}
+                  className="btn-primary-engine h-14 px-10 text-xs font-bold tracking-widest uppercase flex items-center gap-3 cursor-pointer"
+                >
+                  Empezar Predicción <img src={Trending} alt="Trend" className="w-4 h-4" />
+                </motion.button>
               </Link>
               <Link to="/">
-                <button className="bg-(--surface-high) hover:bg-(--surface-highest) transition-colors h-14 px-8 rounded-sm text-white text-base font-semibold border-b-2 border-[#89ceff]/30">
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-(--surface-high) hover:bg-(--surface-highest) transition-colors h-14 px-8 rounded-sm text-white text-xs tracking-widest font-bold border-b-2 border-(--primary)/20 cursor-pointer uppercase"
+                >
                   Ver Precisión
-                </button>
+                </motion.button>
               </Link>
             </motion.div>
           </div>
-
-          <motion.div variants={itemVariants} className="lg:col-span-4 hidden lg:block relative">
-            <div className="neural-glow top-0 right-0 w-64 h-64 opacity-20"></div>
-            <div className="relative glass-panel p-8 rounded-lg border border-white/5 shadow-2xl backdrop-blur-xl bg-(--surface-high)/40">
-              <div className="flex flex-col gap-6">
-                <div className="flex justify-between items-end text-[10px] text-[#bec8d2] font-semibold tracking-widest uppercase">
-                  <div>LAST UPDATE <span className="block font-mono text-sm text-(--secondary) normal-case tracking-normal">2 MINS AGO</span></div>
-                  <div className="text-right">PROCESSED <span className="block font-mono text-sm text-white normal-case tracking-normal">1.2M DATAPOINTS</span></div>
-                </div>
-                <div className="relative glass-panel p-8 rounded-lg border border-white/5 shadow-2xl backdrop-blur-xl bg-(--surface-high)/40">
-                  <div className="h-48 w-full bg-black/20 rounded-sm flex items-center justify-center border border-white/5 relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#89ceff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-                    <svg className="w-full h-full overflow-visible" viewBox="0 0 100 50">
-                      <path className="realtime-path" d="M0 40 L20 20 L40 35 L60 10 L80 25 L100 5" fill="none" stroke="#89ceff" strokeWidth="2" strokeDasharray="200" />
-                      <circle className="data-point" cx="20" cy="20" r="2" fill="#5de6ff" />
-                      <circle className="data-point" cx="60" cy="10" r="2" fill="#5de6ff" />
-                      <circle className="data-point" cx="100" cy="5" r="2" fill="#5de6ff" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
       {/* --- METRICS SECTION --- */}
       <motion.section 
-        variants={{
-          hidden: { opacity: 0 },
-          visible: { 
-            opacity: 1, 
-            transition: { staggerChildren: 0.2, delayChildren: 0.1 } 
-          }
-        }}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10 bg-(--surface-low) py-24 px-6 md:px-20 border-t border-white/5"
       >
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           
-          {/* Columna Izquierda */}
-          <div className="lg:col-span-1">
-            <h2 className="text-white text-3xl font-bold mb-6 tracking-tight uppercase">Integridad del Motor & Métricas</h2>
-            <p className="leading-relaxed text-[#bec8d2] mb-8">Nuestros modelos de Machine Learning se validan mediante dos posibles arquitecturas, comparando datos genéricos con flujos de mercado real.</p>
+          {/* Columna Izquierda: Información de los Modelos */}
+          <div className="lg:col-span-1 space-y-6">
+            <h2 className="text-white text-3xl font-bold tracking-tight uppercase font-headline">
+              Integridad del Motor & Métricas
+            </h2>
+            <p className="leading-relaxed text-(--on-surface-variant) text-sm font-light">
+              Nuestros modelos de Machine Learning se validan mediante dos posibles arquitecturas, comparando datos genéricos con flujos de mercado real.
+            </p>
             
             {/* Precisión XGBOOST con animación de barra */}
-            <div className="p-6 bg-(--surface-highest) rounded-sm border border-white/5 mb-6">
-              <div className="flex items-center gap-3 mb-2"><img src={Verified} alt="Verified" className="w-4 h-4" /><span className="text-[10px] font-bold text-white tracking-widest uppercase">PRECISIÓN DE XGBOOST</span></div>
-              <div className="text-5xl font-bold text-(--primary) mb-4">88.55%</div>
-              <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
+            <div className="p-6 bg-(--surface-highest) rounded-sm border border-white/5">
+              <div className="flex items-center gap-3 mb-2">
+                <img src={Verified} alt="Verified" className="w-4 h-4" />
+                <span className="text-[9px] font-bold text-white tracking-widest uppercase opacity-60">PRECISIÓN DE XGBOOST</span>
+              </div>
+              <div className="text-5xl font-bold text-(--primary) mb-4 font-headline tracking-tight">88.55%</div>
+              <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: 0 }}
                   whileInView={{ width: "88.55%" }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className="h-full bg-(--primary)" 
+                  transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
+                  className="h-full bg-(--primary) progress-bar origin-left" 
                 />
               </div>
             </div>
 
             {/* Precisión Random Forest con animación de barra */}
             <div className="p-6 bg-(--surface-highest) rounded-sm border border-white/5">
-              <div className="flex items-center gap-3 mb-2"><img src={Verified} alt="Verified" className="w-4 h-4" /><span className="text-[10px] font-bold text-white tracking-widest uppercase">PRECISIÓN DE RANDOM FOREST</span></div>
-              <div className="text-5xl font-bold text-(--secondary) mb-4">93.85%</div>
-              <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
+              <div className="flex items-center gap-3 mb-2">
+                <img src={Verified} alt="Verified" className="w-4 h-4" />
+                <span className="text-[9px] font-bold text-white tracking-widest uppercase opacity-60">PRECISIÓN DE RANDOM FOREST</span>
+              </div>
+              <div className="text-5xl font-bold text-(--secondary) mb-4 font-headline tracking-tight">93.85%</div>
+              <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: 0 }}
                   whileInView={{ width: "93.85%" }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className="h-full bg-(--secondary)" 
+                  transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
+                  className="h-full bg-(--secondary) progress-bar origin-left" 
                 />
               </div>
             </div>
           </div>
 
-          {/* Columna Derecha: Tarjetas que aparecen en cascada */}
-          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div variants={itemVariants} className="bg-(--surface-container) p-8 rounded-lg border-l-4 border-(--primary)">
-              <div className="flex justify-between items-start mb-6"><img src={Analytics} alt="Analytics" className="w-8 h-8 opacity-70" /><span className="text-xs font-mono opacity-60 uppercase">XGBOOST</span></div>
-              <h3 className="text-white text-xl font-bold mb-2 uppercase">Margen de Error</h3>
-              <p className="text-4xl font-light text-white mb-4">1.455,53€</p>
-              <p className="text-sm text-[#bec8d2]">Varianza observada con simulaciones reales usando el modelo de regresión.</p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="bg-(--surface-container) p-8 rounded-lg border-l-4 border-(--secondary)">
-              <div className="flex justify-between items-start mb-6"><img src={DynamicFeed} alt="Feed" className="w-8 h-8 opacity-70" /><span className="text-xs font-mono opacity-60 uppercase">XGBOOST</span></div>
-              <h3 className="text-white text-xl font-bold mb-2 uppercase">Margen de Confianza</h3>
-              <p className="text-4xl font-light text-white mb-4">91.1%</p>
-              <p className="text-sm text-[#bec8d2]">Intervalo de confianza para modelos de vehículo de cualquier antigüedad.</p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="bg-(--surface-container) p-8 rounded-lg border-l-4 border-(--primary)">
-              <div className="flex justify-between items-start mb-6"><img src={Analytics} alt="Analytics" className="w-8 h-8 opacity-70" /><span className="text-xs font-mono opacity-60 uppercase">RANDOM FOREST</span></div>
-              <h3 className="text-white text-xl font-bold mb-2 uppercase">Margen de Error</h3>
-              <p className="text-4xl font-light text-white mb-4">1.359,71€</p>
-              <p className="text-sm text-[#bec8d2]">Varianza observada con simulaciones reales usando aprendizaje en árbol.</p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="bg-(--surface-container) p-8 rounded-lg border-l-4 border-(--secondary)">
-              <div className="flex justify-between items-start mb-6"><img src={DynamicFeed} alt="Feed" className="w-8 h-8 opacity-70" /><span className="text-xs font-mono opacity-60 uppercase">RANDOM FOREST</span></div>
-              <h3 className="text-white text-xl font-bold mb-2 uppercase">Margen de Confianza</h3>
-              <p className="text-4xl font-light text-white mb-4">91.34%</p>
-              <p className="text-sm text-[#bec8d2]">Intervalo de confianza para modelos de vehículo hasta el año 2018.</p>
-            </motion.div>
+          {/* Columna Derecha: Tarjetas de Métricas en Rejilla */}
+          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              { type: "XGBOOST", label: "Margen de Error", value: "1.455,53€", desc: "Varianza observada con simulaciones reales usando el modelo de regresión.", border: "border-l-(--primary)" },
+              { type: "XGBOOST", label: "Margen de Confianza", value: "91.1%", desc: "Intervalo de confianza para modelos de vehículo de cualquier antigüedad.", border: "border-l-(--secondary)" },
+              { type: "RANDOM FOREST", label: "Margen de Error", value: "1.359,71€", desc: "Varianza observada con simulaciones reales usando aprendizaje en árbol.", border: "border-l-(--primary)" },
+              { type: "RANDOM FOREST", label: "Margen de Confianza", value: "91.34%", desc: "Intervalo de confianza para modelos de vehículo hasta el año 2018.", border: "border-l-(--secondary)" }
+            ].map((card, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                whileHover={{ y: -3, transition: { duration: 0.15 } }}
+                className={`bg-(--surface-container) p-8 rounded-sm border border-white/5 border-l-4 ${card.border} group hover:bg-(--surface-high) transition-colors flex flex-col justify-between`}
+              >
+                <div>
+                  <div className="flex justify-between items-start mb-6">
+                    <img src={card.type.includes("FEED") ? DynamicFeed : Analytics} alt="Icon" className="w-6 h-6 opacity-40 group-hover:opacity-100 transition-opacity" />
+                    <span className="text-[9px] font-mono opacity-50 uppercase tracking-wider">{card.type}</span>
+                  </div>
+                  <h3 className="text-white text-base font-bold mb-1 uppercase tracking-wider">{card.label}</h3>
+                  <p className="text-3xl font-light text-white mb-4 tracking-tight">{card.value}</p>
+                </div>
+                <p className="text-xs text-(--on-surface-variant) opacity-70 group-hover:opacity-100 transition-opacity leading-relaxed">
+                  {card.desc}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.section>
 
       {/* --- CORE ARCHITECTURE --- */}
       <motion.section 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={{
-          hidden: { opacity: 0 },
-          visible: { 
-            opacity: 1,
-            transition: { staggerChildren: 0.2 } // El delay entre la aparición de cada tarjeta
-          }
-        }}
-        className="py-24 px-6 md:px-20 bg-(--surface-lowest)"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6 }}
+        className="py-24 px-6 md:px-20 bg-(--surface-lowest) border-t border-white/5"
       >
-        <div className="max-w-7xl mx-auto text-center mb-16">
-          <motion.h2 
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            className="text-white text-4xl font-bold mb-4 uppercase"
-          >
+        <div className="max-w-7xl mx-auto text-center mb-16 space-y-4">
+          <h2 className="text-white text-3xl md:text-4xl font-bold uppercase font-headline tracking-tight">
             Arquitectura del Núcleo Predictivo
-          </motion.h2>
-          <motion.div 
-            variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
-            className="h-1 w-24 bg-(--primary) opacity-50 mx-auto mb-6"
-          ></motion.div>
+          </h2>
+          <div className="h-0.5 w-20 bg-(--primary-container) opacity-60 mx-auto"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Bloque Random Forest */}
           <motion.div 
-            variants={{ hidden: { opacity: 0, x: -50 }, visible: { opacity: 1, x: 0 } }}
-            className="group p-8 bg-(--surface-container) hover:bg-(--surface-high) transition-all duration-300 border border-white/5 rounded-lg"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            whileHover={{ y: -4 }}
+            className="group p-8 bg-(--surface-container) hover:bg-(--surface-high) transition-all duration-300 border border-white/5 rounded-sm flex flex-col justify-between"
           >
-            <div className="mb-6 flex items-center gap-4">
-              <div className="size-12 rounded-sm flex items-center justify-center bg-(--primary)/10">
-                <img src={AccountTree} alt="Tree" className="w-6 h-6" />
+            <div>
+              <div className="mb-6 flex items-center gap-4">
+                <div className="size-12 rounded-xs flex items-center justify-center bg-(--primary)/10 border border-(--primary)/10 group-hover:border-(--primary)/30 transition-colors">
+                  <img src={AccountTree} alt="Tree" className="w-5 h-5" />
+                </div>
+                <h3 className="text-white text-xl font-bold tracking-tight uppercase group-hover:text-(--primary) transition-colors">Random Forest</h3>
               </div>
-              <h3 className="text-white text-2xl font-bold tracking-tight uppercase">Random Forest</h3>
+              <p className="leading-relaxed text-(--on-surface-variant) text-sm font-light mb-8 opacity-80 group-hover:opacity-100 transition-opacity">
+                Utiliza el aprendizaje en árboles de decisión para mejorar la precisión del modelo y predecir tendencias de mercado con alta estabilidad dimensional.
+              </p>
             </div>
-            <p className="leading-relaxed text-[#bec8d2] mb-8">Utiliza el aprendizaje en árboles de decisión para mejorar la precisión del modelo y predecir tendencias de mercado con alta estabilidad.</p>
-            <span className="px-3 py-1 bg-black/30 text-[10px] font-bold text-white rounded-sm border border-white/5 uppercase">SCIKIT LEARN</span>
+            <div>
+              <span className="inline-block px-3 py-1 bg-black/30 text-[9px] font-bold text-white/60 rounded-xs border border-white/5 uppercase font-mono tracking-widest">
+                SCIKIT LEARN
+              </span>
+            </div>
           </motion.div>
 
+          {/* Bloque Regression / XGBoost */}
           <motion.div 
-            variants={{ hidden: { opacity: 0, x: 50 }, visible: { opacity: 1, x: 0 } }}
-            className="group p-8 bg-(--surface-container) hover:bg-(--surface-high) transition-all duration-300 border border-white/5 rounded-lg"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            whileHover={{ y: -4 }}
+            className="group p-8 bg-(--surface-container) hover:bg-(--surface-high) transition-all duration-300 border border-white/5 rounded-sm flex flex-col justify-between"
           >
-            <div className="mb-6 flex items-center gap-4">
-              <div className="size-12 rounded-sm flex items-center justify-center bg-(--secondary)/10">
-                <img src={BlurOn} alt="Regression" className="w-6 h-6" />
+            <div>
+              <div className="mb-6 flex items-center gap-4">
+                <div className="size-12 rounded-xs flex items-center justify-center bg-(--secondary)/10 border border-(--secondary)/10 group-hover:border-(--secondary)/30 transition-colors">
+                  <img src={BlurOn} alt="Regression" className="w-5 h-5" />
+                </div>
+                <h3 className="text-white text-xl font-bold tracking-tight uppercase group-hover:text-(--secondary) transition-colors">Regression</h3>
               </div>
-              <h3 className="text-white text-2xl font-bold tracking-tight uppercase">Regression</h3>
+              <p className="leading-relaxed text-(--on-surface-variant) text-sm font-light mb-8 opacity-80 group-hover:opacity-100 transition-opacity">
+                Utiliza el aprendizaje en regresión iterativa para capturar correlaciones lineales y no lineales complejas entre variables de equipamiento técnico.
+              </p>
             </div>
-            <p className="leading-relaxed text-[#bec8d2] mb-8">Utiliza el aprendizaje en regresión para capturar correlaciones lineales y no lineales complejas entre variables técnicas.</p>
-            <span className="px-3 py-1 bg-black/30 text-[10px] font-bold text-white rounded-sm border border-white/5 uppercase">XGBOOST</span>
+            <div>
+              <span className="inline-block px-3 py-1 bg-black/30 text-[9px] font-bold text-white/60 rounded-xs border border-white/5 uppercase font-mono tracking-widest">
+                XGBOOST
+              </span>
+            </div>
           </motion.div>
         </div>
       </motion.section>
 
       {/* --- CTA FINAL --- */}
-      <motion.section 
-        initial={{ opacity: 0, y: 30 }} 
-        whileInView={{ opacity: 1, y: 0 }} 
-        viewport={{ once: true, amount: 0.5 }} 
-        className="py-24 px-6 md:px-20 bg-(--surface)"
-      >
-        <div className="max-w-5xl mx-auto bg-[#222a3d] p-10 rounded-lg shadow-2xl relative border border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <h2 className="text-white text-4xl font-bold mb-2 uppercase">Inicializar Evaluación</h2>
-            <p className="text-[#bec8d2]">Prueba las especificaciones para obtener un resultado estimado de alta fidelidad.</p>
+      <section className="py-20 px-6 md:px-20 bg-(--surface) border-t border-white/5">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }} 
+          whileInView={{ opacity: 1, scale: 1 }} 
+          viewport={{ once: true, amount: 0.4 }} 
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="max-w-5xl mx-auto bg-(--surface-high) p-10 rounded-sm relative border border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 backdrop-blur-xs"
+        >
+          <div className="space-y-2 text-center md:text-left">
+            <h2 className="text-white text-3xl font-bold uppercase font-headline tracking-tight">Inicializar Evaluación</h2>
+            <p className="text-(--on-surface-variant) text-sm font-light">Prueba las especificaciones para obtener un resultado estimado de alta fidelidad.</p>
           </div>
-          <Link to="/predict">
-            <button className="btn-primary-engine w-full h-14.5 text-sm flex items-center justify-center gap-2">
-              GENERAR EVALUACIÓN <img src={Bolt} alt="Bolt" className="w-5 h-5" />
-            </button>
-          </Link>
-        </div>
-      </motion.section>
+          <div className="w-full md:w-auto">
+            <Link to="/predict">
+              <motion.button 
+                whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(93,230,255,0.4)" }}
+                whileTap={{ scale: 0.97 }}
+                className="btn-primary-engine w-full md:w-auto h-14 px-10 text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer"
+              >
+                GENERAR EVALUACIÓN <img src={Bolt} alt="Bolt" className="w-4 h-4" />
+              </motion.button>
+            </Link>
+          </div>
+        </motion.div>
+      </section>
     </motion.main>
   );
 }

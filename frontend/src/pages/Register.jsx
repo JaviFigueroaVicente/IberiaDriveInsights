@@ -8,6 +8,7 @@ import Analytics from '../assets/icons/analytics.svg'
 import VerifiedUser from '../assets/icons/verified_user.svg'
 import ArrowRight from '../assets/icons/arrow_right.svg'
 import { registerUser } from '../composables/auth'
+import { Background } from '../components/Background'
 
 export default function Register() {
     const navigate = useNavigate();
@@ -128,6 +129,7 @@ export default function Register() {
             animate={{ opacity: 1 }}
             className="relative flex min-h-screen items-center justify-center bg-(--surface) text-[#dae2fd] overflow-hidden py-4 px-4 md:px-8"
         >
+            <Background />
             <div className="blueprint-grid pointer-events-none absolute inset-0 opacity-40"></div>
             <div className="kinetic-radial pointer-events-none absolute inset-0 opacity-20"></div>
 
@@ -181,9 +183,15 @@ export default function Register() {
                 </div>
 
                 <motion.div variants={itemVariants} className="bg-(--surface-container) p-6 md:p-10 lg:p-12 flex flex-col justify-center relative">
-                    <div className="mb-6">
+                    <div className="mb-4">
                         <h3 className="text-xl font-bold text-white mb-1 tracking-tight uppercase">Crear Cuenta</h3>
                         <p className="text-xs text-[#bec8d2]/70">Despliegue su terminal de diagnóstico.</p>
+                    </div>
+
+                    {/* Aviso de entorno de pruebas / portfolio */}
+                    <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-sm font-mono text-[10px] text-yellow-200/80 leading-normal uppercase tracking-wider">
+                        <span className="font-bold text-yellow-400">[ ENTORNO DE DEMOSTRACIÓN ]</span><br />
+                        Esta web es un proyecto de portfolio. Puede utilizar correos ficticios (ej: usuario@test.com). Los datos recopilados no se utilizarán para ningún tipo de estudio, análisis o explotación comercial.
                     </div>
 
                     <form onSubmit={handleRegister} className="space-y-4">

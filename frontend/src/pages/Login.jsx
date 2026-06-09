@@ -8,6 +8,8 @@ import Lock from '../assets/icons/lock.svg'
 import Email from '../assets/icons/alternate_email.svg'
 import ArrowRight from '../assets/icons/arrow_right.svg'
 
+import { Background } from '../components/Background';
+
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -77,6 +79,7 @@ export default function Login({ onLoginSuccess }) {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center py-4 bg-(--surface) text-[#dae2fd] overflow-hidden">
+      <Background />
       <div className="blueprint-grid pointer-events-none absolute inset-0 opacity-40"></div>
       <div className="kinetic-radial pointer-events-none absolute inset-0 opacity-20"></div>
 
@@ -104,10 +107,16 @@ export default function Login({ onLoginSuccess }) {
           <div className="absolute -bottom-1 -right-1 h-6 w-6 border-b-2 border-r-2 border-(--secondary)/40"></div>
 
           <div className="p-8">
-            <div className="mb-6">
+            <div className="mb-4">
               <h1 className="text-2xl font-bold tracking-tight text-white uppercase">
                 Autenticación
               </h1>
+            </div>
+
+            {/* Aviso de entorno de pruebas / portfolio */}
+            <div className="mb-5 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-sm font-mono text-[10px] text-yellow-200/80 leading-normal uppercase tracking-wider">
+              <span className="font-bold text-yellow-400">[ ENTORNO DE DEMOSTRACIÓN ]</span><br />
+              Esta web es un proyecto de portfolio. Puede utilizar credenciales ficticias para interactuar. Los datos recopilados no se utilizarán para ningún tipo de estudio, análisis o explotación comercial.
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -187,7 +196,7 @@ export default function Login({ onLoginSuccess }) {
               </div>
               <div className="flex flex-col border-l border-[#3e4850]/30 pl-6">
                 <span className="text-[7px] text-[#bec8d2] uppercase tracking-tighter">Encriptado</span>
-                <span className="text-[8px] font-bold text-white uppercase">AES-256</span>
+                <span className="text-[8px] font-bold text-white uppercase">HS-256</span>
               </div>
             </div>
             <span className="text-[7px] text-[#bec8d2]/30 uppercase tracking-widest">© 2026 IDI</span>

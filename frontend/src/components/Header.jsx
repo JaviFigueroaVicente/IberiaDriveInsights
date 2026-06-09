@@ -2,11 +2,12 @@ import Logo from '../assets/icons/logo.png'
 import { NavLink, Link } from 'react-router-dom'
 import Perfil from '../assets/icons/perfil.svg'
 import { useState } from 'react'
-import Swal from 'sweetalert2' // Importación para el control de confirmación
+import Swal from 'sweetalert2' 
 import Person from '../assets/icons/person.svg'
 import Logout from '../assets/icons/logout.svg'
 import Menu from '../assets/icons/menu.svg'
 import PrecisionManufacturing from '../assets/icons/precision_manufacturing.svg'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Header({ isAuthenticated, currentUser, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,23 +15,22 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
 
     // Configuración técnica para integrar Swal con el diseño oscuro
     const swalConfig = {
-        background: 'var(--surface-container-low, #1e1e1e)',
-        color: '#ffffff',
-        confirmButtonColor: '#ff5252', // Rojo para acciones destructivas
+        background: 'var(--surface-container, #171f33)',
+        color: '#dae2fd',
+        confirmButtonColor: '#ff5252', 
         cancelButtonColor: 'rgba(255, 255, 255, 0.05)',
         customClass: {
-            popup: 'border border-white/10 rounded-sm font-mono text-xs',
-            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
+            popup: 'border border-white/10 rounded-sm font-mono text-xs shadow-2xl',
+            title: 'text-base font-headline uppercase tracking-tight text-white font-bold border-b border-white/5 pb-2',
             htmlContainer: 'text-xs text-[#bec8d2]',
             confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm',
-            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm border border-white/10 text-white'
+            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm border border-white/10 text-white hover:bg-white/5 transition-colors'
         }
     };
 
-    // Interceptor para el flujo de desconexión del sistema
     const confirmLogout = () => {
-        setIsOpen(false); // Cierra el menú desplegable de escritorio
-        setIsMenuOpen(false); // Cierra el menú móvil
+        setIsOpen(false); 
+        setIsMenuOpen(false); 
         
         Swal.fire({
             ...swalConfig,
@@ -54,30 +54,31 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
             allowEscapeKey: true
         }).then((result) => {
             if (result.isConfirmed) {
-                onLogout(); // Llama a la función de logout del Header
+                onLogout(); 
             }
         });
     };
 
+    // Estilos de navegación manteniendo tus proporciones exactas y el efecto de línea expansiva
     const navLinkStyles = ({ isActive }) => 
-        isActive 
-            ? "text-(--primary-container) transition-colors" 
-            : "hover:text-(--primary-container) transition-colors";
+        `relative py-1 transition-colors before:content-[''] before:absolute before:bottom-[-4px] before:left-0 before:w-full before:h-[2px] before:bg-(--primary-container) before:scale-x-0 before:origin-right before:transition-transform before:duration-300 hover:before:scale-x-100 hover:before:origin-left ${
+            isActive ? "text-(--primary-container) before:scale-x-100" : "hover:text-(--primary-container)"
+        }`;
 
     const mobileNavLinkStyles = ({ isActive }) =>
         isActive
-            ? "block py-2 border-b border-white/5 text-(--primary-container) pl-2 border-l-2 border-l-(--primary-container)"
-            : "block py-2 border-b border-white/5 hover:text-(--primary-container) transition-all";
+            ? "block py-2 border-b border-white/5 text-(--primary-container) pl-2 border-l-2 border-l-(--primary-container) bg-white/[0.02]"
+            : "block py-2 border-b border-white/5 hover:text-(--primary-container) hover:pl-1 transition-all";
 
     return (
-        <header className="sticky top-0 z-100 w-full border-b border-white/10 bg-(--surface)/80 backdrop-blur-md">
+        <header className="sticky top-0 z-100 w-full border-b border-white/10 bg-(--surface)/80 backdrop-blur-md select-none">
             
             <div className="flex items-center justify-between py-4 px-4 md:px-10 h-20 relative z-120">
                 
                 {/* 01. Logo */}
                 <div className='flex items-center'>
                     <Link to='/' className='flex items-center gap-3 group' onClick={() => setIsMenuOpen(false)}>
-                        <div className="h-9 w-9 p-1 bg-(--primary-container)/20 border border-(--primary-container)/40 rounded-sm">
+                        <div className="h-9 w-9 p-1 bg-(--primary-container)/20 border border-(--primary-container)/40 rounded-sm group-hover:border-(--primary-container)/80 transition-colors">
                             <img src={Logo} alt="Logo" className="w-full h-full object-contain" />
                         </div>
                         <h1 className="text-lg font-bold tracking-tighter text-white uppercase hidden sm:block">
@@ -105,101 +106,128 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                             <div className="relative">
                                 <button 
                                     onClick={() => setIsOpen(!isOpen)} 
-                                    className="flex items-center gap-3 focus:outline-none group cursor-pointer relative z-130"
+                                    className="flex items-center gap-3 focus:outline-none group cursor-pointer relative z-130 py-1 px-2 rounded-sm hover:bg-white/3 transition-colors"
                                 >
                                     <div className="text-right hidden lg:block">
-                                        <p className="text-[10px] font-bold text-[#bec8d2] uppercase tracking-wider">{currentUser.name}</p>
+                                        <p className="text-[10px] font-bold text-[#bec8d2] uppercase tracking-wider group-hover:text-white transition-colors">{currentUser.name}</p>
                                     </div>
                                     <div className="h-10 w-10 rounded-full border-2 border-white/10 p-0.5 group-hover:border-(--primary-container) transition-all overflow-hidden bg-black/20">
-                                        <img src={Perfil} alt="Perfil" className="h-full w-full object-cover"/>
+                                        <img src={Perfil} alt="Perfil" className="h-full w-full object-cover rounded-full"/>
                                     </div>
                                 </button>
 
-                                {isOpen && (
-                                    <>
-                                        <div className="fixed inset-0 z-125" onClick={() => setIsOpen(false)}></div>
-                                        <ul className="absolute right-0 mt-4 w-52 bg-[#0d0d12] border border-white/10 shadow-2xl z-130 py-3 animate-in fade-in zoom-in-95 duration-200">
-                                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-(--primary-container)/40"></div>
-                                            <li className="px-5 py-3 border-b border-white/5 mb-2">
-                                                <p className="text-[9px] text-[#606070] font-bold tracking-widest uppercase">ID de Sistema</p>
-                                                <p className="text-xs text-white font-mono truncate">{currentUser.email || 'USR-404'}</p>
-                                            </li>
-                                            <li>
-                                                <NavLink 
-                                                    to="/profile" 
-                                                    onClick={() => setIsOpen(false)} 
-                                                    className={({isActive}) => `flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold ${isActive ? 'text-white bg-white/5' : 'text-[#BEC8D2]'} hover:bg-white/5 hover:text-white transition-colors uppercase tracking-wider`}
-                                                >
-                                                    <img src={Person} alt="Person" /> Mi Perfil
-                                                </NavLink>
-                                            </li>
-                                            {isAuthenticated && currentUser.role == 1 && (
-                                                <li>
-                                                    <NavLink 
-                                                        to="/admin" 
-                                                        onClick={() => setIsOpen(false)}
-                                                        className={({isActive}) => `flex items-center gap-3 px-5 py-2.5 text-[11px] font-bold ${isActive ? 'text-white bg-white/5' : 'text-[#BEC8D2]'} hover:bg-white/5 hover:text-white transition-colors uppercase tracking-wider`}
-                                                    >
-                                                        <img src={PrecisionManufacturing} alt="admin" /> Admin
-                                                    </NavLink>
-                                                </li>
-                                            )}
-                                            <li className="mt-2 pt-2 border-t border-white/5 px-2">
-                                                <button onClick={confirmLogout} className="w-full flex items-center gap-3 px-3 py-2 text-[11px] font-bold text-red-400 hover:bg-red-500/10 rounded transition-all uppercase tracking-wider cursor-pointer">
-                                                    <img src={Logout} alt="Logout" /> Cerrar Sesión
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </>
-                                )}
+                                {/* DESPLEGABLE DESKTOP CON MOTION */}
+                                <AnimatePresence>
+                                    {isOpen && (
+                                        <>
+                                            <div className="fixed inset-0 z-125" onClick={() => setIsOpen(false)}></div>
+                                            <motion.div 
+                                                initial={{ opacity: 0, scaleY: 0.85, y: -5 }}
+                                                animate={{ opacity: 1, scaleY: 1, y: 0 }}
+                                                exit={{ opacity: 0, scaleY: 0.9, y: -5 }}
+                                                transition={{ duration: 0.15, ease: "easeOut" }}
+                                                className="absolute right-0 mt-4 w-52 bg-(--surface-low)/95 backdrop-blur-xl border border-white/10 shadow-2xl z-130 py-3 rounded-sm origin-top overflow-hidden"
+                                            >
+                                                {/* Esquinas estéticas cibernéticas */}
+                                                <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-(--primary-container)"></div>
+                                                <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-(--primary-container)"></div>
+                                                
+                                                <div className="px-5 py-2 border-b border-white/5 mb-2 bg-black/10">
+                                                    <p className="text-[9px] text-[#606070] font-bold tracking-widest uppercase">ID de Sistema</p>
+                                                    <p className="text-xs text-white font-mono truncate">{currentUser.email || 'USR-404'}</p>
+                                                </div>
+                                                <ul className="space-y-0.5 font-bold text-[11px] uppercase tracking-wider">
+                                                    <li>
+                                                        <NavLink 
+                                                            to="/profile" 
+                                                            onClick={() => setIsOpen(false)} 
+                                                            className={({isActive}) => `flex items-center gap-3 px-5 py-2.5 transition-colors group/item ${isActive ? 'text-white bg-white/5 border-l-2 border-(--primary-container)' : 'text-[#BEC8D2] hover:bg-white/5 hover:text-white'}`}
+                                                        >
+                                                            <img src={Person} alt="Person" className="w-3.5 h-3.5 opacity-70 group-hover/item:opacity-100 transition-opacity" /> Mi Perfil
+                                                        </NavLink>
+                                                    </li>
+                                                    {isAuthenticated && currentUser.role === 1 && (
+                                                        <li>
+                                                            <NavLink 
+                                                                to="/admin" 
+                                                                onClick={() => setIsOpen(false)}
+                                                                className={({isActive}) => `flex items-center gap-3 px-5 py-2.5 transition-colors group/item ${isActive ? 'text-white bg-white/5 border-l-2 border-(--primary-container)' : 'text-[#BEC8D2] hover:bg-white/5 hover:text-white'}`}
+                                                            >
+                                                                <img src={PrecisionManufacturing} alt="admin" className="w-3.5 h-3.5 opacity-70 group-hover/item:opacity-100 transition-opacity" /> Admin
+                                                            </NavLink>
+                                                        </li>
+                                                    )}
+                                                    <li className="mt-2 pt-2 border-t border-white/5 px-2">
+                                                        <button onClick={confirmLogout} className="w-full flex items-center gap-3 px-3 py-2 text-red-400 hover:bg-red-500/10 rounded-sm transition-all cursor-pointer group/btn">
+                                                            <img src={Logout} alt="Logout" className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform" /> Cerrar Sesión
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </motion.div>
+                                        </>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         ) : (
-                            <Link to="/login" className="bg-linear-to-br from-(--primary-container) to-(--primary) text-white px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-sm">EMPEZAR</Link>
+                            <Link to="/login" className="bg-linear-to-br from-(--primary-container) to-(--primary) text-white px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-all hover:shadow-[0_0_15px_rgba(14,165,233,0.3)]">EMPEZAR</Link>
                         )}
                     </div>
 
+                    {/* Botón Hamburguesa */}
                     <button 
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="md:hidden text-[#BEC8D2] hover:text-white transition-colors z-130 p-1 focus:outline-none cursor-pointer"
+                        className="md:hidden text-[#BEC8D2] hover:text-white transition-colors z-130 p-1 focus:outline-none cursor-pointer rounded-sm hover:bg-white/5"
                     >
                         <img 
                             src={Menu} 
                             alt="Menu Icon" 
-                            className={`w-8 h-8 transition-transform duration-300 ease-in-out ${isMenuOpen ? 'rotate-180' : 'rotate-0'}`} 
+                            className={`w-8 h-8 transition-transform duration-300 ease-in-out ${isMenuOpen ? 'rotate-90 text-white' : 'rotate-0'}`} 
                         />
                     </button>
                 </div>
             </div>
 
-            {/* MENÚ DESPLEGABLE MÓVIL */}
-            <div className={`
-                md:hidden absolute top-20 left-0 w-full bg-[#0d0d12]/98 backdrop-blur-xl border-b border-white/10
-                transition-all duration-300 ease-in-out origin-top z-110 shadow-2xl
-                ${isMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0 pointer-events-none'}
-            `}>
-                <ul className="flex flex-col p-8 gap-6 font-bold text-[12px] tracking-[0.2em] uppercase">
-                    <li><NavLink className={mobileNavLinkStyles} to='/predict' onClick={() => setIsMenuOpen(false)}>Predecir</NavLink></li>
-                    <li><NavLink className={mobileNavLinkStyles} to='/analysis' onClick={() => setIsMenuOpen(false)}>Análisis</NavLink></li>
-                    <li><NavLink className={mobileNavLinkStyles} to='/models' onClick={() => setIsMenuOpen(false)}>Modelos</NavLink></li>
-                    
-                    {isAuthenticated ? (
-                        <>
-                            <li><NavLink className={mobileNavLinkStyles} to='/profile/my-predictions' onClick={() => setIsMenuOpen(false)}>Mis Predicciones</NavLink></li>
-                            <li><NavLink className={({isActive}) => `block py-2 ${isActive ? 'text-(--primary-container)' : 'text-(--secondary)'}`} to='/profile' onClick={() => setIsMenuOpen(false)}>Mi Perfil</NavLink></li>
-                            <li><button onClick={confirmLogout} className="text-red-400 font-bold uppercase tracking-widest text-left cursor-pointer">Cerrar Sesión</button></li>
-                        </>
-                    ) : (
-                        <li><Link to="/login" className="block bg-(--primary-container) text-white text-center py-4 rounded-sm cursor-pointer" onClick={() => setIsMenuOpen(false)}>LOGIN / REGISTRO</Link></li>
-                    )}
-                </ul>
-            </div>
+            {/* MENÚ DESPLEGABLE MÓVIL CON MOTION */}
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0, scaleY: 0.95 }}
+                        animate={{ opacity: 1, scaleY: 1 }}
+                        exit={{ opacity: 0, scaleY: 0.95 }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        className="md:hidden absolute top-20 left-0 w-full bg-[#0d0d12]/98 backdrop-blur-xl border-b border-white/10 z-110 shadow-2xl origin-top"
+                    >
+                        <ul className="flex flex-col p-8 gap-6 font-bold text-[12px] tracking-[0.2em] uppercase">
+                            <li><NavLink className={mobileNavLinkStyles} to='/predict' onClick={() => setIsMenuOpen(false)}>Predecir</NavLink></li>
+                            <li><NavLink className={mobileNavLinkStyles} to='/analysis' onClick={() => setIsMenuOpen(false)}>Análisis</NavLink></li>
+                            <li><NavLink className={mobileNavLinkStyles} to='/models' onClick={() => setIsMenuOpen(false)}>Modelos</NavLink></li>
+                            
+                            {isAuthenticated ? (
+                                <>
+                                    <li><NavLink className={mobileNavLinkStyles} to='/profile/my-predictions' onClick={() => setIsMenuOpen(false)}>Mis Predicciones</NavLink></li>
+                                    <li><NavLink className={({isActive}) => `block py-2 ${isActive ? 'text-(--primary-container)' : 'text-(--on-surface-variant)'}`} to='/profile' onClick={() => setIsMenuOpen(false)}>Mi Perfil</NavLink></li>
+                                    <li><button onClick={confirmLogout} className="text-red-400 font-bold uppercase tracking-widest text-left cursor-pointer w-full py-1 hover:text-red-300 transition-colors">Cerrar Sesión</button></li>
+                                </>
+                            ) : (
+                                <li><Link to="/login" className="block bg-(--primary-container) text-white text-center py-4 rounded-sm cursor-pointer shadow-md hover:bg-(--primary-container)/90 transition-colors" onClick={() => setIsMenuOpen(false)}>LOGIN / REGISTRO</Link></li>
+                            )}
+                        </ul>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-            {isMenuOpen && (
-                <div 
-                    className="fixed inset-0 bg-black/60 z-105 md:hidden backdrop-blur-sm" 
-                    onClick={() => setIsMenuOpen(false)}
-                />
-            )}
+            {/* Telón de fondo oscuro móvil */}
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/60 z-105 md:hidden backdrop-blur-sm" 
+                        onClick={() => setIsMenuOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
         </header>
     )
 }
