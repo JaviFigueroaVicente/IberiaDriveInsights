@@ -84,7 +84,7 @@ export default function Home() {
       className="relative overflow-hidden bg-(--surface) text-(--on-surface) font-body blueprint-grid-dots"
     >
       {/* --- HERO SECTION --- */}
-      <section className="relative w-full h-screen overflow-hidden z-20 flex items-center px-6 md:px-20">
+      <section className="relative w-full min-h-[calc(100vh-5rem)] overflow-hidden z-20 flex items-center px-6 md:px-20">
         
         {/* Capa de Vídeo (Fondo acelerado y optimizado) */}
         <div className="absolute inset-0 z-0 hidden md:block select-none pointer-events-none">

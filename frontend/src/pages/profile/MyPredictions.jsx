@@ -17,11 +17,13 @@ const ChevronLeftIcon = () => (
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
     </svg>
 );
+
 const ChevronRightIcon = () => (
     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
     </svg>
 );
+
 const XIcon = () => (
     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -32,7 +34,7 @@ const PaginationBtn = ({ text, icon: Icon, active, disabled, onClick }) => (
     <button
         disabled={disabled}
         onClick={onClick}
-        className={`h-8 min-w-8 px-2 flex items-center justify-center rounded-xs font-mono text-[10px] uppercase tracking-wider border transition-all duration-150 cursor-pointer
+        className={`h-8 min-w-8 px-2 flex items-center justify-center rounded-xs font-mono text-[10px] uppercase tracking-wider border transition-all duration-150 cursor-pointer select-none
             ${disabled 
                 ? 'opacity-20 cursor-not-allowed border-white/5 text-(--on-surface)' 
                 : active 
@@ -102,7 +104,6 @@ export default function MyPredictions({ currentUser, handleLogout }) {
         const fullRegistrationDate = car.registration ? new Date(car.registration) : null;
         const registrationYear = fullRegistrationDate ? String(fullRegistrationDate.getFullYear()) : '';
 
-        // Comprobación de texto sobre los nombres reales resueltos por el backend
         const matchesSearch = filterSearch === "" || 
             modelName.toLowerCase().includes(filterSearch.toLowerCase()) ||
             versionName.toLowerCase().includes(filterSearch.toLowerCase());
@@ -135,12 +136,14 @@ export default function MyPredictions({ currentUser, handleLogout }) {
     const endRange = Math.min(indexOfLastItem, filteredPredictions.length);
 
     return (
-        <div className="flex items-start min-h-screen bg-(--surface) text-(--on-surface) selection:bg-(--primary-container) selection:text-white">
+        <div className="relative flex items-start min-h-screen text-(--on-surface) selection:bg-(--primary-container) selection:text-white overflow-x-hidden">
+            {/* Capa técnica de fondo aislado: Previene rupturas de la rejilla y cortes negros en scroll dinámico */}
+            <div className="fixed inset-0 bg-(--surface) blueprint-grid opacity-20 pointer-events-none -z-10" />
+
             <SideBar currentUser={currentUser} onLogout={handleLogout}/>
             
-            <main className="flex-1 flex flex-col min-h-screen relative overflow-hidden p-8 max-w-7xl mx-auto w-full space-y-12">
-                <div className="absolute inset-0 blueprint-grid opacity-20 pointer-events-none" />
-                <div className="p-6 relative z-10 w-full">
+            <main className="flex-1 flex flex-col min-h-screen p-8 max-w-7xl mx-auto w-full space-y-12 z-10">
+                <div className="w-full">
                     
                     {/* Header */}
                     <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -166,26 +169,33 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                             </button>
 
                             <div className="flex items-center gap-2 bg-(--surface-container-high) p-1 rounded-sm border border-white/5">
-                                <button onClick={() => setViewMode('list')} className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all rounded-xs cursor-pointer ${viewMode === 'list' ? 'bg-(--surface-highest) text-(--primary)' : 'text-(--on-surface-variant) hover:text-white'}`}>
+                                <button 
+                                    onClick={() => setViewMode('list')} 
+                                    className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all rounded-xs cursor-pointer ${viewMode === 'list' ? 'bg-(--surface-highest) text-(--primary)' : 'text-(--on-surface-variant) hover:text-white'}`}
+                                >
                                     LISTA
                                 </button>
-                                <button onClick={() => setViewMode('grid')} className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all rounded-xs cursor-pointer ${viewMode === 'grid' ? 'bg-(--surface-highest) text-(--primary)' : 'text-(--on-surface-variant) hover:text-white'}`}>
+                                <button 
+                                    onClick={() => setViewMode('grid')} 
+                                    className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all rounded-xs cursor-pointer ${viewMode === 'grid' ? 'bg-(--surface-highest) text-(--primary)' : 'text-(--on-surface-variant) hover:text-white'}`}
+                                >
                                     VISUAL
                                 </button>
                             </div>
                         </div>
                     </header>
 
-                    {/* Controles de Filtros Corregidos y Vinculados */}
+                    {/* Controles de Filtros */}
                     <section className="flex flex-col space-y-3 mb-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             
-                            {/* Input: Marca (Texto) */}
+                            {/* Input: Marca */}
                             <div className="bg-(--surface-low) border border-white/5 rounded-xs p-1 flex items-center group focus-within:border-white/20 focus-within:bg-(--surface-container-low) transition-all">
                                 <div className="p-2 shrink-0 opacity-40 group-focus-within:opacity-100 transition-opacity">
                                     <img src={FilterList} alt="Brand" className="w-4 h-4" />
                                 </div>
                                 <input 
+                                    type="text"
                                     value={filterBrand} 
                                     onChange={(e) => { setFilterBrand(e.target.value); setCurrentPage(1); }} 
                                     placeholder="Marca" 
@@ -193,7 +203,7 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                 />
                             </div>
 
-                            {/* Input: Año (Número) */}
+                            {/* Input: Año */}
                             <div className="bg-(--surface-low) border border-white/5 rounded-xs p-1 flex items-center group focus-within:border-white/20 focus-within:bg-(--surface-container-low) transition-all">
                                 <div className="p-2 shrink-0 opacity-40 group-focus-within:opacity-100 transition-opacity">
                                     <img src={CalendarMonth} alt="Year" className="w-4 h-4" />
@@ -207,7 +217,7 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                 />
                             </div>
 
-                            {/* Input: Presupuesto Máximo (Número) */}
+                            {/* Input: Presupuesto Máximo */}
                             <div className="bg-(--surface-low) border border-white/5 rounded-xs p-1 flex items-center group focus-within:border-white/20 focus-within:bg-(--surface-container-low) transition-all">
                                 <div className="p-2 shrink-0 opacity-40 group-focus-within:opacity-100 transition-opacity">
                                     <img src={Payments} alt="Max Price" className="w-4 h-4" />
@@ -221,12 +231,13 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                 />
                             </div>
 
-                            {/* Input: Modelo o Especificación (Texto) */}
+                            {/* Input: Modelo */}
                             <div className="bg-(--surface-low) border border-white/5 rounded-xs p-1 flex items-center group focus-within:border-white/20 focus-within:bg-(--surface-container-low) transition-all">
                                 <div className="p-2 shrink-0 opacity-40 group-focus-within:opacity-100 transition-opacity">
                                     <img src={Search} alt="Search" className="w-4 h-4" />
                                 </div>
                                 <input 
+                                    type="text"
                                     value={filterSearch} 
                                     onChange={(e) => { setFilterSearch(e.target.value); setCurrentPage(1); }} 
                                     placeholder="Modelo" 
@@ -243,13 +254,13 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                     className="flex items-center gap-1.5 px-3 py-1 bg-white/5 hover:bg-red-500/10 text-(--on-surface-variant) hover:text-red-400 border border-white/5 hover:border-red-500/20 rounded-xs transition-all font-mono text-[9px] uppercase tracking-widest cursor-pointer"
                                 >
                                     <XIcon />
-                                    <span className="font-bold animate-pulse">Restablecer Filtros</span>
+                                    <span className="font-bold">Restablecer Filtros</span>
                                 </button>
                             </div>
                         </div>
                     </section>
 
-                    {/* Listado de Tarjetas */}
+                    {/* Listado / Grid de Tarjetas */}
                     <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 gap-4" : "space-y-4"}>
                         {isLoading ? (
                             <div className="flex flex-col items-center justify-center py-20 opacity-50 col-span-full">
@@ -260,6 +271,8 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                             currentItems.map((car) => (
                                 <div key={car.id} className="group relative bg-(--surface-low) hover:bg-(--surface-container) transition-all duration-300 rounded-sm border-l-2 border-(--secondary) overflow-hidden border-t border-r border-b">
                                     <div className={`flex gap-6 p-4 ${viewMode === 'grid' ? 'flex-col items-start' : 'flex-col lg:flex-row items-center'}`}>
+                                        
+                                        {/* Contenedor de Imagen/Icono */}
                                         <div className={`rounded-sm bg-(--surface-highest) overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500 border border-white/10 shrink-0 ${viewMode === 'grid' ? 'w-full h-40' : 'w-full lg:w-48 h-32'}`}>
                                             <div className="absolute inset-0 bg-linear-to-br from-(--primary)/20 to-transparent" />
                                             <div className="absolute inset-0 flex items-center justify-center p-4">
@@ -270,8 +283,8 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                             </div>
                                         </div>
 
+                                        {/* Información Técnica */}
                                         <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-
                                             <div>
                                                 <p className="text-[9px] uppercase font-bold text-(--on-surface-variant) tracking-widest mb-1">
                                                     Información General
@@ -305,7 +318,7 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                                     Evaluación Y Rendimiento
                                                 </p>
                                                 <p className="text-white font-headline text-2xl font-black tracking-tighter">
-                                                    €{Number(car.price).toLocaleString()}
+                                                    {Number(car.price).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })}
                                                 </p>
                                                 <p className="text-(--secondary) text-[10px] font-mono uppercase font-bold tracking-wider mt-1">
                                                     {Number(car.kms).toLocaleString()} KMS
@@ -313,6 +326,7 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                             </div>
                                         </div>
 
+                                        {/* Botones de Acción */}
                                         <div className={`flex justify-between items-end gap-4 shrink-0 ${viewMode === 'grid' ? 'w-full border-t border-white/5 pt-3' : 'flex-col w-full lg:w-auto'}`}>
                                             <p className={`text-[9px] text-(--on-surface-variant) font-mono opacity-60 ${viewMode === 'grid' ? 'text-left' : 'text-right'}`}>
                                                 ID-{car.id}
@@ -326,6 +340,7 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                                 </button>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             ))
@@ -337,8 +352,8 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                     </div>
 
                     {/* Paginación */}
-                    <div className="mt-4 flex flex-col sm:flex-row justify-between items-center bg-(--surface-low) px-6 sm:px-8 py-4 sm:py-5 rounded-sm border border-white/5 gap-4 relative z-10 w-full">
-                        <p className="text-[9px] font-black text-(--on-surface-variant) uppercase tracking-[0.25em] sm:tracking-[0.3em] opacity-40 font-mono text-center sm:text-left">
+                    <div className="mt-4 flex flex-col sm:flex-row justify-between items-center bg-(--surface-low) px-6 sm:px-8 py-4 sm:py-5 rounded-sm border border-white/5 gap-4 w-full">
+                        <p className="font-mono text-[9px] font-black text-(--on-surface-variant) uppercase tracking-[0.25em] sm:tracking-[0.3em] opacity-40 text-center sm:text-left">
                             Rango: {String(startRange).padStart(3, '0')}-{String(endRange).padStart(3, '0')} // Coches Totales: {filteredPredictions.length.toLocaleString()}
                         </p>
                         <div className="flex gap-1.5 sm:gap-2 max-w-full overflow-x-auto">

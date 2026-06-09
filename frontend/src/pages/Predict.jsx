@@ -7,7 +7,6 @@ import { getMakes, getModelsByMake, getVersionsByModel, getFuelTypes, getGearTyp
 import VerifiedUser from '../assets/icons/verified_user.svg'
 import Bolt from '../assets/icons/bolt.svg'
 
-// Variantes de animación para la entrada secuencial (Stagger) del formulario técnico
 const formContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -54,7 +53,6 @@ export default function Predict() {
     const [selectedFuelType, setSelectedFuelType] = useState(fuel_type);
     const [selectedGearType, setSelectedGearType] = useState(gear_type);
 
-    // Configuración estética para integrar Swal con el diseño técnico oscuro de la aplicación
     const swalConfig = {
         background: 'var(--surface-container-low, #1e1e1e)',
         color: '#ffffff',
@@ -67,7 +65,6 @@ export default function Predict() {
         }
     };
 
-    // Carga de catálogos iniciales
     useEffect(() => {
         getMakes().then(setMakes).catch(console.error);
         getFuelTypes().then(setFuelTypes).catch(console.error);
@@ -102,22 +99,42 @@ export default function Predict() {
         setFormData(prev => ({ ...prev, [name]: value }));
 
         if (name === 'make') {
+            if (!value) {
+                setSelectedMake(make);
+                return;
+            }
             const found = makes.find(m => m.id === parseInt(value));
             setSelectedMake(found ? { make_id: found.id, nombre: found.nombre } : make);
         }
         if (name === 'model') {
+            if (!value) {
+                setSelectedModel(model);
+                return;
+            }
             const found = models.find(m => m.id === parseInt(value));
             setSelectedModel(found ? { model_id: found.id, nombre: found.nombre, id_marca: found.id_marca } : model);
         }
         if (name === 'version') {
+            if (!value) {
+                setSelectedVersion(version);
+                return;
+            }
             const found = versions.find(v => v.id === parseInt(value));
             setSelectedVersion(found ? { version_id: found.id, nombre: found.nombre, id_modelo: found.id_modelo } : version);
         }
         if (name === 'fuel_type') {
+            if (!value) {
+                setSelectedFuelType(fuel_type);
+                return;
+            }
             const found = fuelTypes.find(f => f.id === parseInt(value));
             setSelectedFuelType(found ? { fuel_id: found.id, nombre: found.nombre } : fuel_type);
         }
         if (name === 'gear_type') {
+            if (!value) {
+                setSelectedGearType(gear_type);
+                return;
+            }
             const found = gearTypes.find(g => g.id === parseInt(value));
             setSelectedGearType(found ? { gear_id: found.id, nombre: found.nombre } : gear_type);
         }
@@ -126,13 +143,11 @@ export default function Predict() {
     const handlePredict = async (e) => {
         e.preventDefault();
         try {
-            // 1. Enviar parámetros estructurados al motor de regresión/red neuronal
             const result = await predictCar(formData);
             console.log('Predicción completada:', result);
             
             const predictedPrice = result?.price || result?.estimated_price || 0;
 
-            // 2. Interceptar el flujo para inyectar el modal de evaluación técnica con animación de entrada controlada por sweetalert
             await Swal.fire({
                 ...swalConfig,
                 title: 'Evaluación Completada',
@@ -160,7 +175,6 @@ export default function Predict() {
                 allowEnterKey: false
             });
 
-            // 3. Desviar al usuario al dashboard o listado raíz una vez cerrado el modal
             navigate('/profile/my-predictions');
         } catch (error) {
             console.error("Error en la predicción", error);
@@ -178,11 +192,10 @@ export default function Predict() {
     }
 
     return (
-        <div className="bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid relative overflow-hidden flex items-center justify-center mb-6 min-h-screen">
+        <div className="bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid relative overflow-hidden flex items-center justify-center mb-6 min-h-[calc(100vh-5rem)]">
             <Background />
 
             <main className="z-10 w-full max-w-7xl">
-                {/* Encabezado Animado */}
                 <motion.div 
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -204,7 +217,6 @@ export default function Predict() {
                         </h1>
                     </div>
                     
-                    {/* Chip de Selección Actual Reactivo */}
                     <motion.div 
                         layout
                         className="bg-black/20 p-4 border border-white/5 rounded-sm backdrop-blur-xs min-w-55 transition-all hover:border-(--secondary)/20"
@@ -212,7 +224,7 @@ export default function Predict() {
                         <p className="text-[9px] font-mono text-[#bec8d2]/40 uppercase mb-1">Selección Actual</p>
                         <AnimatePresence mode="wait">
                             <motion.p 
-                                key={`${selectedMake.nombre}-${selectedModel.nombre}`}
+                                key={`${selectedMake.nombre || 'none'}-${selectedModel.nombre || 'none'}`}
                                 initial={{ opacity: 0, x: -5 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 5 }}
@@ -225,7 +237,6 @@ export default function Predict() {
                     </motion.div>
                 </motion.div>
 
-                {/* Formulario Principal */}
                 <motion.form 
                     variants={formContainerVariants}
                     initial="hidden"
@@ -233,18 +244,14 @@ export default function Predict() {
                     onSubmit={handlePredict} 
                     className="grid grid-cols-1 lg:grid-cols-12 shadow-2xl rounded-sm overflow-hidden border border-[#3e4850]/10"
                 >
-                    
-                    {/* Panel de Inputs */}
                     <div className="lg:col-span-8 bg-(--surface-low) p-8 md:p-12 border-r border-white/5 space-y-12">
                         
-                        {/* 01: Core Specs */}
                         <motion.div variants={sectionVariants} className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <span className="text-[10px] font-black text-white px-2 py-0.5 bg-(--surface-high) rounded-xs shadow-xs">01</span>
                                 <h3 className="text-xs font-bold uppercase tracking-widest text-[#bec8d2]">Especificaciones Base</h3>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {/* Selector de Fabricante */}
                                 <div className="space-y-2 group">
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Fabricante</label>
                                     <select name="make" value={formData.make} onChange={handleChange} className="input-data-entry w-full transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20">
@@ -253,7 +260,6 @@ export default function Predict() {
                                     </select>
                                 </div>
 
-                                {/* Selector de Modelo (Requiere Marca) */}
                                 <div className={`space-y-2 group transition-all duration-300 ${!formData.make ? 'opacity-30 mix-blend-luminosity' : 'opacity-100'}`}>
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Modelo</label>
                                     <select 
@@ -268,7 +274,6 @@ export default function Predict() {
                                     </select>
                                 </div>
 
-                                {/* Selector de Versión Específica (Requiere Marca Y Modelo) */}
                                 <div className={`md:col-span-2 space-y-2 group transition-all duration-300 ${(!formData.make || !formData.model) ? 'opacity-30 mix-blend-luminosity' : 'opacity-100'}`}>
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Versión Específica</label>
                                     <select 
@@ -285,7 +290,6 @@ export default function Predict() {
                             </div>
                         </motion.div>
 
-                        {/* 02: Usage */}
                         <motion.div variants={sectionVariants} className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <span className="text-[10px] font-black text-white px-2 py-0.5 bg-(--surface-high) rounded-xs shadow-xs">02</span>
@@ -306,7 +310,6 @@ export default function Predict() {
                             </div>
                         </motion.div>
 
-                        {/* 03: Tech */}
                         <motion.div variants={sectionVariants} className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <span className="text-[10px] font-black text-white px-2 py-0.5 bg-(--surface-high) rounded-xs shadow-xs">03</span>
@@ -335,12 +338,10 @@ export default function Predict() {
                         </motion.div>
                     </div>
 
-                    {/* Panel de Acción Lateral */}
                     <motion.div 
                         variants={sectionVariants}
                         className="lg:col-span-4 bg-(--surface-container) p-8 md:p-10 flex flex-col justify-between relative overflow-hidden"
                     >
-                        {/* Glow decorativo de fondo */}
                         <div className="absolute top-0 right-0 w-32 h-32 bg-(--secondary)/5 rounded-full blur-3xl pointer-events-none"></div>
 
                         <div className="space-y-8 relative z-10">
@@ -370,7 +371,6 @@ export default function Predict() {
                             </div>
                         </div>
 
-                        {/* Botón de Acción Principal con Microinteracción */}
                         <div className="mt-12 space-y-4 relative z-10">
                             <motion.button 
                                 type="submit"
