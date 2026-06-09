@@ -157,7 +157,6 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                 text: 'Los cambios se han guardado correctamente en el sistema.',
                 icon: 'success',
                 iconColor: '#00e676',
-                confirmButtonText: false,
                 timer: 2500,
                 timerProgressBar: true,
                 showConfirmButton: false,

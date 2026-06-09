@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion' // Inyección para orquestación de movimiento
 import { loginUser } from '../composables/auth'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -12,7 +13,17 @@ export default function Login({ onLoginSuccess }) {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Configuración visual común para los modales de Swal (estética oscura e industrial)
+  // Variantes para animaciones secuenciales
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }
+  };
+
   const swalConfig = {
     background: 'var(--surface-container-low, #1e1e1e)',
     color: '#ffffff',
@@ -35,7 +46,6 @@ export default function Login({ onLoginSuccess }) {
     try {
       const response = await loginUser(email, password);
       
-      // 3. Modal auto-cerrable de éxito (sin botones, con barra de progreso)
       await Swal.fire({
         ...swalConfig,
         title: 'Acceso Correcto',
@@ -48,13 +58,11 @@ export default function Login({ onLoginSuccess }) {
         confirmButtonText: null
       });
 
-      // 4. Delegación del token y cambio de estado global tras cerrarse el Swal
       await onLoginSuccess(response.access_token);
 
     } catch (error) {
       console.log(error);
       
-      // Manejo de errores de autenticación del servidor
       Swal.fire({
         ...swalConfig,
         title: 'Fallo de Autenticación',
@@ -72,9 +80,14 @@ export default function Login({ onLoginSuccess }) {
       <div className="blueprint-grid pointer-events-none absolute inset-0 opacity-40"></div>
       <div className="kinetic-radial pointer-events-none absolute inset-0 opacity-20"></div>
 
-      <main className="z-10 w-full max-w-120 px-6 py-2">
+      <motion.main 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="z-10 w-full max-w-120 px-6 py-2"
+      >
         
-        <div className="mb-4 flex flex-col items-start gap-3">
+        <motion.div variants={itemVariants} className="mb-4 flex flex-col items-start gap-3">
           <Link to="/" className="flex items-center gap-4 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-(--primary-container)/20 p-1 border border-(--primary-container)/40 transition-transform group-hover:scale-105">
               <img src={Logo} alt="Logo" className="w-full h-full object-contain rounded" />
@@ -84,9 +97,9 @@ export default function Login({ onLoginSuccess }) {
             </span>
           </Link>
           <div className="h-0.5 w-12 bg-(--primary-container)"></div>
-        </div>
+        </motion.div>
 
-        <div className="login-card relative bg-(--surface-low) shadow-2xl border border-white/5">
+        <motion.div variants={itemVariants} className="login-card relative bg-(--surface-low) shadow-2xl border border-white/5">
           <div className="absolute -top-1 -left-1 h-6 w-6 border-t-2 border-l-2 border-(--primary-container)/40"></div>
           <div className="absolute -bottom-1 -right-1 h-6 w-6 border-b-2 border-r-2 border-(--secondary)/40"></div>
 
@@ -142,14 +155,16 @@ export default function Login({ onLoginSuccess }) {
               </div>
 
               <div className="pt-2">
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                   type="submit" 
                   disabled={isSubmitting}
                   className="btn-primary-engine w-full flex items-center justify-center gap-2 py-3.5 font-bold tracking-widest uppercase transition-all text-sm disabled:opacity-50 cursor-pointer"
                 >
                   <span>{isSubmitting ? 'Procesando...' : 'Entrar'}</span>
                   {!isSubmitting && <img src={ArrowRight} alt="" className="w-4 h-4" />}
-                </button>
+                </motion.button>
               </div>
             </form>
 
@@ -177,8 +192,8 @@ export default function Login({ onLoginSuccess }) {
             </div>
             <span className="text-[7px] text-[#bec8d2]/30 uppercase tracking-widest">© 2026 IDI</span>
           </div>
-        </div>
-      </main>
+        </motion.div>
+      </motion.main>
     </div>
   )
 }

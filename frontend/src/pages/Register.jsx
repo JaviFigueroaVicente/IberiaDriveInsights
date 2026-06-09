@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import Swal from 'sweetalert2'
 import FotoRegister from '../assets/register/chip-register.png'
 import Logo from '../assets/icons/logo.png'
@@ -20,7 +21,17 @@ export default function Register() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Configuración visual común para los modales de Swal (estética oscura e industrial)
+    // Variantes de animación para el formulario (Ease: cubic-bezier para sensación industrial)
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } }
+    };
+
     const swalConfig = {
         background: 'var(--surface-container-low, #1e1e1e)',
         color: '#ffffff',
@@ -46,7 +57,6 @@ export default function Register() {
         e.preventDefault();
         if (isSubmitting) return;
 
-        // 1. Validaciones del lado del cliente
         if (formData.email !== formData.confirmEmail) {
             Swal.fire({
                 ...swalConfig,
@@ -113,11 +123,20 @@ export default function Register() {
     }
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center bg-(--surface) text-[#dae2fd] overflow-hidden py-4 px-4 md:px-8">
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="relative flex min-h-screen items-center justify-center bg-(--surface) text-[#dae2fd] overflow-hidden py-4 px-4 md:px-8"
+        >
             <div className="blueprint-grid pointer-events-none absolute inset-0 opacity-40"></div>
             <div className="kinetic-radial pointer-events-none absolute inset-0 opacity-20"></div>
 
-            <main className="z-10 w-full max-w-260 grid grid-cols-1 lg:grid-cols-2 shadow-2xl bg-(--surface-low) border border-white/5 relative overflow-hidden">
+            <motion.main 
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="z-10 w-full max-w-260 grid grid-cols-1 lg:grid-cols-2 shadow-2xl bg-(--surface-low) border border-white/5 relative overflow-hidden"
+            >
                 
                 <div className="absolute -top-1 -left-1 h-8 w-8 border-t-2 border-l-2 border-(--primary-container)/40 z-30"></div>
                 <div className="absolute -bottom-1 -right-1 h-8 w-8 border-b-2 border-r-2 border-(--secondary)/40 z-30"></div>
@@ -161,8 +180,7 @@ export default function Register() {
                     </div>
                 </div>
 
-                {/* --- Lado Formulario (Acción principal de reducción) --- */}
-                <div className="bg-(--surface-container) p-6 md:p-10 lg:p-12 flex flex-col justify-center relative">
+                <motion.div variants={itemVariants} className="bg-(--surface-container) p-6 md:p-10 lg:p-12 flex flex-col justify-center relative">
                     <div className="mb-6">
                         <h3 className="text-xl font-bold text-white mb-1 tracking-tight uppercase">Crear Cuenta</h3>
                         <p className="text-xs text-[#bec8d2]/70">Despliegue su terminal de diagnóstico.</p>
@@ -278,7 +296,9 @@ export default function Register() {
                         </div>
 
                         <div className="pt-2">
-                            <button 
+                            <motion.button 
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                                 className="btn-primary-engine w-full py-3.5 flex items-center justify-center gap-3 group disabled:opacity-50 cursor-pointer" 
                                 type="submit"
                                 disabled={isSubmitting}
@@ -287,7 +307,7 @@ export default function Register() {
                                     {isSubmitting ? 'PROCESANDO REGISTRO...' : 'REGISTRAR CUENTA'}
                                 </span>
                                 {!isSubmitting && <img src={ArrowRight} alt="" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
-                            </button>
+                            </motion.button>
                         </div>
 
                         <div className="text-center pt-4 border-t border-white/5">
@@ -297,8 +317,8 @@ export default function Register() {
                             </p>
                         </div>
                     </form>
-                </div>
-            </main>
-        </div>
+                </motion.div>
+            </motion.main>
+        </motion.div>
     )
 }
