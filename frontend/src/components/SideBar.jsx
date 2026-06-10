@@ -5,7 +5,7 @@ import AccountCircle from "../assets/icons/account_circle.svg";
 import AccountCircleSelected from "../assets/icons/account_circle_selected.svg";
 import History from "../assets/icons/history.svg";
 import HistorySelected from "../assets/icons/history_selected.svg";
-import Bolt from "../assets/icons/bolt_white.svg";
+import Bolt from "../assets/icons/bolt_blue.svg";
 import LogoutRed from "../assets/icons/logout.svg";
 import ArrowForward from "../assets/icons/arrow_forward.svg";
 import ArrowBack from "../assets/icons/arrow_back.svg";
@@ -73,15 +73,15 @@ export default function SideBar({ currentUser, handleLogout }) {
 
     return (
         <>
-            {/* 01. CAPA DE OPACIDAD */}
+            {/* CAPA DE OPACIDAD */}
             <div className={`fixed inset-0 bg-black/80 backdrop-blur-sm z-40 transition-opacity duration-300 md:hidden ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`} onClick={() => setIsOpen(false)} />
 
-            {/* 02. BOTÓN MÓVIL */}
+            {/* BOTÓN MÓVIL */}
             <button onClick={() => setIsOpen(!isOpen)} className={`md:hidden fixed top-1/2 -translate-y-1/2 z-60 bg-(--surface) border border-l-0 border-white/10 text-(--on-surface-variant) p-2 rounded-r-sm transition-all duration-300 ${isOpen ? 'left-64' : 'left-0'}`}>
                 <img src={isOpen ? ArrowBack : ArrowForward} alt="Toggle" className="w-5 h-5" />
             </button>
 
-            {/* 03. SIDEBAR */}
+            {/* SIDEBAR */}
             <aside className={`fixed md:sticky left-0 top-0 md:top-20 bottom-0 w-64 bg-(--surface)/95 backdrop-blur-md flex flex-col py-8 z-50 border-r border-white/5 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} h-screen md:h-[calc(100vh-5rem)] overflow-y-auto scrollbar-hide`}>
                 
                 <div className="px-6 mb-10 shrink-0">
@@ -137,12 +137,11 @@ export default function SideBar({ currentUser, handleLogout }) {
                     </div>
                     
                     <NavLink to='/predict' onClick={() => setIsOpen(false)} className="block">
-                        <button className="w-full bg-linear-to-br from-(--primary-container) to-(--primary) text-white font-bold text-[10px] py-3.5 rounded-sm shadow-lg hover:brightness-105 transition-all flex items-center justify-center gap-2 uppercase tracking-widest cursor-pointer">
+                        <button className="btn-primary-engine w-full active:scale-[0.98] font-bold text-[10px] py-3.5 rounded-sm shadow-lg hover:brightness-105 transition-all flex items-center justify-center gap-2 uppercase tracking-widest cursor-pointer">
                             PREDECIR <img src={Bolt} alt="Bolt" className="w-3.5"/>
                         </button>
                     </NavLink>
 
-                    {/* Botón modificado para lanzar el modal de confirmación */}
                     <button onClick={confirmLogout} className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-(--on-surface-variant) border border-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all rounded-sm cursor-pointer">
                         <img src={LogoutRed} alt="Logout" className="w-3.5 opacity-60" />
                         Cerrar Sesión

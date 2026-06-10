@@ -225,7 +225,7 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                         <button 
                                             type="submit"
                                             disabled={isUpdating}
-                                            className="w-full bg-(--primary-container) py-4 mt-4 font-headline font-bold text-white uppercase tracking-[0.2em] text-[10px] md:text-xs hover:brightness-110 transition-all active:scale-[0.98] shadow-lg shadow-(--primary-container)/20 cursor-pointer disabled:opacity-50 flex items-center justify-center"
+                                            className="w-full btn-primary-engine py-4 mt-4 font-headline font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs transition-all active:scale-[0.98] rounded-sm cursor-pointer disabled:opacity-50 flex items-center justify-center"
                                         >
                                             {isUpdating ? 'Procesando Sincronización...' : 'Actualizar Contraseña'}
                                         </button>

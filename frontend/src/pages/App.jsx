@@ -14,6 +14,7 @@ import AdminDashboard from './admin/AdminDashboard'
 import AdminUsers from './admin/AdminUsers'
 import AdminCars from './admin/AdminCars'
 import Error from './Error'
+import ScrollToTop from '../components/ScrollToTop'
 import { Routes, Route, BrowserRouter, useLocation, useNavigate, Navigate, Outlet } from 'react-router-dom'
 import { getUserProfile, logoutUser } from '../composables/auth'
 
@@ -73,6 +74,7 @@ function AppContent() {
   const hideLogin = ['/login', '/register'].includes(location.pathname);
   return (
     <>
+      <ScrollToTop />
       {!hideLogin && <Header isAuthenticated={isAuthenticated} currentUser={currentUser} onLogout={handleLogout}/>}
       <Routes>
         <Route path="/" element={<Home />} />

@@ -314,14 +314,14 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                                     type="button"
                                     onClick={handleDiscard}
                                     disabled={isSaving}
-                                    className="py-2 text-[10px] font-bold text-(--on-surface-variant) hover:text-white uppercase tracking-widest transition-colors cursor-pointer disabled:opacity-50"
+                                    className="flex items-center justify-center gap-2 px-8 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-(--on-surface-variant) border border-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all rounded-sm cursor-pointer disabled:opacity-50"
                                 >
                                     Descartar
                                 </button>
                                 <button 
                                     type="submit"
                                     disabled={isSaving}
-                                    className="bg-(--primary-container) px-8 py-4 md:py-3 rounded-sm text-[10px] font-bold text-white shadow-[0_0_15px_rgba(137,206,255,0.4)] hover:brightness-110 transition-all uppercase tracking-[0.2em] cursor-pointer disabled:opacity-50 flex items-center justify-center min-w-40"
+                                    className="btn-primary-engine px-8 py-4 md:py-3 rounded-sm text-[10px] font-bold transition-all uppercase tracking-[0.2em] cursor-pointer disabled:opacity-50 active:scale-[0.98] flex items-center justify-center min-w-40"
                                 >
                                     {isSaving ? 'Guardando...' : 'Guardar Cambios'}
                                 </button>

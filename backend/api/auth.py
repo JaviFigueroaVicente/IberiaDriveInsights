@@ -7,7 +7,7 @@ from jwt.exceptions import InvalidTokenError
 from datetime import datetime
 from security import verify_password, get_password_hash
 import models, security, schemas
-from schemas import UserCreate, UserResponseWithCars, UserUpdate, ProfileUpdate, UserResponse, PasswordUpdate
+from schemas import UserResponseWithCars, UserUpdate, ProfileUpdate, UserResponse, PasswordUpdate
 from database import SessionLocal
 
 router = APIRouter()

@@ -136,7 +136,7 @@ export default function MyPredictions({ currentUser, handleLogout }) {
     const endRange = Math.min(indexOfLastItem, filteredPredictions.length);
 
     return (
-        <div className="relative flex items-start min-h-screen text-(--on-surface) selection:bg-(--primary-container) selection:text-white overflow-x-hidden">
+        <div className="relative flex items-start min-h-screen text-(--on-surface) selection:bg-(--primary-container) selection:text-white">
             {/* Capa técnica de fondo aislado: Previene rupturas de la rejilla y cortes negros en scroll dinámico */}
             <div className="fixed inset-0 bg-(--surface) blueprint-grid opacity-20 pointer-events-none -z-10" />
 
