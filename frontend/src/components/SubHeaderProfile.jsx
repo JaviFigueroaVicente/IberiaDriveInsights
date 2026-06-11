@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Menu from "../assets/icons/Menu.svg";
+import Menu from "../assets/icons/menu.svg";
 
 export default function SubHeaderProfile() {
     const location = useLocation();
