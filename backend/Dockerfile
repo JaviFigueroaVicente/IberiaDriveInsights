@@ -1,8 +1,15 @@
-FROM python:3.13.11
+# Use the Python 3 alpine official image
+# https://hub.docker.com/_/python
+FROM python:3.13.14-slim
+
+# Create and change to the app directory.
 WORKDIR /app
-RUN apt-get update && apt-get install -y build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
-# Copiamos solo el contenido del backend
-COPY requirements.txt . 
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy local code to the container image.
 COPY . .
+
+# Install project dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Run the web service on container startup.
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
