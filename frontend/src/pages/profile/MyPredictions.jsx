@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import SideBar from '../../components/SideBar';
 import DirectionsCar from '../../assets/icons/directions_car.svg';
 import FilterList from '../../assets/icons/filter_list.svg';
@@ -160,13 +161,13 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4">
-                            <button 
-                                onClick={() => window.location.href = '/predict'} 
+                            <Link 
+                                to ="/predict"
                                 className="btn-primary-engine flex items-center gap-2 px-5 py-2.5 tracking-widest text-[10px]"
                             >
                                 <span className='tracking-widest'>NUEVA PREDICCIÓN</span>
                                 <img src={ChevronRight} alt="Nav" className="w-3.5 h-3.5 invert" />
-                            </button>
+                            </Link>
 
                             <div className="flex items-center gap-2 bg-(--surface-container-high) p-1 rounded-sm border border-white/5">
                                 <button 
