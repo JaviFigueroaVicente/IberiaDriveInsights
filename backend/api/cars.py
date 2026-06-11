@@ -9,6 +9,9 @@ import joblib
 import pandas as pd
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+import io
+import urllib.request
 
 router = APIRouter()
 
@@ -155,20 +158,51 @@ async def delete_car(
     
     return {"detail": f"Vehículo con ID {car_id} eliminado correctamente"}
 
+# Cargar el modelo y los transformadores en local
+# DIR_API = os.path.dirname(os.path.abspath(__file__))
+# DIR_BACKEND = os.path.dirname(DIR_API)
 
-DIR_API = os.path.dirname(os.path.abspath(__file__))
-DIR_BACKEND = os.path.dirname(DIR_API)
+# PATH_MODELO = os.path.join(DIR_BACKEND, "ai_models", "compra_coches", "modelo_compra_coches_iberia.pkl")
+# PATH_TRANSFORMADORES = os.path.join(DIR_BACKEND, "ai_models", "compra_coches", "transformadores.pkl")
 
-PATH_MODELO = os.path.join(DIR_BACKEND, "ai_models", "compra_coches", "modelo_compra_coches_iberia.pkl")
-PATH_TRANSFORMADORES = os.path.join(DIR_BACKEND, "ai_models", "compra_coches", "transformadores.pkl")
+# try:
+#     model = joblib.load(PATH_MODELO)
+#     transformadores = joblib.load(PATH_TRANSFORMADORES)
+# except Exception as e:
+#     print(f"Error al cargar archivos: {e}")
+#     model = None
+#     transformadores = None
 
-try:
-    model = joblib.load(PATH_MODELO)
-    transformadores = joblib.load(PATH_TRANSFORMADORES)
-except Exception as e:
-    print(f"Error al cargar archivos: {e}")
-    model = None
-    transformadores = None
+# Cargar el moedlo y los transformadores en Supabase
+load_dotenv()
+URL_MODELO = os.getenv("URL_MODELO")
+URL_TRANSFORMADORES = os.getenv("URL_TRANSFORMADORES")
+
+# Variables globales para almacenar los objetos en la memoria RAM
+model = None
+transformadores = None
+
+def cargar_recursos_remotos():
+    global model, transformadores
+    try:
+        print("Descargando modelo matemático desde Supabase Storage...")
+        with urllib.request.urlopen(URL_MODELO) as response:
+            model = joblib.load(io.BytesIO(response.read()))
+        print("Modelo cargado con éxito.")
+
+        print("Descargando transformadores desde Supabase Storage...")
+        # Descarga e inyección de los transformadores (Scalers, Encoders, etc.)
+        with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
+            transformadores = joblib.load(io.BytesIO(response.read()))
+        print("Transformadores cargados con éxito.")
+
+    except Exception as e:
+        print(f"Error crítico al cargar los archivos desde Supabase: {e}")
+        model = None
+        transformadores = None
+
+# Forzamos la descarga automática de los modelos en cuanto Vercel encienda el backend
+cargar_recursos_remotos()
 
 # Función de predicción
 @router.post("/predict", response_model=CarResponse)
