@@ -58,7 +58,6 @@ def users():
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(cars.router, prefix="/cars", tags=["cars"])
-# app.include_router(users.router)
 
 
 if __name__ == "__main__":
