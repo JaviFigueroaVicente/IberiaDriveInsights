@@ -236,7 +236,7 @@ export default function Models() {
           viewport={{ once: true }} 
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
-          <footer className="bg-(--surface-container)/50 p-5 border border-white/5 flex flex-row justify-between items-center gap-6">
+          <footer className="bg-(--surface-container) p-5 border border-white/5 flex flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-6">
               <div className="text-right border-r border-white/10 pr-6 block shrink-0">
                 <p className="text-[8px] text-white/30 uppercase font-mono leading-none mb-0.5">System Health</p>

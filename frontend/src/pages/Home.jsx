@@ -1,13 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
-import { createScope } from 'animejs';
-import { animate } from 'animejs/animation';
 
 import Trending from '../assets/icons/trending.svg';
 import Analytics from '../assets/icons/analytics.svg';
 import Verified from '../assets/icons/verified.svg';
-import DynamicFeed from '../assets/icons/dynamic_feed.svg';
 import AccountTree from '../assets/icons/account_tree.svg';
 import BlurOn from '../assets/icons/blur_on.svg';
 import Bolt from '../assets/icons/bolt.svg';
@@ -39,34 +35,10 @@ const itemVariants = {
 };
 
 export default function Home() {
-  const root = useRef(null);
-  const scope = useRef(null);
-
-  // Ciclo controlado de inicialización para Anime.js v4
-  useEffect(() => {
-    scope.current = createScope(root.current);
-
-    scope.current.add(() => {
-      animate('.progress-bar', {
-        scaleX: [0, 1],
-        duration: 1200,
-        easing: 'easeOutQuad'
-      });
-    });
-
-    return () => scope.current.revert();
-  }, []);
-
   return (
-    <motion.main 
-      ref={root}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="relative overflow-hidden bg-(--surface) text-(--on-surface) font-body blueprint-grid-dots"
-    >
+    <main className="relative overflow-hidden bg-(--surface) text-(--on-surface) font-body w-full min-h-screen">      
       {/* HERO SECTION */}
-      <section className="relative w-full min-h-[calc(100vh-5rem)] overflow-hidden z-20 flex items-center px-6 md:px-20">
+      <section className="relative w-full min-h-[calc(105vh-5rem)] overflow-hidden z-20 flex items-center px-6 md:px-20">
         
         {/* Capa de Vídeo */}
         <div className="absolute inset-0 z-0 hidden md:block select-none pointer-events-none">
@@ -76,17 +48,23 @@ export default function Home() {
             loop 
             muted 
             playsInline
-            className="absolute w-full h-full object-cover opacity-35"
+            className="absolute w-full h-full opacity-35"
             style={{ 
-              objectPosition: '85% 50%',
-              transform: 'translateZ(0)' 
+              objectPosition: '120% 50%',
+              transform: 'translateZ(0)',
+              scale: 1.1
             }} 
           />
           <div className="absolute inset-0 bg-linear-to-r from-(--surface) via-(--surface)/85 to-transparent"></div>
         </div>
 
         {/* Contenido Técnico */}
-        <div className="relative z-10 max-w-7xl mx-auto w-full">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="relative z-10 max-w-7xl mx-auto w-full"
+        >
           <div className="lg:max-w-4xl">
             <motion.div variants={itemVariants} className="flex items-center gap-3 mb-6">
               <span className="inline-block w-12 h-0.5 bg-(--secondary)"></span>
@@ -123,18 +101,18 @@ export default function Home() {
               </Link>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* METRICS SECTION */}
-      <motion.section 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.15 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative z-10 bg-(--surface-low) min-h-[calc(100vh-5rem)] flex flex-col justify-center py-16 px-6 md:px-20 border-t border-white/5"
-      >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center w-full">
+      <section className="relative z-10 bg-(--surface-low) min-h-[calc(100vh-5rem)] flex flex-col justify-center py-16 px-6 md:px-20 border-t border-white/5">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center w-full"
+        >
           
           {/* Columna Izquierda: Información de los Modelos */}
           <div className="lg:col-span-1 space-y-5">
@@ -154,10 +132,12 @@ export default function Home() {
               <div className="text-4xl font-bold text-(--primary) mb-3 font-headline tracking-tight">88.55%</div>
               <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
                 <motion.div 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "88.55%" }}
-                  transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-                  className="h-full bg-(--primary) progress-bar origin-left" 
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1], delay: 0.1 }}
+                  style={{ originX: 0 }}
+                  className="h-full bg-(--primary) w-[88.55%]" 
                 />
               </div>
             </div>
@@ -171,10 +151,12 @@ export default function Home() {
               <div className="text-4xl font-bold text-(--secondary) mb-3 font-headline tracking-tight">93.85%</div>
               <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
                 <motion.div 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "93.85%" }}
-                  transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-                  className="h-full bg-(--secondary) progress-bar origin-left" 
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1], delay: 0.2 }}
+                  style={{ originX: 0 }}
+                  className="h-full bg-(--secondary) w-[93.85%]" 
                 />
               </div>
             </div>
@@ -193,7 +175,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.18 }}
+                transition={{ duration: 0.4, delay: i * 0.12 }}
                 whileHover={{ y: -3, transition: { duration: 0.15 } }}
                 className={`bg-(--surface-container) p-6 lg:p-8 rounded-sm border border-white/5 border-l-4 ${card.border} group hover:bg-(--surface-high) transition-colors flex flex-col justify-between`}
               >
@@ -211,32 +193,33 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
       {/* CORE ARCHITECTURE & CTA */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6 }}
-        className="min-h-[calc(100vh-5rem)] flex flex-col justify-between py-16 px-6 md:px-20 bg-(--surface-lowest) border-t border-white/5"
-      >
+      <section className="min-h-[calc(100vh-5rem)] flex flex-col justify-between py-16 px-6 md:px-20 bg-(--surface-lowest) border-t border-white/5">
+        
         <div className="my-auto max-w-7xl mx-auto w-full space-y-12">
-          <div className="text-center space-y-3">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center space-y-3"
+          >
             <h2 className="text-white text-3xl md:text-4xl font-bold uppercase font-headline tracking-tight">
               Arquitectura del Núcleo Predictivo
             </h2>
             <div className="h-0.5 w-20 bg-(--primary-container) opacity-60 mx-auto"></div>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {/* Bloque Random Forest */}
             <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               whileHover={{ y: -4 }}
               className="group p-6 lg:p-8 bg-(--surface-container) hover:bg-(--surface-high) transition-all duration-300 border border-white/5 rounded-sm flex flex-col justify-between"
             >
@@ -260,10 +243,10 @@ export default function Home() {
 
             {/* Bloque Regression */}
             <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
+              transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
               whileHover={{ y: -4 }}
               className="group p-6 lg:p-8 bg-(--surface-container) hover:bg-(--surface-high) transition-all duration-300 border border-white/5 rounded-sm flex flex-col justify-between"
             >
@@ -290,10 +273,10 @@ export default function Home() {
         {/* Bloque CTA */}
         <div className="w-full max-w-5xl mx-auto pt-6">
           <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
+            initial={{ opacity: 0, y: 25 }} 
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} 
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
             className="w-full bg-(--surface-high) p-6 lg:p-8 rounded-sm relative border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6 backdrop-blur-xs"
           >
             <div className="space-y-1 text-center sm:text-left">
@@ -312,7 +295,7 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-      </motion.section>
-    </motion.main>
+      </section>
+    </main>
   );
 }

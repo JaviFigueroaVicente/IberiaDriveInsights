@@ -247,10 +247,10 @@ export default function Analysis() {
             variants={blockVariants}
             className="col-span-12 block w-full"
           >
-            <Link to='/models' className="block w-full">
+            <div className="block w-full">
               <section 
                 style={{ borderColor: 'rgba(255, 255, 255, 0.05)' }}
-                className="bg-(--surface-container)/50 relative h-28 rounded-sm overflow-hidden border w-full flex items-center justify-between px-5 md:px-7 hover:bg-(--surface-container-high)/40 transition-colors duration-300"
+                className="bg-(--surface-container) relative h-28 rounded-sm overflow-hidden border w-full flex items-center justify-between px-5 md:px-7 transition-colors duration-300"
               >
                 <div className="relative z-10 flex flex-col justify-center flex-1 mr-4">
                   <div className="flex items-center gap-3 mb-1">
@@ -264,7 +264,7 @@ export default function Analysis() {
                 </div>
 
                 <div className="relative z-10 shrink-0 hidden sm:block">
-                  <button className="btn-primary-engine w-full sm:w-auto h-9.5 px-8 text-[10px] font-bold tracking-widest uppercase flex flex-row items-center justify-center gap-2 leading-none cursor-pointer">
+                  <Link to='/models'  className="btn-primary-engine w-full sm:w-auto h-9.5 px-8 text-[10px] font-bold tracking-widest uppercase flex flex-row items-center justify-center gap-2 leading-none cursor-pointer">
                     <span className="inline-flex items-center h-full pt-px">
                       GENERAR EVALUACIÓN
                     </span>                  
@@ -273,12 +273,11 @@ export default function Analysis() {
                       alt="Arrow" 
                       className="w-4 h-4 object-contain shrink-0" 
                     />
-                  </button>
+                  </Link>
                 </div>
               </section>
-            </Link>
+            </div>
           </motion.div>
-
         </div>
       </div>
     </motion.div>
