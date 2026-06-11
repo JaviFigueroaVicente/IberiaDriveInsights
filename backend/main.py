@@ -22,7 +22,7 @@ origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://www.localhost:5173",
-    "https://iberia-drive-insights-n2w788svq.vercel.app"
+    "https://iberia-drive-insights.vercel.app"
 ]
 
 app.add_middleware(
