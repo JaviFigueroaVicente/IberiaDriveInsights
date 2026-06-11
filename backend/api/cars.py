@@ -10,9 +10,7 @@ from datetime import datetime
 import joblib
 import os
 from dotenv import load_dotenv
-import io
-import urllib
-from model_loader import model, transformadores
+from fastapi import Request, Depends
 
 router = APIRouter()
 
@@ -174,12 +172,21 @@ async def delete_car(
 #     model = None
 #     transformadores = None
 
+def get_model(request: Request):
+    return request.app.state.model
+
+def get_transformadores(request: Request):
+    return request.app.state.transformadores
+
 # Función de predicción
 @router.post("/predict", response_model=CarResponse)
-async def predict_car(car: CarPrediction, db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
-    if model is None or transformadores is None:
-        raise HTTPException(status_code=503, detail="El modelo aún no está listo. Intenta de nuevo en unos segundos.")
-    
+async def predict_car(
+    car: CarPrediction, 
+    db: db_dependency, 
+    current_user: Annotated[models.User, Depends(get_current_user)],
+    model = Depends(get_model),
+    transformadores = Depends(get_transformadores)
+):    
     try:
         fecha = pd.to_datetime(car.registration)
         hoy = datetime.now()

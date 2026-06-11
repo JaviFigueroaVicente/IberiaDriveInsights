@@ -21,8 +21,7 @@ transformadores = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global model, transformadores
-    model, transformadores = init_models()
+    app.state.model, app.state.transformadores = init_models()
     yield
 
 
