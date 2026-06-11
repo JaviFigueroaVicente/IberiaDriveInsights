@@ -347,7 +347,7 @@ export default function Predict() {
                                 <div className="md:col-span-2 space-y-1 group">
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Kilometraje Total</label>
                                     <div className="relative">
-                                        <input type="number" name="kms" value={formData.kms || ''} onChange={handleChange} className="input-data-entry w-full pl-4 transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20" placeholder="0" />
+                                        <input type="number" name="kms" min="0" step="1" onKeyDown={(e) => {if (['.', ',', 'e', 'E', '+', '-'].includes(e.key)){e.preventDefault()}}} value={formData.kms || ''} onChange={handleChange} className="input-data-entry w-full pl-4 transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20" placeholder="0" />
                                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-mono text-(--secondary) tracking-wider font-bold select-none pointer-events-none">KM</span>
                                     </div>
                                 </div>
@@ -377,7 +377,7 @@ export default function Predict() {
                                 </div>
                                 <div className="space-y-1 group">
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Potencia (CV)</label>
-                                    <input type="number" name="power" value={formData.power || ''} onChange={handleChange} className="input-data-entry w-full transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20" placeholder="0" />
+                                    <input type="number" name="power" min="0" step="1" onKeyDown={(e) => {if (['.', ',', 'e', 'E', '+', '-'].includes(e.key)){e.preventDefault()}}} value={formData.power || ''} onChange={handleChange} className="input-data-entry w-full transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20" placeholder="0" />
                                 </div>
                             </div>
                         </motion.div>
