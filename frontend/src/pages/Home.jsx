@@ -38,7 +38,7 @@ export default function Home() {
   return (
     <main className="relative overflow-hidden bg-(--surface) text-(--on-surface) font-body w-full min-h-screen">      
       {/* HERO SECTION */}
-      <section className="relative w-full min-h-[calc(105vh-5rem)] overflow-hidden z-20 flex items-center px-6 md:px-20">
+      <section className="relative w-full min-h-[calc(100vh-4rem)] overflow-hidden z-20 flex items-center px-6 md:px-20">
         
         {/* Capa de Vídeo */}
         <div className="absolute inset-0 z-0 hidden md:block select-none pointer-events-none">

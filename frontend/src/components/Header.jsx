@@ -128,7 +128,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                                                 animate={{ opacity: 1, scaleY: 1, y: 0 }}
                                                 exit={{ opacity: 0, scaleY: 0.9, y: -5 }}
                                                 transition={{ duration: 0.15, ease: "easeOut" }}
-                                                className="absolute right-0 mt-3 w-52 bg-(--surface-low)/95 backdrop-blur-xl border border-white/10 shadow-2xl z-130 py-3 rounded-sm origin-top overflow-hidden"
+                                                className="absolute right-0 mt-3 w-52 bg-(--surface-low) border border-white/10 shadow-2xl z-130 py-3 rounded-sm origin-top overflow-hidden"
                                             >
                                                 {/* Esquinas estéticas cibernéticas */}
                                                 <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-(--primary-container)"></div>

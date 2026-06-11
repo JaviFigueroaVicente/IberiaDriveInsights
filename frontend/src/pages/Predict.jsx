@@ -30,6 +30,15 @@ const sectionVariants = {
 export default function Predict() {
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        }
+    }, [navigate]);
+
+    const today = new Date().toISOString().split('T')[0];
+
     const [formData, setFormData] = useState({
         make: '',
         model: '',
@@ -53,22 +62,27 @@ export default function Predict() {
     const [selectedFuelType, setSelectedFuelType] = useState(fuel_type);
     const [selectedGearType, setSelectedGearType] = useState(gear_type);
 
+    const [isPredicting, setIsPredicting] = useState(false);
+
     const swalConfig = {
-        background: 'var(--surface-container-low, #1e1e1e)',
-        color: '#ffffff',
-        confirmButtonColor: 'var(--primary-container, #004a77)',
+        background: 'var(--surface-container, #171f33)', 
+        color: 'var(--on-surface, #dae2fd)',
+        confirmButtonColor: 'transparent', 
         customClass: {
-            popup: 'border border-white/10 rounded-sm font-mono text-xs shadow-[0_0_50px_rgba(0,0,0,0.8)]',
-            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
-            htmlContainer: 'text-xs text-[#bec8d2]',
-            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm transition-transform active:scale-95'
-        }
+            popup: 'border border-white/5 rounded-sm font-body text-xs shadow-[0_24px_60px_-15px_rgba(0,0,0,0.8)] blueprint-grid-dots',
+            title: 'text-base font-headline uppercase tracking-[0.2em] text-white font-bold pt-6',
+            htmlContainer: 'text-xs text-[var(--on-surface-variant,#bec8d2)] font-light px-2',
+            confirmButton: 'px-8 py-3 text-[10px] font-bold transition-all uppercase tracking-[0.2em] cursor-pointer active:scale-[0.98] flex items-center justify-center rounded-sm min-w-40 outline-none focus:outline-none focus:ring-0',
+        },
+        buttonsStyling: false
     };
 
     useEffect(() => {
-        getMakes().then(setMakes).catch(console.error);
-        getFuelTypes().then(setFuelTypes).catch(console.error);
-        getGearTypes().then(setGearTypes).catch(console.error);
+        if (localStorage.getItem('token')) {
+            getMakes().then(setMakes).catch(console.error);
+            getFuelTypes().then(setFuelTypes).catch(console.error);
+            getGearTypes().then(setGearTypes).catch(console.error);
+        }
     }, []);
 
     // Pipeline reactivo: Cambio de Marca
@@ -142,6 +156,7 @@ export default function Predict() {
 
     const handlePredict = async (e) => {
         e.preventDefault();
+        setIsPredicting(true);
         try {
             const result = await predictCar(formData);
             console.log('Predicción completada:', result);
@@ -151,18 +166,24 @@ export default function Predict() {
             await Swal.fire({
                 ...swalConfig,
                 title: 'Evaluación Completada',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} btn-primary-engine h-auto py-3 md:py-3`
+                },
                 html: `
-                    <div style="font-family: monospace; text-align: left; margin: 8px 0; padding: 8px;">                        
-                        <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; text-align: center; margin: 16px 0; position: relative;">
-                            <div style="position: absolute; top: 4px; left: 6px; font-size: 8px; color: var(--secondary, #5de6ff); opacity: 0.5;">VALOR ESTIMADO</div>
-                            <span style="font-size: 32px; font-weight: 800; letter-spacing: -0.025em; color: var(--secondary, #5de6ff); text-shadow: 0 0 12px rgba(93, 230, 255, 0.3);">
+                    <div style="font-family: var(--font-body, 'Inter', sans-serif); text-align: left; margin: 8px 0; padding: 0;">        
+                        <div style="background: var(--surface-lowest, #060e20); padding: 24px 20px; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2px; text-align: center; margin: 16px 0; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, var(--secondary, #5de6ff), transparent);"></div>
+                            <div style="position: absolute; top: 6px; left: 8px; font-size: 8px; font-family: var(--font-headline, sans-serif); font-weight: 700; letter-spacing: 0.15em; color: var(--secondary, #5de6ff); opacity: 0.6;">VALOR ESTIMADO</div>
+                            
+                            <span style="font-family: var(--font-headline, sans-serif); font-size: 36px; font-weight: 700; letter-spacing: -0.03em; color: var(--secondary, #5de6ff); text-shadow: 0 0 20px rgba(93, 230, 255, 0.25); display: inline-block; line-height: 1.1; margin-top: 6px;">
                                 ${Number(predictedPrice).toLocaleString('es-ES')} €
                             </span>
                         </div>
                         
-                        <div style="background: rgba(255, 255, 255, 0.02); padding: 10px; border-left: 2px solid var(--secondary, #5de6ff); border-radius: 2px; margin-top: 12px;">
-                            <p style="font-size: 9px; color: rgba(190, 200, 210, 0.6); text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">
-                                Vehículo analizado: <span style="color: #ffffff; font-weight: bold; font-family: sans-serif;">${selectedMake.nombre || ''} ${selectedModel.nombre || ''}</span>
+                        <div style="background: var(--surface-high, #222a3d); padding: 12px 14px; border-left: 3px solid var(--secondary, #5de6ff); border-radius: 2px; margin-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.02); border-right: 1px solid rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.02);">
+                            <p style="font-size: 10px; color: var(--on-surface-variant, #bec8d2); text-transform: uppercase; letter-spacing: 0.08em; margin: 0; line-height: 1.4;">
+                                Vehículo analizado: <span style="color: #ffffff; font-weight: 700; font-family: var(--font-body, sans-serif);">${selectedMake.nombre || ''} ${selectedModel.nombre || ''}</span>
                             </p>
                         </div>
                     </div>
@@ -178,9 +199,13 @@ export default function Predict() {
             navigate('/profile/my-predictions');
         } catch (error) {
             console.error("Error en la predicción", error);
-            Swal.fire({
+            await Swal.fire({
                 ...swalConfig,
                 title: 'Fallo de Evaluación',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3 md:py-3`
+                },
                 text: error.response?.data?.detail || 'Error al procesar el coche en el motor de regresión.',
                 icon: 'error',
                 iconColor: '#ff5252',
@@ -189,14 +214,14 @@ export default function Predict() {
                 allowEscapeKey: false,
                 allowEnterKey: false,
             });
+        } finally {
+            setIsPredicting(false);
         }
     }
 
     return (
         <div className="bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid relative flex flex-col items-center justify-between min-h-[calc(100vh-5rem)]">
             <Background />
-
-            {/* Wrapper elástico interno */}
             <main className="z-10 w-full max-w-7xl h-full flex flex-col justify-between gap-6 min-h-[calc(100vh-8rem)]">
                 
                 {/* --- HEADER (Calibrado Exacto) --- */}
@@ -317,7 +342,7 @@ export default function Predict() {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div className="space-y-1 group">
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Fecha Matriculación</label>
-                                    <input type="date" name="registration" value={formData.registration} onChange={handleChange} className="input-data-entry w-full transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20" />
+                                    <input type="date" name="registration" max={today} value={formData.registration} onChange={handleChange} className="input-data-entry w-full transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20" />
                                 </div>
                                 <div className="md:col-span-2 space-y-1 group">
                                     <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Kilometraje Total</label>
@@ -396,23 +421,30 @@ export default function Predict() {
                         <div className="mt-8 space-y-3 relative z-10">
                             <motion.button 
                                 type="submit"
-                                disabled={!formData.version}
-                                whileHover={formData.version ? { scale: 1.02, boxShadow: '0 0 20px rgba(14,165,233,0.15)' } : {}}
-                                whileTap={formData.version ? { scale: 0.98 } : {}}
+                                disabled={!formData.version || isPredicting}
+                                whileHover={(formData.version && !isPredicting) ? { scale: 1.02, boxShadow: '0 0 20px rgba(14,165,233,0.15)' } : {}}
+                                whileTap={(formData.version && !isPredicting) ? { scale: 0.98 } : {}}
                                 className={`btn-primary-engine w-full flex items-center justify-center gap-3 py-3.5 transition-all duration-300 border ${
-                                    !formData.version 
+                                    (!formData.version || isPredicting)
                                     ? 'opacity-20 grayscale cursor-not-allowed border-transparent' 
                                     : 'cursor-pointer hover:border-(--secondary)/40 active:scale-[0.99]'
                                 }`}
                             >
-                                <span className="tracking-[0.2em] font-bold text-xs">PREDECIR PRECIO</span>
-                                <motion.img 
-                                    src={Bolt} 
-                                    alt="Bolt" 
-                                    animate={formData.version ? { y: [0, -2, 0] } : {}}
-                                    transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-                                    className="w-3.5 h-3.5"
-                                />
+                                {/* Cambio dinámico de texto según el estado */}
+                                <span className="tracking-[0.2em] font-bold text-xs">
+                                    {isPredicting ? 'EVALUANDO VEHÍCULO...' : 'PREDECIR PRECIO'}
+                                </span>
+                                
+                                {/* Ocultamos el icono del rayo o detenemos la animación si está cargando */}
+                                {!isPredicting && (
+                                    <motion.img 
+                                        src={Bolt} 
+                                        alt="Bolt" 
+                                        animate={formData.version ? { y: [0, -2, 0] } : {}}
+                                        transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                                        className="w-3.5 h-3.5"
+                                    />
+                                )}
                             </motion.button>
                             <p className="text-[8px] text-center text-[#bec8d2]/30 uppercase tracking-[0.15em]">
                                 Margen de precisión estimado: ±2.1%

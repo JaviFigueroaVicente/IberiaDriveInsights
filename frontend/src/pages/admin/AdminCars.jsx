@@ -175,7 +175,6 @@ export default function AdminCars({ currentUser, handleLogout }) {
                 Toast.fire({ icon: 'success', title: 'Registrado' });
             }
             setIsModalOpen(false);
-            window.location.reload();
         } catch (error) {
             console.error("Error en la operación del activo:", error);
             Toast.fire({ icon: 'error', title: 'Error al registrar' });

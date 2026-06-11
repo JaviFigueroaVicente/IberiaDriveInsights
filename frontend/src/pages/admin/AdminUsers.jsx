@@ -139,7 +139,6 @@ export default function UserRegistry({ currentUser, handleLogout }) {
                 Toast.fire({ icon: 'success', title: 'Usuario Creado' });
             }
             setIsModalOpen(false);
-            window.location.reload();
         } catch (error) {
             console.error("Error en la operación de identidad:", error);
             Toast.fire({ icon: 'error', title: 'Error 422' });
