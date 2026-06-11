@@ -237,7 +237,7 @@ export default function Predict() {
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 5 }}
                                     transition={{ duration: 0.15 }}
-                                    className="text-[10px] font-bold text-(--secondary) tracking-widest uppercase truncate max-w-[180px]"
+                                    className="text-[10px] font-bold text-(--secondary) tracking-widest uppercase truncate max-w-45"
                                 >
                                     {selectedMake.nombre || '---'} // {selectedModel.nombre || '---'}
                                 </motion.p>
