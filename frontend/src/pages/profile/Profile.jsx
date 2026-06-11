@@ -163,7 +163,7 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                 confirmButtonText: null
             });
 
-            window.location.href = '/';
+            window.location.reload();
 
         } catch (error) {
             console.error("Error updating identity parameters:", error);

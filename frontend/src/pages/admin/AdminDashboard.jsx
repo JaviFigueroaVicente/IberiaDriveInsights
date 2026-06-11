@@ -140,6 +140,7 @@ export default function UserRegistry({ currentUser, handleLogout }) {
                 });
                 setUsers([newIdentity, ...users]);
                 Toast.fire({ icon: 'success', title: 'NUEVA_IDENTIDAD_REGISTRADA' });
+                window.location.href = "/admin/users";
             }
             setIsModalOpen(false);
         } catch (error) {
