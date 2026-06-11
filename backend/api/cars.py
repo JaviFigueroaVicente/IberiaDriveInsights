@@ -9,7 +9,6 @@ import joblib
 import pandas as pd
 from datetime import datetime
 import os
-from dotenv import load_dotenv
 import io
 import urllib.request
 
@@ -174,26 +173,29 @@ async def delete_car(
 #     transformadores = None
 
 # Cargar el moedlo y los transformadores en Supabase
-load_dotenv()
-URL_MODELO = os.getenv("URL_MODELO")
-URL_TRANSFORMADORES = os.getenv("URL_TRANSFORMADORES")
+URL_MODELO = os.environ.get("URL_MODELO")
+URL_TRANSFORMADORES = os.environ.get("URL_TRANSFORMADORES")
 
-try:
-    print("Descargando modelo matemático desde Supabase Storage...")
-    with urllib.request.urlopen(URL_MODELO) as response:
-        model = joblib.load(io.BytesIO(response.read()))
-    print("Modelo cargado con éxito.")
+def cargar_recursos():
+    if not URL_MODELO or not URL_TRANSFORMADORES:
+        print("Error: Las variables de entorno URL_MODELO o URL_TRANSFORMADORES no están definidas.")
+        return None, None
 
-    print("Descargando transformadores desde Supabase Storage...")
-    # Descarga e inyección de los transformadores (Scalers, Encoders, etc.)
-    with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
-        transformadores = joblib.load(io.BytesIO(response.read()))
-    print("Transformadores cargados con éxito.")
+    try:
+        print(f"Descargando de: {URL_MODELO}")
+        with urllib.request.urlopen(URL_MODELO) as response:
+            model = joblib.load(io.BytesIO(response.read()))
+            
+        print(f"Descargando de: {URL_TRANSFORMADORES}")
+        with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
+            transformadores = joblib.load(io.BytesIO(response.read()))
+            
+        return model, transformadores
+    except Exception as e:
+        print(f"Error crítico al cargar los archivos: {e}")
+        return None, None
 
-except Exception as e:
-    print(f"Error crítico al cargar los archivos desde Supabase: {e}")
-    model = None
-    transformadores = None
+model, transformadores = cargar_recursos()
 
 # Función de predicción
 @router.post("/predict", response_model=CarResponse)
