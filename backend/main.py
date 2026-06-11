@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Header, Request, Response, Cookie
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from typing import Annotated
@@ -6,7 +6,6 @@ import models
 import uvicorn
 from database import engine
 from api import cars, auth
-import jwt
 from dotenv import load_dotenv
 import os
 
@@ -23,6 +22,7 @@ origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://www.localhost:5173",
+    "https://iberia-drive-insights-n2w788svq.vercel.app"
 ]
 
 app.add_middleware(
