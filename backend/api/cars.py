@@ -178,31 +178,22 @@ load_dotenv()
 URL_MODELO = os.getenv("URL_MODELO")
 URL_TRANSFORMADORES = os.getenv("URL_TRANSFORMADORES")
 
-# Variables globales para almacenar los objetos en la memoria RAM
-model = None
-transformadores = None
+try:
+    print("Descargando modelo matemático desde Supabase Storage...")
+    with urllib.request.urlopen(URL_MODELO) as response:
+        model = joblib.load(io.BytesIO(response.read()))
+    print("Modelo cargado con éxito.")
 
-def cargar_recursos_remotos():
-    global model, transformadores
-    try:
-        print("Descargando modelo matemático desde Supabase Storage...")
-        with urllib.request.urlopen(URL_MODELO) as response:
-            model = joblib.load(io.BytesIO(response.read()))
-        print("Modelo cargado con éxito.")
+    print("Descargando transformadores desde Supabase Storage...")
+    # Descarga e inyección de los transformadores (Scalers, Encoders, etc.)
+    with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
+        transformadores = joblib.load(io.BytesIO(response.read()))
+    print("Transformadores cargados con éxito.")
 
-        print("Descargando transformadores desde Supabase Storage...")
-        # Descarga e inyección de los transformadores (Scalers, Encoders, etc.)
-        with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
-            transformadores = joblib.load(io.BytesIO(response.read()))
-        print("Transformadores cargados con éxito.")
-
-    except Exception as e:
-        print(f"Error crítico al cargar los archivos desde Supabase: {e}")
-        model = None
-        transformadores = None
-
-# Forzamos la descarga automática de los modelos en cuanto Vercel encienda el backend
-cargar_recursos_remotos()
+except Exception as e:
+    print(f"Error crítico al cargar los archivos desde Supabase: {e}")
+    model = None
+    transformadores = None
 
 # Función de predicción
 @router.post("/predict", response_model=CarResponse)

@@ -163,8 +163,7 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                 confirmButtonText: null
             });
 
-            // 4. La página se recarga exactamente cuando el usuario pulsa "Aceptar"
-            window.location.reload();
+            window.location.href = '/';
 
         } catch (error) {
             console.error("Error updating identity parameters:", error);
