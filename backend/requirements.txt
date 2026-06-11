@@ -15,7 +15,6 @@ hpack==4.1.0
 greenlet==3.3.2
 
 # Análisis y Modelos de datos
-pandas==3.0.1
 scikit-learn==1.8.0
 joblib==1.5.3
 threadpoolctl==3.6.0
