@@ -5,12 +5,13 @@ import models
 from database import SessionLocal
 from schemas import CarBase, CarResponse, MakeResponse, ModelResponse, VersionResponse, CarPrediction, CarUpdate, FuelResponse, GearResponse, CarAdmin, MyPredictions
 from api.auth import get_current_user, get_admin_user
-import joblib
 import pandas as pd
 from datetime import datetime
+import joblib
 import os
+from dotenv import load_dotenv
 import io
-import urllib.request
+import urllib
 
 router = APIRouter()
 
@@ -173,37 +174,33 @@ async def delete_car(
 #     transformadores = None
 
 # Cargar el moedlo y los transformadores en Supabase
-URL_MODELO = os.environ.get("URL_MODELO")
-URL_TRANSFORMADORES = os.environ.get("URL_TRANSFORMADORES")
+load_dotenv()
 
-def cargar_recursos():
-    if not URL_MODELO or not URL_TRANSFORMADORES:
-        print("Error: Las variables de entorno URL_MODELO o URL_TRANSFORMADORES no están definidas.")
-        return None, None
+URL_MODELO = os.getenv("URL_MODELO")
+URL_TRANSFORMADORES = os.getenv("URL_TRANSFORMADORES")
 
-    try:
-        print(f"Descargando de: {URL_MODELO}")
-        with urllib.request.urlopen(URL_MODELO) as response:
-            model = joblib.load(io.BytesIO(response.read()))
-            
-        print(f"Descargando de: {URL_TRANSFORMADORES}")
-        with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
-            transformadores = joblib.load(io.BytesIO(response.read()))
-            
-        return model, transformadores
-    except Exception as e:
-        print(f"Error crítico al cargar los archivos: {e}")
-        return None, None
+try:
+    model = joblib.load(URL_MODELO)
+    transformadores = joblib.load(URL_TRANSFORMADORES)
+except Exception as e:
+    print(f"Error al cargar archivos: {e}")
+    model = None
+    transformadores = None
 
-model, transformadores = cargar_recursos()
 
 # Función de predicción
 @router.post("/predict", response_model=CarResponse)
 async def predict_car(car: CarPrediction, db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
-    if not model:
-        raise HTTPException(status_code=404, detail="Modelo no encontrado")
-    if not transformadores:
-        raise HTTPException(status_code=404, detail="Transformadores no encontrados")
+    global model, transformadores
+    if model is None or transformadores is None:
+        try:
+            print("Intentando descargar modelos...")
+            with urllib.request.urlopen(URL_MODELO) as response:
+                model = joblib.load(io.BytesIO(response.read()))
+            with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
+                transformadores = joblib.load(io.BytesIO(response.read()))
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"No se pudo descargar el modelo: {str(e)}")
     
     try:
         fecha = pd.to_datetime(car.registration)
