@@ -47,12 +47,11 @@ def get_headers(
 
 @app.get("/")
 def root():
-    # return JSONResponse(content={"message": "Hello World"}, headers={"set-cookie": "email={users.email}"})
-    return {"message": "Hello World"}
+    return
 
 @app.get("/users")
 def users():
-    response = JSONResponse(content={"message": "Hello World"})
+    response = JSONResponse()
     response.set_cookie(key="email", value = users.email, path="/users")
     return response
 
