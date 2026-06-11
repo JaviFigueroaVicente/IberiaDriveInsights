@@ -8,13 +8,25 @@ from database import engine
 from api import cars, auth
 from dotenv import load_dotenv
 import os
+from model_loader import init_models
+from contextlib import asynccontextmanager
 
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
-app = FastAPI()
+model = None
+transformadores = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model, transformadores
+    model, transformadores = init_models()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -45,9 +57,10 @@ def get_headers(
         "user_role": user_role,
     }
 
+
 @app.get("/")
 def root():
-    return
+    return {"message": "Backend Connected"}
 
 @app.get("/users")
 def users():

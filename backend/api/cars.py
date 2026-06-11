@@ -12,6 +12,7 @@ import os
 from dotenv import load_dotenv
 import io
 import urllib
+from model_loader import model, transformadores
 
 router = APIRouter()
 
@@ -173,34 +174,11 @@ async def delete_car(
 #     model = None
 #     transformadores = None
 
-# Cargar el moedlo y los transformadores en Supabase
-load_dotenv()
-
-URL_MODELO = os.getenv("URL_MODELO")
-URL_TRANSFORMADORES = os.getenv("URL_TRANSFORMADORES")
-
-try:
-    model = joblib.load(URL_MODELO)
-    transformadores = joblib.load(URL_TRANSFORMADORES)
-except Exception as e:
-    print(f"Error al cargar archivos: {e}")
-    model = None
-    transformadores = None
-
-
 # Función de predicción
 @router.post("/predict", response_model=CarResponse)
 async def predict_car(car: CarPrediction, db: db_dependency, current_user: Annotated[models.User, Depends(get_current_user)]):
-    global model, transformadores
     if model is None or transformadores is None:
-        try:
-            print("Intentando descargar modelos...")
-            with urllib.request.urlopen(URL_MODELO) as response:
-                model = joblib.load(io.BytesIO(response.read()))
-            with urllib.request.urlopen(URL_TRANSFORMADORES) as response:
-                transformadores = joblib.load(io.BytesIO(response.read()))
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"No se pudo descargar el modelo: {str(e)}")
+        raise HTTPException(status_code=503, detail="El modelo aún no está listo. Intenta de nuevo en unos segundos.")
     
     try:
         fecha = pd.to_datetime(car.registration)
