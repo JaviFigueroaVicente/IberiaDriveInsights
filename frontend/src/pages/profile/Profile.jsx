@@ -43,33 +43,33 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
         })); 
     };
 
-    // Estilo común para integrar Swal con la estética oscura de la app
+    // Configuración de SweetAlert2 unificada y adaptada al Design System Oscuro
     const swalConfig = {
-        background: 'var(--surface-container-low, #1e1e1e)',
-        color: '#ffffff',
-        confirmButtonColor: 'var(--primary-container, #004a77)',
+        background: 'var(--surface-container, #171f33)', 
+        color: 'var(--on-surface, #dae2fd)',
+        confirmButtonColor: 'transparent',
         denyButtonColor: '#2a2a2a',
         customClass: {
-            popup: 'border border-white/10 rounded-sm font-mono text-xs',
-            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
-            htmlContainer: 'text-xs text-(--on-surface-variant)',
-            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
-            denyButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
-            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
-        }
+            popup: 'border border-white/5 rounded-sm font-body text-xs shadow-[0_24px_60px_-15px_rgba(0,0,0,0.8)] blueprint-grid-dots',
+            title: 'text-base font-headline uppercase tracking-[0.2em] text-white font-bold pt-6',
+            htmlContainer: 'text-xs text-[var(--on-surface-variant,#bec8d2)] font-light px-2',
+            confirmButton: 'btn-primary-engine px-8 py-3 text-[10px] font-bold transition-all uppercase tracking-[0.2em] cursor-pointer active:scale-[0.98] flex items-center justify-center rounded-sm min-w-40 outline-none focus:outline-none focus:ring-0',
+            cancelButton: 'flex items-center justify-center gap-2 px-8 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all rounded-sm cursor-pointer ml-3 outline-none focus:outline-none focus:ring-0'
+        },
+        buttonsStyling: false
     };
 
-    // Configuración específica para Toast de notificación rápida
+    // Configuración específica para Toast de notificación rápida coherente con la UI
     const toastConfig = Swal.mixin({
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
-        background: 'var(--surface-container-low, #1e1e1e)',
-        color: '#ffffff',
+        background: 'var(--surface-container, #171f33)',
+        color: 'var(--on-surface, #dae2fd)',
         customClass: {
-            popup: 'border border-white/10 rounded-sm font-mono text-xs',
+            popup: 'border border-white/10 rounded-sm font-mono text-xs shadow-2xl blueprint-grid-dots',
             title: 'text-xs uppercase tracking-wider text-white font-bold'
         },
         didOpen: (toast) => {
@@ -93,7 +93,9 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                 showCancelButton: true,
                 confirmButtonText: 'Sí, descartar',
                 cancelButtonText: 'Cancelar',
-                cancelButtonColor: '#3a3a3a'
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
 
             if (!result.isConfirmed) return;
@@ -115,9 +117,17 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
             Swal.fire({
                 ...swalConfig,
                 title: 'Sin cambios',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-white/10 py-3`
+                },
                 text: 'No se han detectado modificaciones en los datos de usuario.',
                 icon: 'info',
-                iconColor: 'var(--secondary, #5de6ff)'
+                iconColor: 'var(--secondary, #5de6ff)',
+                confirmButtonText: 'ENTENDIDO',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
             return;
         }
@@ -126,13 +136,14 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
         const result = await Swal.fire({
             ...swalConfig,
             title: '¿Actualizar datos?',
-            text: '¿Confirmas la actualización de tus datos en el sistema?',
             icon: 'question',
             iconColor: 'var(--secondary, #5de6ff)',
             showCancelButton: true,
             confirmButtonText: 'Confirmar',
             cancelButtonText: 'Cancelar',
-            cancelButtonColor: '#3a3a3a'
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false
         });
 
         if (!result.isConfirmed) return;
@@ -150,7 +161,7 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                 setCurrentUser(updatedUser);
             }
 
-            // 3. Muestra el SweetAlert modal (esperando la interacción del usuario)
+            // 3. Muestra el SweetAlert modal automático de éxito
             await Swal.fire({
                 ...swalConfig,
                 title: 'Perfil actualizado',
@@ -160,7 +171,9 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
                 timer: 2500,
                 timerProgressBar: true,
                 showConfirmButton: false,
-                confirmButtonText: null
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
 
             window.location.reload();
@@ -169,10 +182,18 @@ export default function Profile({ currentUser, handleLogout, setCurrentUser }) {
             console.error("Error updating identity parameters:", error);
             Swal.fire({
                 ...swalConfig,
-                title: 'Error',
+                title: 'Error de Guardado',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3`
+                },
                 text: 'Hubo un fallo al guardar las modificaciones en el servidor.',
                 icon: 'error',
-                iconColor: '#ff5252'
+                iconColor: '#ff5252',
+                confirmButtonText: 'REINTENTAR',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
         } finally {
             setIsSaving(false);

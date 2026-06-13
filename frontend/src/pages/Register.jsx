@@ -22,7 +22,6 @@ export default function Register() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Variantes de animación para el formulario (Ease: cubic-bezier para sensación industrial)
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
@@ -34,17 +33,16 @@ export default function Register() {
     };
 
     const swalConfig = {
-        background: 'var(--surface-container-low, #1e1e1e)',
-        color: '#ffffff',
-        confirmButtonColor: 'var(--primary-container, #004a77)',
-        denyButtonColor: '#2a2a2a',
+        background: 'var(--surface-container, #171f33)', 
+        color: 'var(--on-surface, #dae2fd)',
+        confirmButtonColor: 'transparent', 
         customClass: {
-            popup: 'border border-white/10 rounded-sm font-mono text-xs',
-            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
-            htmlContainer: 'text-xs text-(--on-surface-variant)',
-            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
-            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
-        }
+            popup: 'border border-white/5 rounded-sm font-body text-xs shadow-[0_24px_60px_-15px_rgba(0,0,0,0.8)] blueprint-grid-dots',
+            title: 'text-base font-headline uppercase tracking-[0.2em] text-white font-bold pt-6',
+            htmlContainer: 'text-xs text-[var(--on-surface-variant,#bec8d2)] font-light px-2',
+            confirmButton: 'px-8 py-3 text-[10px] font-bold transition-all uppercase tracking-[0.2em] cursor-pointer active:scale-[0.98] flex items-center justify-center rounded-sm min-w-40 outline-none focus:outline-none focus:ring-0',
+        },
+        buttonsStyling: false
     };
 
     const handleChange = (e) => {
@@ -61,10 +59,18 @@ export default function Register() {
         if (formData.email !== formData.confirmEmail) {
             Swal.fire({
                 ...swalConfig,
-                title: 'Error de Confirmación de Correo',
+                title: 'Error de Confirmación',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3 md:py-3`
+                },
                 text: 'La confirmación no coincide con el correo electrónico introducido.',
                 icon: 'error',
-                iconColor: '#ff5252'
+                iconColor: '#ff5252',
+                confirmButtonText: 'REINTENTAR',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
             return;
         }
@@ -72,10 +78,18 @@ export default function Register() {
         if (formData.password !== formData.confirmPassword) {
             Swal.fire({
                 ...swalConfig,
-                title: 'Error de Confirmación de Contraseña',
+                title: 'Error de Contraseña',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3 md:py-3`
+                },
                 text: 'La confirmación no coincide con la contraseña introducida.',
                 icon: 'error',
-                iconColor: '#ff5252'
+                iconColor: '#ff5252',
+                confirmButtonText: 'REINTENTAR',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
             return;
         }
@@ -84,9 +98,17 @@ export default function Register() {
             Swal.fire({
                 ...swalConfig,
                 title: 'Seguridad Insuficiente',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-amber-500/10 hover:text-amber-400 hover:border-amber-500/20 py-3 md:py-3`
+                },
                 text: 'La longitud de la clave debe ser igual o superior a 8 caracteres.',
                 icon: 'warning',
-                iconColor: '#ffd700'
+                iconColor: '#ffd700',
+                confirmButtonText: 'CORREGIR',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
             return;
         }
@@ -98,13 +120,15 @@ export default function Register() {
             await Swal.fire({
                 ...swalConfig,
                 title: 'Registro Completado',
-                text: 'Redirigiendo a incio de sesión...',
+                text: 'Redirigiendo a inicio de sesión...',
                 icon: 'success',
-                iconColor: '#00e676',
+                iconColor: 'var(--secondary, #5de6ff)',
                 timer: 2500,
                 timerProgressBar: true,
                 showConfirmButton: false,
-                confirmButtonText: null
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
 
             navigate('/login');
@@ -114,9 +138,17 @@ export default function Register() {
             Swal.fire({
                 ...swalConfig,
                 title: 'Fallo de Registro',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3 md:py-3`
+                },
                 text: error.response?.data?.detail || 'El servidor rechazó los datos de la cuenta o el email ya está en uso.',
                 icon: 'error',
-                iconColor: '#ff5252'
+                iconColor: '#ff5252',
+                confirmButtonText: 'REINTENTAR',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
         } finally {
             setIsSubmitting(false);
@@ -185,7 +217,6 @@ export default function Register() {
                 <motion.div variants={itemVariants} className="bg-(--surface-container) p-6 md:p-10 lg:p-12 flex flex-col justify-center relative">
                     <div className="mb-4">
                         <h3 className="text-xl font-bold text-white mb-1 tracking-tight uppercase">Crear Cuenta</h3>
-                        <p className="text-xs text-[#bec8d2]/70">Despliegue su terminal de diagnóstico.</p>
                     </div>
 
                     {/* Aviso de entorno de pruebas / portfolio */}
@@ -193,7 +224,7 @@ export default function Register() {
                         <span className="font-bold text-yellow-400">[ ENTORNO DE DEMOSTRACIÓN ]</span><br />
                         Esta web es un proyecto de portfolio. Puede utilizar correos ficticios (ej: usuario@test.com). Los datos recopilados no se utilizarán para ningún tipo de estudio, análisis o explotación comercial.
                     </div>
-
+                    {/* Formulario de Registro */}
                     <form onSubmit={handleRegister} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-1">
@@ -226,7 +257,7 @@ export default function Register() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-1">
-                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Email Address</label>
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Email</label>
                                 <input 
                                     className="input-data-entry w-full py-2.5 text-sm disabled:opacity-50" 
                                     placeholder="iberia@drive.com" 
@@ -272,7 +303,7 @@ export default function Register() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar</label>
+                                <label className="block text-[9px] font-bold uppercase tracking-widest text-[#bec8d2]/60">Confirmar Contraseña</label>
                                 <input 
                                     className={`input-data-entry w-full py-2.5 text-sm disabled:opacity-50 ${
                                         formData.confirmPassword && formData.password !== formData.confirmPassword 
@@ -319,8 +350,8 @@ export default function Register() {
                         </div>
 
                         <div className="text-center pt-4 border-t border-white/5">
-                            <p className="text-[10px] text-[#bec8d2] uppercase tracking-wider">
-                                ¿YA TIENES CUENTA? 
+                            <p className="text-[10px] text-[#bec8d2] tracking-wider">
+                                ¿Ya tienes cuenta? 
                                 <Link className="font-bold ml-2 text-(--secondary) hover:text-white transition-colors" to="/login">Inicia Sesión</Link>
                             </p>
                         </div>

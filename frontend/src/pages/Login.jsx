@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion' // Inyección para orquestación de movimiento
+import { motion, AnimatePresence } from 'framer-motion'
 import { loginUser } from '../composables/auth'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -27,19 +27,19 @@ export default function Login({ onLoginSuccess }) {
   };
 
   const swalConfig = {
-    background: 'var(--surface-container-low, #1e1e1e)',
-    color: '#ffffff',
-    confirmButtonColor: 'var(--primary-container, #004a77)',
-    denyButtonColor: '#2a2a2a',
+    background: 'var(--surface-container, #171f33)', 
+    color: 'var(--on-surface, #dae2fd)',
+    confirmButtonColor: 'transparent', 
     customClass: {
-      popup: 'border border-white/10 rounded-sm font-mono text-xs',
-      title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
-      htmlContainer: 'text-xs text-(--on-surface-variant)',
-      confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
-      cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
-    }
+      popup: 'border border-white/5 rounded-sm font-body text-xs shadow-[0_24px_60px_-15px_rgba(0,0,0,0.8)] blueprint-grid-dots',
+      title: 'text-base font-headline uppercase tracking-[0.2em] text-white font-bold pt-6',
+      htmlContainer: 'text-xs text-[var(--on-surface-variant,#bec8d2)] font-light px-2',
+      confirmButton: 'px-8 py-3 text-[10px] font-bold transition-all uppercase tracking-[0.2em] cursor-pointer active:scale-[0.98] flex items-center justify-center rounded-sm min-w-40 outline-none focus:outline-none focus:ring-0',
+    },
+    buttonsStyling: false
   };
 
+  // Función para manejar el inicio de sesión
   const handleLogin = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -53,11 +53,13 @@ export default function Login({ onLoginSuccess }) {
         title: 'Acceso Correcto',
         text: 'Sincronizando entorno de usuario...',
         icon: 'success',
-        iconColor: '#00e676',
+        iconColor: 'var(--secondary, #5de6ff)',
         timer: 2000,
         timerProgressBar: true,
         showConfirmButton: false,
-        confirmButtonText: null
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false
       });
 
       await onLoginSuccess(response.access_token);
@@ -68,9 +70,17 @@ export default function Login({ onLoginSuccess }) {
       Swal.fire({
         ...swalConfig,
         title: 'Fallo de Autenticación',
+        customClass: {
+          ...swalConfig.customClass,
+          confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3 md:py-3`
+        },
         text: error.response?.data?.detail || 'Los datos introducidos no coinciden con ningún registro del sistema.',
         icon: 'error',
-        iconColor: '#ff5252'
+        iconColor: '#ff5252',
+        confirmButtonText: 'REINTENTAR',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false
       });
     } finally {
       setIsSubmitting(false);
@@ -89,7 +99,7 @@ export default function Login({ onLoginSuccess }) {
         animate="visible"
         className="z-10 w-full max-w-120 px-6 py-2"
       >
-        
+        {/* HEADER */}
         <motion.div variants={itemVariants} className="mb-4 flex flex-col items-start gap-3">
           <Link to="/" className="flex items-center gap-4 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-(--primary-container)/20 p-1 border border-(--primary-container)/40 transition-transform group-hover:scale-105">
@@ -119,6 +129,7 @@ export default function Login({ onLoginSuccess }) {
               Esta web es un proyecto de portfolio. Puede utilizar credenciales ficticias para interactuar. Los datos recopilados no se utilizarán para ningún tipo de estudio, análisis o explotación comercial.
             </div>
 
+            {/* Formulario de acceso */}
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="block text-[9px] font-semibold tracking-widest text-[#bec8d2] uppercase" htmlFor="email">

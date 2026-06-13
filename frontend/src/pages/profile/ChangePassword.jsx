@@ -26,17 +26,18 @@ export default function ChangePassword({ currentUser, handleLogout }) {
 
     // Configuración visual común para los modales de Swal (estética oscura e industrial)
     const swalConfig = {
-        background: 'var(--surface-container-low, #1e1e1e)',
-        color: '#ffffff',
-        confirmButtonColor: 'var(--primary-container, #004a77)',
+        background: 'var(--surface-container, #171f33)', 
+        color: 'var(--on-surface, #dae2fd)',
+        confirmButtonColor: 'transparent',
         denyButtonColor: '#2a2a2a',
         customClass: {
-            popup: 'border border-white/10 rounded-sm font-mono text-xs',
-            title: 'text-base font-headline uppercase tracking-tight text-white font-bold',
-            htmlContainer: 'text-xs text-(--on-surface-variant)',
-            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm',
-            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-sm'
-        }
+            popup: 'border border-white/5 rounded-sm font-body text-xs shadow-[0_24px_60px_-15px_rgba(0,0,0,0.8)] blueprint-grid-dots',
+            title: 'text-base font-headline uppercase tracking-[0.2em] text-white font-bold pt-6',
+            htmlContainer: 'text-xs text-[var(--on-surface-variant,#bec8d2)] font-light px-2',
+            confirmButton: 'btn-primary-engine px-8 py-3 text-[10px] font-bold transition-all uppercase tracking-[0.2em] cursor-pointer active:scale-[0.98] flex items-center justify-center rounded-sm min-w-40 outline-none focus:outline-none focus:ring-0',
+            cancelButton: 'flex items-center justify-center gap-2 px-8 py-3 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all rounded-sm cursor-pointer ml-3 outline-none focus:outline-none focus:ring-0'
+        },
+        buttonsStyling: false
     };
 
     const handlePasswordChange = (e) => {
@@ -54,9 +55,17 @@ export default function ChangePassword({ currentUser, handleLogout }) {
             Swal.fire({
                 ...swalConfig,
                 title: 'Error de Protocolo',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3`
+                },
                 text: 'La confirmación no coincide con la nueva contraseña introducida.',
                 icon: 'error',
-                iconColor: '#ff5252'
+                iconColor: '#ff5252',
+                confirmButtonText: 'REVISAR DATOS',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
             return;
         }
@@ -66,9 +75,17 @@ export default function ChangePassword({ currentUser, handleLogout }) {
             Swal.fire({
                 ...swalConfig,
                 title: 'Seguridad Insuficiente',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-amber-500/10 hover:text-amber-400 hover:border-amber-500/20 py-3`
+                },
                 text: 'La nueva contraseña debe contener un mínimo de 8 caracteres.',
                 icon: 'warning',
-                iconColor: '#ffd700'
+                iconColor: '#ffd700',
+                confirmButtonText: 'CORREGIR',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
             return;
         }
@@ -77,13 +94,15 @@ export default function ChangePassword({ currentUser, handleLogout }) {
         const result = await Swal.fire({
             ...swalConfig,
             title: '¿Modificar Contraseña?',
-            text: 'Esta acción cambiará tu contraseña.',
+            text: 'Esta acción cambiará tu contraseña actual de acceso al sistema.',
             icon: 'question',
             iconColor: 'var(--secondary, #5de6ff)',
             showCancelButton: true,
             confirmButtonText: 'Confirmar',
             cancelButtonText: 'Cancelar',
-            cancelButtonColor: '#3a3a3a'
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false
         });
 
         if (!result.isConfirmed) return;
@@ -100,13 +119,15 @@ export default function ChangePassword({ currentUser, handleLogout }) {
             await Swal.fire({
                 ...swalConfig,
                 title: 'Contraseña Actualizada',
-                text: 'La contraseña ha sido actualizada con exito.',
+                text: 'La contraseña ha sido modificada con éxito en el sistema.',
                 icon: 'success',
                 iconColor: '#00e676',
                 timer: 2500,
                 timerProgressBar: true,
                 showConfirmButton: false,
-                confirmButtonText: null
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
 
             // Limpieza del formulario tras la expiración del temporizador del Swal
@@ -125,9 +146,17 @@ export default function ChangePassword({ currentUser, handleLogout }) {
             Swal.fire({
                 ...swalConfig,
                 title: 'Fallo de Autenticación',
+                customClass: {
+                    ...swalConfig.customClass,
+                    confirmButton: `${swalConfig.customClass.confirmButton} bg-white/5 text-[var(--on-surface-variant,#bec8d2)] border border-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 py-3`
+                },
                 text: error.response?.data?.detail || 'La contraseña actual no es válida o el servidor rechazó los parámetros.',
                 icon: 'error',
-                iconColor: '#ff5252'
+                iconColor: '#ff5252',
+                confirmButtonText: 'REINTENTAR',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             });
         } finally {
             setIsUpdating(false);
@@ -244,7 +273,7 @@ export default function ChangePassword({ currentUser, handleLogout }) {
                                 <div className="space-y-4 text-[10px]">
                                     <div className="flex justify-between">
                                         <span className="text-(--on-surface-variant)">ENCRIPTACIÓN</span>
-                                        <span className="text-white">AES-256</span>
+                                        <span className="text-white">HS-256</span>
                                     </div>
                                     <div className="pt-4 border-t border-white/5">
                                         <p className="text-(--on-surface-variant) leading-relaxed italic">

@@ -14,19 +14,18 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Configuración técnica para integrar Swal con el diseño oscuro
+    // Configuración unificada con el diseño cibernético/industrial del SideBar
     const swalConfig = {
         background: 'var(--surface-container, #171f33)',
         color: '#dae2fd',
-        confirmButtonColor: '#ff5252', 
-        cancelButtonColor: 'rgba(255, 255, 255, 0.05)',
         customClass: {
-            popup: 'border border-white/10 rounded-sm font-mono text-xs shadow-2xl',
-            title: 'text-base font-headline uppercase tracking-tight text-white font-bold border-b border-white/5 pb-2',
-            htmlContainer: 'text-xs text-[#bec8d2]',
-            confirmButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm cursor-pointer',
-            cancelButton: 'text-[10px] uppercase tracking-widest font-bold px-6 py-2 rounded-sm border border-white/10 text-white hover:bg-white/5 transition-colors cursor-pointer'
-        }
+            popup: 'border border-white/10 rounded-sm font-mono text-xs shadow-2xl select-none',
+            title: 'text-base font-headline uppercase tracking-tight text-white font-bold border-b border-white/5 pb-2 pt-4',
+            htmlContainer: 'text-xs text-[#bec8d2] font-mono leading-relaxed px-4',
+            confirmButton: 'relative pointer-events-auto text-[10px] uppercase tracking-widest font-bold px-6 py-2.5 rounded-sm cursor-pointer bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30 transition-all select-none touch-manipulation min-w-32 mx-2 outline-none',
+            cancelButton: 'relative pointer-events-auto text-[10px] uppercase tracking-widest font-bold px-6 py-2.5 rounded-sm border border-white/10 text-white hover:bg-white/5 transition-all cursor-pointer select-none touch-manipulation min-w-32 mx-2 outline-none'
+        },
+        buttonsStyling: false
     };
 
     const confirmLogout = () => {
@@ -72,7 +71,7 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
             : "block py-2 border-b border-white/5 hover:text-(--primary-container) hover:pl-1 transition-all";
 
     return (
-        // Fijamos la altura a h-16 estricto (4rem) para asegurar proporciones consistentes en pantallas verticales pequeñas
+        // Fijamos la altura a h-16 estricto (4rem) para asegurar proporciones consistentemente en pantallas verticales pequeñas
         <header className="sticky top-0 z-100 w-full h-16 border-b border-white/10 bg-(--surface)/80 backdrop-blur-md select-none flex items-center">
             
             <div className="flex items-center justify-between w-full px-4 md:px-10 relative z-120">
@@ -122,12 +121,13 @@ export default function Header({ isAuthenticated, currentUser, onLogout }) {
                                 <AnimatePresence>
                                     {isOpen && (
                                         <>
+                                            {/* Telón invisible para capturar el click-away del menú de escritorio */}
                                             <div className="fixed inset-0 z-125" onClick={() => setIsOpen(false)}></div>
                                             <motion.div 
                                                 initial={{ opacity: 0, scaleY: 0.85, y: -5 }}
                                                 animate={{ opacity: 1, scaleY: 1, y: 0 }}
                                                 exit={{ opacity: 0, scaleY: 0.9, y: -5 }}
-                                                transition={{ duration: 0.15, ease: "easeOut" }}
+                                                transition={{ duration: 0.15, ease: "easeOut" }} // Easing suave de salida arquitectónica
                                                 className="absolute right-0 mt-3 w-52 bg-(--surface-low) border border-white/10 shadow-2xl z-130 py-3 rounded-sm origin-top overflow-hidden"
                                             >
                                                 {/* Esquinas estéticas cibernéticas */}
