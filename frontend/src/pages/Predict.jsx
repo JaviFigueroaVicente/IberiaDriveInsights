@@ -220,11 +220,11 @@ export default function Predict() {
     }
 
     return (
-        <div className="bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid relative flex flex-col items-center justify-between min-h-[calc(100vh-5rem)]">
-            <Background />
+        <div className="bg-(--surface) text-[#dae2fd] p-6 lg:p-12 blueprint-grid-dots relative flex flex-col items-center justify-between min-h-[calc(100vh-5rem)]">
+            
             <main className="z-10 w-full max-w-7xl h-full flex flex-col justify-between gap-6 min-h-[calc(100vh-8rem)]">
                 
-                {/* --- HEADER (Calibrado Exacto) --- */}
+                {/* --- HEADER --- */}
                 <motion.header 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -239,7 +239,7 @@ export default function Predict() {
                                     animate={{ width: 24 }}
                                     transition={{ delay: 0.1, duration: 0.2 }}
                                     className="h-px bg-(--secondary)"
-                                ></motion.span>
+                                />
                                 <span className="text-[9px] font-bold tracking-[0.3em] text-(--secondary) uppercase whitespace-nowrap">
                                     Modulo: Evaluación de Mercado
                                 </span>
@@ -272,12 +272,12 @@ export default function Predict() {
 
                     <div className="mt-3">
                         <p className="max-w-4xl text-[10px] md:text-[11px] text-(--on-surface-variant) font-light leading-relaxed uppercase tracking-wide opacity-75 line-clamp-2 md:line-clamp-none">
-                            Evaluación mediante dos modelos independientes: análisis estructural de patrones históricos (<span className="text-white font-bold">Kaggle pre-2018</span>) y corrección por fluctuaciones dinámicas mediante captura en tiempo real (<span className="text-white font-bold">Web Scraping</span>).
+                            Posibilidad de evaluación entre dos modelos: un modelo entrenado con vehículos evaluados en 2018 (<span className="text-white font-bold">Kaggle</span>) o mediante un modelo entrenado con precios actuales (<span className="text-white font-bold">Web Scraping</span>).
                         </p>
                     </div>
                 </motion.header>
 
-                {/* --- FORMULARIO ADAPTADO --- */}
+                {/* --- FORMULARIO --- */}
                 <motion.form 
                     variants={formContainerVariants}
                     initial="hidden"
@@ -406,6 +406,19 @@ export default function Predict() {
                                 </div>
                             </div>
 
+                            {/* Selector de Algoritmo/Modelo Deshabilitado */}
+                            <div className="space-y-1 group opacity-60 mix-blend-luminosity">
+                                <label className="text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest">Algoritmo Predictor</label>
+                                <select 
+                                    disabled 
+                                    value="xgboost" 
+                                    className="input-data-entry w-full cursor-not-allowed bg-black/20"
+                                >
+                                    <option value="xgboost">XGBoost Regressor (XGBoost)</option>
+                                    <option value="random_forest">Random Forest (Kaggle)</option>
+                                </select>
+                            </div>
+
                             <div className="bg-black/40 p-4 rounded-sm border border-white/5 backdrop-blur-xs group hover:border-(--secondary)/20 transition-colors duration-300">
                                 <p className="text-[10px] leading-relaxed text-[#bec8d2]/60 uppercase tracking-wider mb-3">
                                     El cálculo se basará en el análisis sobre <span className="text-white font-bold">{selectedVersion.nombre || 'el modelo seleccionado'}</span>.
@@ -430,12 +443,10 @@ export default function Predict() {
                                     : 'cursor-pointer hover:border-(--secondary)/40 active:scale-[0.99]'
                                 }`}
                             >
-                                {/* Cambio dinámico de texto según el estado */}
                                 <span className="tracking-[0.2em] font-bold text-xs">
                                     {isPredicting ? 'EVALUANDO VEHÍCULO...' : 'PREDECIR PRECIO'}
                                 </span>
                                 
-                                {/* Ocultamos el icono del rayo o detenemos la animación si está cargando */}
                                 {!isPredicting && (
                                     <motion.img 
                                         src={Bolt} 
@@ -447,7 +458,7 @@ export default function Predict() {
                                 )}
                             </motion.button>
                             <p className="text-[8px] text-center text-[#bec8d2]/30 uppercase tracking-[0.15em]">
-                                Margen de precisión estimado: ±2.1%
+                                Margen de precisión estimado: ±7.92%
                             </p>
                         </div>
                     </motion.div>

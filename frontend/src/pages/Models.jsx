@@ -129,7 +129,7 @@ export default function Models() {
                 <p className="text-[8px] font-mono text-[#bec8d2]/40 uppercase mb-0.5">System Health</p>
                 <p className="text-[10px] font-bold text-(--secondary) tracking-widest uppercase flex items-center gap-1.5">
                   <span className="h-1 w-1 bg-(--secondary) rounded-full animate-system-live"></span>
-                  99.98% Stable
+                  Estable
                 </p>
               </motion.div>
             </div>
@@ -146,31 +146,31 @@ export default function Models() {
             <ArchitectureCard 
               className="col-span-1" 
               number="01" 
-              subtitle="Modelo de Datos Históricos" 
-              title="Random Forest (Kaggle)" 
-              badge="Dataset Base" 
-              description="Entrenado de forma independiente con datos estáticos de la plataforma Kaggle. Este modelo proporciona la línea base estructural del mercado basándose estrictamente en registros históricos consolidados hasta el año 2018." 
+              subtitle="Modelo de Datos Volátiles" 
+              title="Gradient Boosting (XGBoost)" 
+              badge="Dataset Scrap" 
+              description="Entrenado exclusivamente con datos dinámicos obtenidos mediante técnicas de Web Scraping automatizado. Captura las fluctuaciones de oferta, demanda y depreciación en tiempo real del mercado actual." 
               metrics={[
-                { label: 'Algoritmo', value: 'Random Forest' }, 
-                { label: 'Temporalidad', value: 'ANTERIOR ≤ 2018' }, 
-                { label: 'Estimadores', value: '1,500 Árboles' }, 
-                { label: 'Propósito', value: 'Patrón Estructural' }
+                { label: 'Algoritmo', value: 'XGBoost Regression' }, 
+                { label: 'Muestra Total', value: '2.964 vehículos' }, 
+                { label: 'Estimadores', value: '500 Árboles' }, 
+                { label: 'Profundidad', value: 'Max-Depth 5' }
               ]} 
             />
             <ArchitectureCard 
               className="col-span-1" 
               number="02" 
-              subtitle="Modelo de Datos Volátiles" 
-              title="Gradient Boosting (XGBoost)" 
-              badge="Dataset en Vivo" 
-              description="Entrenado exclusivamente con datos dinámicos obtenidos mediante técnicas de Web Scraping automatizado. Captura las fluctuaciones de oferta, demanda y depreciación en tiempo real del mercado actual." 
+              subtitle="Modelo de Datos Históricos" 
+              title="Random Forest (Kaggle)" 
+              badge="Dataset Kaggle" 
+              description="Entrenado de forma independiente con datos estáticos de la plataforma Kaggle. Este modelo proporciona la línea base estructural del mercado basándose estrictamente en registros históricos consolidados hasta el año 2018." 
               metrics={[
-                { label: 'Algoritmo', value: 'XGBoost (Inferencia)' }, 
-                { label: 'Temporalidad', value: 'Tiempo Real' }, 
-                { label: 'Profundidad', value: 'Max-Depth 12' }, 
-                { label: 'Propósito', value: 'Tendencia Volátil' }
+                { label: 'Algoritmo', value: 'Random Forest' }, 
+                { label: 'Muestra Total', value: '83.996 vehículos' }, 
+                { label: 'Estimadores', value: '200 Árboles' }, 
+                { label: 'Profundidad', value: '30 Niveles' }
               ]} 
-            />
+            />            
           </FadeInWhenVisible>
 
           {/* PIPELINE */}

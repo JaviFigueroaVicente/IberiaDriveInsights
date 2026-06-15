@@ -120,7 +120,7 @@ export default function Home() {
               Integridad del Motor & Métricas
             </h2>
             <p className="leading-relaxed text-(--on-surface-variant) text-sm font-light">
-              Nuestros modelos de Machine Learning se validan mediante dos posibles arquitecturas, comparando datos genéricos con flujos de mercado real.
+              Nuestros modelos de Machine Learning se validan mediante dos posibles arquitecturas, comparando datos genéricos y flujos de mercado real.
             </p>
             
             {/* Precisión XGBOOST */}
@@ -129,7 +129,7 @@ export default function Home() {
                 <img src={Verified} alt="Verified" className="w-4 h-4" />
                 <span className="text-[9px] font-bold text-white tracking-widest uppercase opacity-60">PRECISIÓN DE XGBOOST</span>
               </div>
-              <div className="text-4xl font-bold text-(--primary) mb-3 font-headline tracking-tight">88.55%</div>
+              <div className="text-4xl font-bold text-(--primary) mb-3 font-headline tracking-tight">92.16%</div>
               <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ scaleX: 0 }}
@@ -137,7 +137,7 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1], delay: 0.1 }}
                   style={{ originX: 0 }}
-                  className="h-full bg-(--primary) w-[88.55%]" 
+                  className="h-full bg-(--primary) w-[92.16%]" 
                 />
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function Home() {
                 <img src={Verified} alt="Verified" className="w-4 h-4" />
                 <span className="text-[9px] font-bold text-white tracking-widest uppercase opacity-60">PRECISIÓN DE RANDOM FOREST</span>
               </div>
-              <div className="text-4xl font-bold text-(--secondary) mb-3 font-headline tracking-tight">93.85%</div>
+              <div className="text-4xl font-bold text-(--secondary) mb-3 font-headline tracking-tight">93.89%</div>
               <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ scaleX: 0 }}
@@ -156,7 +156,7 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1], delay: 0.2 }}
                   style={{ originX: 0 }}
-                  className="h-full bg-(--secondary) w-[93.85%]" 
+                  className="h-full bg-(--secondary) w-[93.89%]" 
                 />
               </div>
             </div>
@@ -165,10 +165,10 @@ export default function Home() {
           {/* Columna Derecha: Tarjetas de Métricas en Rejilla */}
           <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
             {[
-              { type: "XGBOOST", label: "Margen de Error", value: "1.455,53€", desc: "Varianza observada con simulaciones reales usando el modelo de regresión.", border: "border-l-(--primary)" },
-              { type: "XGBOOST", label: "Margen de Confianza", value: "91.1%", desc: "Intervalo de confianza para modelos de vehículo de cualquier antigüedad.", border: "border-l-(--secondary)" },
-              { type: "RANDOM FOREST", label: "Margen de Error", value: "1.359,71€", desc: "Varianza observada con simulaciones reales usando aprendizaje en árbol.", border: "border-l-(--primary)" },
-              { type: "RANDOM FOREST", label: "Margen de Confianza", value: "91.34%", desc: "Intervalo de confianza para modelos de vehículo hasta el año 2018.", border: "border-l-(--secondary)" }
+              { type: "XGBOOST", label: "Margen de Error", value: "1.321,33€", desc: "Varianza observada con simulaciones reales usando el modelo de regresión.", border: "border-l-(--primary)" },
+              { type: "XGBOOST", label: "Margen de Confianza", value: "92.08%", desc: "Intervalo de confianza para modelos de vehículo de cualquier antigüedad.", border: "border-l-(--secondary)" },
+              { type: "RANDOM FOREST", label: "Margen de Error", value: "1.331,60€", desc: "Varianza observada con simulaciones reales usando aprendizaje en árbol.", border: "border-l-(--primary)" },
+              { type: "RANDOM FOREST", label: "Margen de Confianza", value: "91.52%", desc: "Intervalo de confianza para modelos de vehículo hasta el año 2018.", border: "border-l-(--secondary)" }
             ].map((card, i) => (
               <motion.div 
                 key={i}
