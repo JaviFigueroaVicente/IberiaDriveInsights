@@ -59,9 +59,10 @@ pip install -r requirements.txt
 Configura un archivo .env en la raíz del directorio backend con las credenciales de conexión a tu instancia de base de datos:
 
 ```bash
+URL_FRONTEND=http://localhost:5173
 DATABASE_URL=tu_url_de_conexion_postgresql
-URL_MODELO = tu_url_de modelos
-URL_TRANSFORMADORES = tu_url_de_transformadores
+URL_MODELO=tu_url_de modelos
+URL_TRANSFORMADORES=tu_url_de_transformadores
 ```
 
 Inicia el servidor local de desarrollo del backend:
