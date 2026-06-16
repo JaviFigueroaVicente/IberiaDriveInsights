@@ -29,11 +29,13 @@ app = FastAPI(lifespan=lifespan)
 
 models.Base.metadata.create_all(bind=engine)
 
+URL_FRONTEND = os.getenv("URL_FRONTEND")
+
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://www.localhost:5173",
-    "https://iberia-drive-insights.vercel.app"
+    URL_FRONTEND
 ]
 
 app.add_middleware(
