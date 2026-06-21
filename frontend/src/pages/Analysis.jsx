@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ArrowRight from '../assets/icons/arrow_right.svg';
 
-// Variantes del contenedor principal para activar el efecto Stagger (escalonado)
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { 
@@ -65,7 +64,7 @@ const MetricCard = ({ label, value, progress, active = false }) => (
         initial={{ width: 0 }}
         whileInView={{ width: `${progress}%` }}
         viewport={{ once: true }} 
-        transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }} 
+        transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
         style={{ backgroundColor: active ? 'var(--secondary)' : 'rgba(190, 200, 210, 0.3)' }}
         className="h-full" 
       />
@@ -131,7 +130,7 @@ export default function Analysis() {
               { label: "Min Samples Leaf", value: "1" },
               { label: "Estimadores (Trees)", value: "200" }
             ],
-           bars: [
+            bars: [
               { label: '0-15k €', h1: '50.8%', h2: '22.4%', count: "RF: 50.8% | XGB: 22.4%" },
               { label: '15k-30k €', h1: '33.1%', h2: '46.3%', count: "RF: 33.1% | XGB: 46.3%" },
               { label: '30k-60k €', h1: '14.2%', h2: '26.6%', count: "RF: 14.2% | XGB: 26.6%" },
@@ -215,7 +214,7 @@ export default function Analysis() {
                   activeModel === 'xgb' ? 'border-(--secondary) bg-white/5 opacity-100' : 'border-transparent opacity-40 hover:opacity-75'
                 }`}
               >
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center gap-2">
                   <div className="min-w-0 flex-1">
                     <h3 style={{ color: activeModel === 'xgb' ? 'var(--secondary)' : 'var(--on-surface-variant)' }} className="text-[10px] uppercase tracking-widest font-bold truncate">XGBoost (Numeric Matrice)</h3>
                     <p className="text-[8px] font-mono text-white/40 truncate">Data Target: Scrap en vivo</p>
@@ -228,7 +227,7 @@ export default function Analysis() {
                     {activeModel === 'xgb' ? 'Activo' : 'Analizar'}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 grow">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 grow">
                   <MetricCard label="MAE" value="€1.321,33" progress={92.16} active={activeModel === 'xgb'} />
                   <MetricCard label="RMSE" value="€1.868,64" progress={92.08} active={activeModel === 'xgb'} />
                 </div>
@@ -241,7 +240,7 @@ export default function Analysis() {
                   activeModel === 'rf' ? 'border-(--secondary) bg-white/5 opacity-100' : 'border-transparent opacity-40 hover:opacity-75'
                 }`}
               >
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center gap-2">
                   <div className="min-w-0 flex-1">
                     <h3 style={{ color: activeModel === 'rf' ? 'var(--secondary)' : 'var(--on-surface-variant)' }} className="text-[10px] uppercase tracking-widest font-bold truncate">Random Forest (Categorical String)</h3>
                     <p className="text-[8px] font-mono text-white/40 truncate">Data Target: Kaggle</p>
@@ -254,7 +253,7 @@ export default function Analysis() {
                     {activeModel === 'rf' ? 'Activo' : 'Analizar'}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 grow">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 grow">
                   <MetricCard label="MAE" value="€1.331,60" progress={93.89} active={activeModel === 'rf'} />
                   <MetricCard label="RMSE" value="€2.229,37" progress={91.52} active={activeModel === 'rf'} />
                 </div>
@@ -275,15 +274,14 @@ export default function Analysis() {
               </h2>
             </div>
             
-            <div className="h-full flex items-end justify-between gap-4 px-1 relative border-b border-white/10">
+            <div className="h-full min-h-45 pt-6 flex items-end justify-between gap-2 md:gap-4 relative border-b border-white/10 md:overflow-visible">
               <AnimatePresence mode="wait">
                 {!loading && metricsData?.bars.map((bar, i) => (
-                  <div key={`${activeModel}-bar-${i}`} className="flex-1 flex flex-col items-center h-full justify-end group min-w-0">
-                    {/* Tooltip inline sutil con la cantidad total de coches */}
-                    <span className="text-[9px] font-mono text-white/60 mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div key={`${activeModel}-bar-${i}`} className="flex-1 flex flex-col items-center h-full justify-end group min-w-13.75 md:min-w-0">
+                    <span className="text-[8px] md:text-[9px] font-mono text-white/60 mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                       {bar.count}
                     </span>
-                    <div className="flex items-end gap-2 w-full max-w-14 h-full">
+                    <div className="flex items-end gap-1.5 md:gap-2 w-full max-w-14 h-full">
                       <motion.div 
                         initial={{ scaleY: 0 }} 
                         animate={{ scaleY: 1 }}
@@ -292,8 +290,7 @@ export default function Analysis() {
                         style={{ height: bar.h1, originY: 1, backgroundColor: 'var(--secondary)' }} 
                         className="flex-1 rounded-t-xs relative"
                       >
-                        {/* Indicador de densidad en el core del gráfico */}
-                        <div className="absolute top-1 left-0 right-0 h-px bg-white/20 mx-0.5"></div>
+                        <div className="absolute top-1 left-0 right-0 h-px bg-white/20"></div>
                       </motion.div>
                       <motion.div 
                         initial={{ scaleY: 0 }} 
@@ -311,7 +308,7 @@ export default function Analysis() {
             </div>
           </motion.section>
 
-          {/* HIPERPARÁMETROS ASIGNADOS AL DATASET (Alto completo, sin hover y secuencial al cambiar) */}
+          {/* HIPERPARÁMETROS ASIGNADOS AL DATASET */}
           <motion.div 
             variants={blockVariants}
             style={{ 
@@ -350,8 +347,8 @@ export default function Analysis() {
 
           {/* BANNER INFORMATIVO */}
           <motion.div variants={blockVariants} className="col-span-12 block w-full">
-            <section style={{ borderColor: 'rgba(255, 255, 255, 0.05)' }} className="bg-(--surface-container) relative h-28 rounded-sm border w-full flex items-center justify-between px-5 md:px-7">
-              <div className="relative z-10 flex flex-col justify-center flex-1 mr-4">
+            <section style={{ borderColor: 'rgba(255, 255, 255, 0.05)' }} className="bg-(--surface-container) relative min-h-28 py-5 rounded-sm border w-full flex flex-col sm:flex-row items-start sm:items-center justify-between px-5 md:px-7 gap-4">
+              <div className="relative z-10 flex flex-col justify-center flex-1">
                 <div className="flex items-center gap-3 mb-1">
                   <span style={{ backgroundColor: 'var(--secondary)' }} className="h-px w-6"></span>
                   <span style={{ color: 'var(--secondary)' }} className="text-[8px] md:text-[9px] uppercase font-bold tracking-[0.2em]">Evaluación de Modelos de Aprendizaje</span>
@@ -361,7 +358,7 @@ export default function Analysis() {
                   Nuestro motor de valoración utiliza un método de ensamble propio, para un modelo de aprendizaje automático usando Gradient Boosting y para otro modelo de aprendizaje automático usando Random Forest.
                 </p>
               </div>
-              <div className="relative z-10 shrink-0 hidden sm:block">
+              <div className="relative z-10 shrink-0 w-full sm:w-auto">
                 <Link to='/models' className="btn-primary-engine w-full sm:w-auto h-9.5 px-8 text-[10px] font-bold tracking-widest uppercase flex flex-row items-center justify-center gap-2 cursor-pointer">
                   <span className="inline-flex items-center h-full pt-px">Modelos de Evaluación</span>
                   <img src={ArrowRight} alt="Arrow" className="w-4 h-4 object-contain" />
