@@ -2,6 +2,7 @@ from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime, D
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base, engine
+from sqlalchemy.dialects.mysql import LONGTEXT
 
 # Car Model
 class CarKaffle(Base):
@@ -48,6 +49,11 @@ class Car(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     rep_id = Column(Integer, ForeignKey("users.id"))
+
+    price_base = Column(Integer, nullable=False)
+    status = Column(String(20), nullable=True)
+    dmgs_detectados = Column(LONGTEXT, nullable=True)
+    imgagen_coche = Column(LONGTEXT, nullable=True)
     
     make_rel = relationship("Make", primaryjoin="Car.make == Make.id", foreign_keys=[make])
     model_rel = relationship("Model", primaryjoin="Car.model == Model.id", foreign_keys=[model])

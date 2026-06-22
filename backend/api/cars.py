@@ -3,14 +3,17 @@ from sqlalchemy.orm import Session, joinedload
 from typing import Annotated, List
 import models
 from database import SessionLocal
-from schemas import CarBase, CarResponse, MakeResponse, ModelResponse, VersionResponse, CarPrediction, CarUpdate, FuelResponse, GearResponse, CarAdmin, MyPredictions
+from schemas import CarBase, CarResponse, MakeResponse, ModelResponse, VersionResponse, CarPrediction, CarUpdate, FuelResponse, GearResponse, CarAdmin, MyPredictions, TasacionRequest, TasacionResponse
 from api.auth import get_current_user, get_admin_user
 import pandas as pd
 from datetime import datetime
 import joblib
 import os
+import json
 from dotenv import load_dotenv
 from fastapi import Request, Depends
+from agents.graph import agent
+
 
 router = APIRouter()
 
@@ -187,6 +190,7 @@ async def predict_car(
     model = Depends(get_model),
     transformadores = Depends(get_transformadores)
 ):    
+    
     try:
         fecha = pd.to_datetime(car.registration)
         hoy = datetime.now()
@@ -208,22 +212,77 @@ async def predict_car(
         columnas_modelo = transformadores['features_names']
         df_predict = pd.DataFrame([input_dict])[columnas_modelo].astype('int64')
 
-        precio = int(model.predict(df_predict)[0])
+        precio_base = int(model.predict(df_predict)[0])
 
-        car_bbdd = car.model_dump()
-
-        car_bbdd['price'] = precio
-        car_bbdd['is_prediction'] = True
-
-        new_car = models.Car(**car_bbdd, rep_id=current_user.id)
-
-        db.add(new_car)
-        db.commit()
-        db.refresh(new_car)
-
-        return new_car
+        return precio_base
 
     except Exception as e:
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
+    
+@router.post("/tasar_dmgs", response_model=TasacionResponse)
+async def tasar_dmgs(
+    payload: TasacionRequest,
+    db: db_dependency,
+    current_user: Annotated[models.User, Depends(get_current_user)],
+    model = Depends(get_model),
+    transformadores = Depends(get_transformadores)
+):
+    # Separar la imagen del payload técnico del coche
+    datos_completos = payload.model_dump()
+    img_b64 = datos_completos.pop("img_b64", None)
+
+    # Estado inicial del grafo
+    inputs = {
+        "messages": [{"role": "user", "content": "Iniciar tasación con peritaje visual."}],
+        "car_data": datos_completos,
+        "imagen_coche": img_b64,
+        "dmgs_detectados": [],
+        "precio_base": 0,
+        "precio_final": 0
+    }
+
+    try:
+        # Ejecutar el agente pasándole los cargadores del pkl en el contexto configurable
+        config = {
+            "recursion_limit": 10,
+            "configurable": {
+                "model": model,
+                "transformadores": transformadores
+            }
+        }
+        resultado = agent.invoke(inputs, config=config)
+
+        # Persistir en la base de datos el coche con el precio final calculado por el agente
+        car_bbdd = payload.model_dump()
+        car_bbdd.pop("img_b64", None)
+        
+        car_bbdd['price'] = resultado.get("precio_final")
+        car_bbdd['price_base'] = resultado.get("precio_base")
+        car_bbdd['status'] = "success"
+        car_bbdd['imagen_coche'] = img_b64
+        car_bbdd['is_prediction'] = True
+
+        lista_dmgs = resultado.get("danos_detectados", [])
+        car_bbdd['dmgs_detectados'] = json.dumps(lista_dmgs)
+
+        # Creamos la entidad mapeando el usuario autenticado
+        new_car = models.Car(**car_bbdd, rep_id=current_user.id)
+        
+        db.add(new_car)
+        db.commit()
+        db.refresh(new_car)
+
+        # Respuesta para actualizar el Frontend de React
+        return {
+            "status": "success",
+            "precio_perfecto": resultado.get("precio_base"),
+            "dmgs_detectados": resultado.get("dmgs_detectados"),
+            "precio_final": resultado.get("precio_final")
+        }
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error en tasación avanzada: {str(e)}")

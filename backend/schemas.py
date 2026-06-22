@@ -230,3 +230,13 @@ class UserResponse(BaseModel):
 class PasswordUpdate(BaseModel):
     current_password: str
     new_password: str
+
+# Tasacion
+class TasacionRequest(CarPrediction):
+    img_b64: str = None
+
+class TasacionResponse(BaseModel):
+    status: str
+    precio_perfecto: int
+    dmgs_detectados: List[str]
+    precio_final: int
