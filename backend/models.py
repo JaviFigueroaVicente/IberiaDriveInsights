@@ -1,9 +1,7 @@
-from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime, Date
+from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime, Date, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base, engine
-from sqlalchemy.dialects.mysql import LONGTEXT
-
 # Car Model
 class CarKaffle(Base):
     __tablename__ = "cars_kaffle"
@@ -23,7 +21,7 @@ class CarKaffle(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    rep_id = Column(Integer, ForeignKey("users.id"))
+    rep_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
 
     rep = relationship("User", back_populates="cars_kaffle")
 
@@ -48,12 +46,11 @@ class Car(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    rep_id = Column(Integer, ForeignKey("users.id"))
+    rep_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
 
     price_base = Column(Integer, nullable=False)
     status = Column(String(20), nullable=True)
-    dmgs_detectados = Column(LONGTEXT, nullable=True)
-    imgagen_coche = Column(LONGTEXT, nullable=True)
+    dmgs_detectados = Column(Text, nullable=True)
     
     make_rel = relationship("Make", primaryjoin="Car.make == Make.id", foreign_keys=[make])
     model_rel = relationship("Model", primaryjoin="Car.model == Model.id", foreign_keys=[model])
@@ -63,6 +60,16 @@ class Car(Base):
     
     rep = relationship("User", back_populates="cars")
 
+    images = relationship("CarImage", back_populates="car", cascade="all, delete-orphan")
+
+class CarImage(Base):
+    __tablename__ = "car_images"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    car_id = Column(Integer, ForeignKey("cars.id", ondelete="CASCADE"), nullable=False)
+    imagen_b64 = Column(Text, nullable=False)
+
+    car = relationship("Car", back_populates="images")
 
 class User(Base):
     __tablename__ = "users"
@@ -76,8 +83,8 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
-    cars_kaffle = relationship("CarKaffle", back_populates="rep")
-    cars = relationship("Car", back_populates="rep")
+    cars_kaffle = relationship("CarKaffle", back_populates="rep", cascade="all, delete-orphan")
+    cars = relationship("Car", back_populates="rep", cascade="all, delete-orphan")
 
 
 class Make(Base):
@@ -88,7 +95,7 @@ class Make(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    models = relationship("Model", back_populates="makes")
+    models = relationship("Model", back_populates="makes", cascade="all, delete-orphan")
 
 class Model(Base):
     __tablename__ = "models"
@@ -98,10 +105,10 @@ class Model(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
-    id_marca = Column(Integer, ForeignKey("makes.id"))
+    id_marca = Column(Integer, ForeignKey("makes.id", ondelete="CASCADE"))
 
     makes = relationship("Make", back_populates="models")
-    versions = relationship("Version", back_populates="models")
+    versions = relationship("Version", back_populates="models", cascade="all, delete-orphan")
 
 class Version(Base):
     __tablename__ = "versions"
@@ -111,7 +118,7 @@ class Version(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
-    id_modelo = Column(Integer, ForeignKey("models.id"))
+    id_modelo = Column(Integer, ForeignKey("models.id", ondelete="CASCADE"))
 
     models = relationship("Model", back_populates="versions")
 
@@ -130,3 +137,4 @@ class GearType(Base):
     nombre = Column(String(50), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+

@@ -47,7 +47,8 @@ export default function Predict() {
         power: 0,
         gear_type: '',
         fuel_type: '',
-        kms: 0
+        kms: 0,
+        imgs_b64: []
     });
 
     const [makes, setMakes] = useState([]);
@@ -153,6 +154,29 @@ export default function Predict() {
             setSelectedGearType(found ? { gear_id: found.id, nombre: found.nombre } : gear_type);
         }
     }
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1];
+                
+                setFormData(prev => ({
+                    ...prev,
+                    imgs_b64: [...prev.imgs_b64, base64String]
+                }));
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+    const removeImage = (indexToRemove) => {
+        setFormData(prev => ({
+            ...prev,
+            imgs_b64: prev.imgs_b64.filter((_, index) => index !== indexToRemove)
+        }));
+    };
 
     const handlePredict = async (e) => {
         e.preventDefault();
@@ -379,6 +403,54 @@ export default function Predict() {
                                     <label className="text-[9px] md:text-[10px] font-bold text-[#bec8d2]/60 uppercase tracking-widest transition-colors group-focus-within:text-(--secondary)">Potencia (CV)</label>
                                     <input type="number" name="power" min="0" step="1" onKeyDown={(e) => {if (['.', ',', 'e', 'E', '+', '-'].includes(e.key)){e.preventDefault()}}} value={formData.power || ''} onChange={handleChange} className="input-data-entry w-full transition-all focus:border-(--secondary)/40 focus:ring-1 focus:ring-(--secondary)/20 text-xs py-2.5" placeholder="0" />
                                 </div>
+                            </div>
+                        </motion.div>
+
+                        {/* 04. Peritaje Visual (Carga de Imágenes) */}
+                        <motion.div variants={sectionVariants} className="space-y-3">
+                            <div className="flex items-center gap-3">
+                                <span className="text-[9px] md:text-[10px] font-black text-white px-2 py-0.5 bg-(--surface-high) rounded-xs shadow-xs">04</span>
+                                <h3 className="text-xs font-bold uppercase tracking-widest text-[#bec8d2]">Análisis de Carrocería</h3>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="group relative border-2 border-dashed border-white/10 hover:border-(--secondary)/40 transition-colors p-6 rounded-sm bg-(--surface-highest)/30 text-center cursor-pointer">
+                                    <input 
+                                        type="file" 
+                                        multiple 
+                                        accept="image/*" 
+                                        onChange={handleImageChange} 
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    />
+                                    <div className="space-y-2">
+                                        <span className="material-symbols-outlined text-2xl">Añadir Imágenes</span>
+                                        <p className="text-xs text-white font-medium">Subir imágenes del vehículo</p>
+                                        <p className="text-[10px] text-[#bec8d2]/40 uppercase tracking-wider">Selecciona una o varias fotos (Frontal, Trasera, Laterales)</p>
+                                    </div>
+                                </div>
+
+                                {/* Galería de Previsualización Dinámica */}
+                                {formData.imgs_b64.length > 0 && (
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 p-3 bg-black/20 rounded-sm border border-white/5">
+                                        {formData.imgs_b64.map((img, index) => (
+                                            <div key={index} className="relative aspect-video bg-(--surface-high) border border-white/10 rounded-xs overflow-hidden group/thumb">
+                                                <img 
+                                                    src={`data:image/jpeg;base64,${img}`} 
+                                                    alt={`Miniatura ${index + 1}`} 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeImage(index)}
+                                                    className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-600 text-white p-1 rounded-xs opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center"
+                                                >
+                                                    <span className="material-symbols-outlined text-xs">Borrar</span>
+                                                </button>
+                                                <span className="absolute bottom-1 left-1 data-chip opacity-80">Foto {index + 1}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     </div>

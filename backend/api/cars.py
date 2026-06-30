@@ -181,7 +181,32 @@ def get_model(request: Request):
 def get_transformadores(request: Request):
     return request.app.state.transformadores
 
-# Función de predicción
+# Función interna para el cálculo matemático puro
+def obtener_prediccion_precio(car_dict: dict, model, transformadores) -> int:
+    fecha = pd.to_datetime(car_dict['registration'])
+    hoy = datetime.now()
+    antiguedad = (hoy.year - fecha.year) * 12 + (hoy.month - fecha.month)
+    if antiguedad < 0:
+        antiguedad = 0
+    
+    input_dict = {
+        'make': car_dict['make'],
+        'model': car_dict['model'],
+        'version': car_dict['version'],
+        'gear_type': car_dict['gear_type'],
+        'fuel_type': car_dict['fuel_type'],
+        'power': car_dict['power'],
+        'kms': car_dict['kms'],
+        'antiguedad_meses': antiguedad
+    }
+
+    columnas_modelo = transformadores['features_names']
+    df_predict = pd.DataFrame([input_dict])[columnas_modelo].astype('int64')
+
+    return int(model.predict(df_predict)[0])
+
+
+# Endpoint original /predict
 @router.post("/predict", response_model=CarResponse)
 async def predict_car(
     car: CarPrediction, 
@@ -190,37 +215,16 @@ async def predict_car(
     model = Depends(get_model),
     transformadores = Depends(get_transformadores)
 ):    
-    
     try:
-        fecha = pd.to_datetime(car.registration)
-        hoy = datetime.now()
-        antiguedad = (hoy.year - fecha.year) * 12 + (hoy.month - fecha.month)
-        if antiguedad < 0:
-            antiguedad = 0
-        
-        input_dict = {
-            'make': car.make,
-            'model': car.model,
-            'version': car.version,
-            'gear_type': car.gear_type,
-            'fuel_type': car.fuel_type,
-            'power': car.power,
-            'kms': car.kms,
-            'antiguedad_meses': antiguedad
-        }
-
-        columnas_modelo = transformadores['features_names']
-        df_predict = pd.DataFrame([input_dict])[columnas_modelo].astype('int64')
-
-        precio_base = int(model.predict(df_predict)[0])
-
-        return precio_base
+        precio_base = obtener_prediccion_precio(car.model_dump(), model, transformadores)
+        return {"precio": precio_base}
 
     except Exception as e:
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
-    
+
+
 @router.post("/tasar_dmgs", response_model=TasacionResponse)
 async def tasar_dmgs(
     payload: TasacionRequest,
@@ -231,13 +235,13 @@ async def tasar_dmgs(
 ):
     # Separar la imagen del payload técnico del coche
     datos_completos = payload.model_dump()
-    img_b64 = datos_completos.pop("img_b64", None)
+    lista_img = datos_completos.pop("imgs_b64", [])
 
     # Estado inicial del grafo
     inputs = {
         "messages": [{"role": "user", "content": "Iniciar tasación con peritaje visual."}],
         "car_data": datos_completos,
-        "imagen_coche": img_b64,
+        "imagenes_coche": lista_img,
         "dmgs_detectados": [],
         "precio_base": 0,
         "precio_final": 0
@@ -252,19 +256,19 @@ async def tasar_dmgs(
                 "transformadores": transformadores
             }
         }
+
         resultado = agent.invoke(inputs, config=config)
 
         # Persistir en la base de datos el coche con el precio final calculado por el agente
         car_bbdd = payload.model_dump()
-        car_bbdd.pop("img_b64", None)
+        car_bbdd.pop("imgs_b64", None)
         
         car_bbdd['price'] = resultado.get("precio_final")
         car_bbdd['price_base'] = resultado.get("precio_base")
-        car_bbdd['status'] = "success"
-        car_bbdd['imagen_coche'] = img_b64
+        car_bbdd['status'] = resultado.get("status", "success")
         car_bbdd['is_prediction'] = True
 
-        lista_dmgs = resultado.get("danos_detectados", [])
+        lista_dmgs = resultado.get("dmgs_detectados", [])
         car_bbdd['dmgs_detectados'] = json.dumps(lista_dmgs)
 
         # Creamos la entidad mapeando el usuario autenticado
@@ -274,15 +278,28 @@ async def tasar_dmgs(
         db.commit()
         db.refresh(new_car)
 
-        # Respuesta para actualizar el Frontend de React
-        return {
+        for foto in lista_img:
+            car_img = models.CarImage(car_id=new_car.id, imagen_b64=foto)
+            db.add(car_img)
+        
+        db.commit()
+
+        respuesta_final = payload.model_dump()
+        
+        respuesta_final.pop("imgs_b64", None)
+
+        respuesta_final.update({
             "status": "success",
-            "precio_perfecto": resultado.get("precio_base"),
-            "dmgs_detectados": resultado.get("dmgs_detectados"),
-            "precio_final": resultado.get("precio_final")
-        }
+            "price_base": resultado.get("precio_base"),
+            "dmgs_detectados": lista_dmgs,
+            "price": resultado.get("precio_final")
+        })
+
+        return respuesta_final
+    
 
     except Exception as e:
+        db.rollback()
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error en tasación avanzada: {str(e)}")

@@ -18,8 +18,8 @@ def obtener_modelo() -> BaseChatModel:
             temperature=0.0
         )
     else:
-        print("[INFRAESTRUCTURA] Iniciando Llava en Ollama Local...")
+        print("[INFRAESTRUCTURA] Iniciando Qwen en Ollama Local...")
         return ChatOllama(
-            model="qwen.3.5:4b", 
+            model="qwen3.5:4b", 
             temperature=0.0
         )

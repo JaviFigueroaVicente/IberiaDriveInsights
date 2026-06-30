@@ -233,10 +233,10 @@ class PasswordUpdate(BaseModel):
 
 # Tasacion
 class TasacionRequest(CarPrediction):
-    img_b64: str = None
+    imgs_b64: list[str] = []    
 
 class TasacionResponse(BaseModel):
     status: str
-    precio_perfecto: int
+    price_base: int
     dmgs_detectados: List[str]
-    precio_final: int
+    price: int

@@ -30,7 +30,8 @@ const car = {
     gear_type: '',
     fuel_type: '',
     kms: 0,
-    price: 0
+    price: 0,
+    imgs_b64: []
 }
 
 const make = {
@@ -109,7 +110,11 @@ const getCars = async () => {
 
 const predictCar = async (carData) => {
     try {
-        const response = await apiClient.post('/cars/predict', carData);
+        const response = await apiClient.post('/cars/tasar_dmgs', carData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
         return response.data;
     } catch (error) {
         throw error;

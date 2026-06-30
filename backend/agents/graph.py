@@ -3,10 +3,11 @@ from langgraph.graph import StateGraph, START, END
 from agents.state import CarState
 from agents.factory import obtener_modelo
 from langchain_core.messages import HumanMessage
+from langchain_core.runnables import RunnableConfig
 
 # Nodo de peritación
 def peritacion(state: CarState):
-    img_b64 = state.imagen_coche
+    img_b64 = state.get("imagenes_coche", [])
 
     if not img_b64:
         return {"dmgs_detectados": []}
@@ -25,13 +26,15 @@ def peritacion(state: CarState):
     No escribas introducciones ni explicaciones, solo el objeto JSON.
     """
 
-    mensaje = HumanMessage(
-        content=[
-            {"type": "text", "text": prompt},
-            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}}
-        ]
-    )
+    contenido_mensaje = [{"type": "text", "text": prompt}]
 
+    for img in img_b64:
+        contenido_mensaje.append({
+            "type": "image_url", 
+            "image_url": {"url": f"data:image/jpeg;base64,{img}"}
+        })
+
+    mensaje = HumanMessage(content=contenido_mensaje)
     respuesta = ai_model.invoke([mensaje])
 
     try:
@@ -46,12 +49,16 @@ def peritacion(state: CarState):
     return {"dmgs_detectados": dmgs}
 
 # Nodo de cálculo de precio post peritación
-def calcular_precio(state: CarState):
-    from api.cars import predict_car
+def calcular_precio(state: CarState, config: RunnableConfig):
+    from api.cars import obtener_prediccion_precio
+
+    configurable = config.get("configurable", {})
+    model = configurable.get("model")
+    transformadores = configurable.get("transformadores")
 
     # Ejecución de la predicción base
-    car = state.car_data
-    precio_base = predict_car(car)
+    car = state.get("car_data", {})
+    precio_base = obtener_prediccion_precio(car, model, transformadores)
 
     # Precios de daños detectados
     TABLA_COSTES = {
@@ -60,7 +67,9 @@ def calcular_precio(state: CarState):
     }
 
     total_dmgs = 0
-    for dmg in state.dmgs_detectados:
+    dmgs_detectados = state.get("dmgs_detectados", [])
+
+    for dmg in dmgs_detectados:
         total_dmgs += TABLA_COSTES.get(dmg, 0)
 
     precio_final = precio_base - total_dmgs
@@ -71,7 +80,8 @@ def calcular_precio(state: CarState):
         
     return {
         "precio_base": int(precio_base),
-        "precio_final": int(precio_final)
+        "precio_final": int(precio_final),
+        "status": "success"
     }
 
 # Fulo de LangGraph
