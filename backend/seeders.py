@@ -47,6 +47,9 @@ def generar_seeders():
         df_fuel_types = pd.read_csv('datasets/seed_fuel_types.csv')
         df_fuel_types.to_sql('fuel_types', con=engine, if_exists='append', index=False)
 
+        damages = pd.read_csv('datasets/seed_damages.csv')
+        damages.to_sql('damages', con=engine, if_exists='append', index=False)
+
         print("Datos insertados correctamente")
             
     except Exception as e:

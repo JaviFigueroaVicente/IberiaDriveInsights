@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime, Date, Text
+from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime, Date, Text, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base, engine
@@ -138,3 +138,10 @@ class GearType(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+class Damages(Base):
+    __tablename__ = "damages"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    damage_type = Column(String(50), nullable=False)
+    penalty_percentage = Column(Float, nullable=False)
+    description = Column(Text, nullable=False)

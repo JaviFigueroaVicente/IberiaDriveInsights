@@ -240,3 +240,9 @@ class TasacionResponse(BaseModel):
     price_base: int
     dmgs_detectados: List[str]
     price: int
+
+class Damages(BaseModel):
+    id: int
+    damage_type: str
+    penalty_percentage: float
+    description: str
