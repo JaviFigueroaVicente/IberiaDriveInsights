@@ -242,9 +242,10 @@ async def tasar_dmgs(
         "messages": [{"role": "user", "content": "Iniciar tasación con peritaje visual."}],
         "car_data": datos_completos,
         "imagenes_coche": lista_img,
-        "dmgs_detectados": [],
+        "damages": [],
         "precio_base": 0,
-        "precio_final": 0
+        "precio_final": 0,
+        "status": "pendiente de tasación"
     }
 
     try:
@@ -253,7 +254,8 @@ async def tasar_dmgs(
             "recursion_limit": 10,
             "configurable": {
                 "model": model,
-                "transformadores": transformadores
+                "transformadores": transformadores,
+                "db": db
             }
         }
 
@@ -265,11 +267,11 @@ async def tasar_dmgs(
         
         car_bbdd['price'] = resultado.get("precio_final")
         car_bbdd['price_base'] = resultado.get("precio_base")
-        car_bbdd['status'] = resultado.get("status", "success")
+        car_bbdd['status'] = resultado.get("status")
         car_bbdd['is_prediction'] = True
 
-        lista_dmgs = resultado.get("dmgs_detectados", [])
-        car_bbdd['dmgs_detectados'] = json.dumps(lista_dmgs)
+        lista_dmgs = resultado.get("damages", [])
+        car_bbdd['damages'] = lista_dmgs
 
         # Creamos la entidad mapeando el usuario autenticado
         new_car = models.Car(**car_bbdd, rep_id=current_user.id)
@@ -289,10 +291,10 @@ async def tasar_dmgs(
         respuesta_final.pop("imgs_b64", None)
 
         respuesta_final.update({
-            "status": "success",
             "price_base": resultado.get("precio_base"),
-            "dmgs_detectados": lista_dmgs,
-            "price": resultado.get("precio_final")
+            "damages": lista_dmgs,
+            "price": resultado.get("precio_final"),
+            "status": resultado.get("status")
         })
 
         return respuesta_final

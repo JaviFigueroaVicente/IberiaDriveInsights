@@ -238,7 +238,7 @@ class TasacionRequest(CarPrediction):
 class TasacionResponse(BaseModel):
     status: str
     price_base: int
-    dmgs_detectados: List[str]
+    damages: List[int]
     price: int
 
 class Damages(BaseModel):
@@ -246,3 +246,6 @@ class Damages(BaseModel):
     damage_type: str
     penalty_percentage: float
     description: str
+
+    class Config:
+        from_attributes = True

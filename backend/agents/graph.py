@@ -4,26 +4,51 @@ from agents.state import CarState
 from agents.factory import obtener_modelo
 from langchain_core.messages import HumanMessage
 from langchain_core.runnables import RunnableConfig
+from sqlalchemy import text
 
 # Nodo de peritación
-def peritacion(state: CarState):
+def peritacion(state: CarState, config: RunnableConfig):
     img_b64 = state.get("imagenes_coche", [])
 
     if not img_b64:
-        return {"dmgs_detectados": []}
+        return {"damages": []}
     
     # Llamamos al modelo
     ai_model = obtener_modelo()
+    configurable = config.get("configurable", {})
+    db = configurable.get("db", None)
 
     prompt = """
-    Analiza la carrocería de este coche. Identifica daños visibles (bollos, roces, arañazos).
-    Debes clasificar los daños únicamente usando estas etiquetas válidas del sector técnico:
-    - 'pintura_panio' (si hay roces o abolladuras en chapas/paragolpes)
-    - 'neumatico_unidad' (si se ve un neumático pinchado o destrozado)
+    Objetivo: Analizar las imágenes del coche y detectar todos los daños visibles de la carrocería.
     
-    Devuelve estrictamente un JSON limpio con el formato: {"dmgs": ["etiqueta1", "etiqueta2"]}
-    Si el coche está perfecto, devuelve: {"dmgs": []}
-    No escribas introducciones ni explicaciones, solo el objeto JSON.
+    Reglas estrictas:
+    1. Analiza todas las fotos en conjunto.
+    2. Si un daño se repite (ej. 2 faros rotos o 2 llantas rascadas), REPITE la etiqueta en el array por cada unidad dañada.
+    3. Devuelve ÚNICAMENTE el objeto JSON crudo, sin markdown (```json), sin introducciones ni explicaciones.
+
+    Catálogo técnico:
+    'pintura_leve' (roces/arañazos)
+    'pintura_con_chapa' (bollos/deformaciones leves)
+    'optica_delantera' (faro delantero roto/agrietado)
+    'optica_trasera' (piloto trasero roto/agrietado)
+    'retrovisor_completo' (espejo roto/colgando)
+    'luna_parabrisas' (parabrisas agrietado/picado)
+    'luna_trasera' (cristal trasero roto)
+    'ventanilla_lateral' (ventanilla rota)
+    'neumatico_unidad' (rueda pinchada/destrozada)
+    'llanta_daño_grave' (llanta abollada/muy rascada)
+    'capo_deformado' (capó abollado/levantado)
+    'puerta_hundida' (puerta con golpe profundo)
+    'techo_hundido' (techo abollado grave)
+    'golpe_estructural_frontal' (frontal destrozado/airbags saltados)
+    'golpe_estructural_trasero' (maletero hundido fuerte)
+    'golpe_estructural_lateral' (lateral empotrado)
+
+    Formato de salida esperado:
+    {"damages": ["optica_delantera", "optica_delantera", "pintura_leve"]}
+
+    Si no hay daños:
+    {"damages": []}
     """
 
     contenido_mensaje = [{"type": "text", "text": prompt}]
@@ -37,16 +62,30 @@ def peritacion(state: CarState):
     mensaje = HumanMessage(content=contenido_mensaje)
     respuesta = ai_model.invoke([mensaje])
 
+    lista_ids = []
     try:
-        # Limpiamos posibles caracteres extraños del markdown que a veces añaden los LLM
         clean_content = respuesta.content.strip().replace("```json", "").replace("```", "")
         data = json.loads(clean_content)
-        dmgs = data.get("dmgs", [])
+        tags_detectados = data.get("damages", [])
+
+        if tags_detectados and db:
+            # Una sola consulta masiva eliminando duplicados temporales para el IN de SQL
+            tags_unicos = list(set(tags_detectados))
+            query = text("SELECT id, damage_type FROM damages WHERE damage_type = ANY(:tags)")
+            rows = db.execute(query, {"tags": tags_unicos}).fetchall()
+            
+            mapa_maestro = {row[1]: row[0] for row in rows}
+
+            # Construimos la lista final respetando las repeticiones que envió el LLM
+            for tag in tags_detectados:
+                if tag in mapa_maestro:
+                    lista_ids.append(mapa_maestro[tag])
+
     except Exception as e:
         print(f"Error al parsear JSON del peritaje: {e}. Respuesta cruda: {respuesta.content}")
-        dmgs = []
+        lista_ids = []
 
-    return {"dmgs_detectados": dmgs}
+    return {"damages": lista_ids}
 
 # Nodo de cálculo de precio post peritación
 def calcular_precio(state: CarState, config: RunnableConfig):
@@ -55,35 +94,49 @@ def calcular_precio(state: CarState, config: RunnableConfig):
     configurable = config.get("configurable", {})
     model = configurable.get("model")
     transformadores = configurable.get("transformadores")
+    db = configurable.get("db", None)
 
     # Ejecución de la predicción base
     car = state.get("car_data", {})
     precio_base = obtener_prediccion_precio(car, model, transformadores)
 
-    # Precios de daños detectados
-    TABLA_COSTES = {
-        "pintura_panio": 180.00,
-        "neumatico_unidad": 95.00
-    }
+    ids = state.get("damages", [])
+    total_porcentaje = 0.0
 
-    total_dmgs = 0
-    dmgs_detectados = state.get("dmgs_detectados", [])
+    if ids and db:
+        # Consulta masiva limpia
+        query = text("SELECT id, penalty_percentage FROM damages WHERE id = ANY(:ids)")
+        rows = db.execute(query, {"ids": list(set(ids))}).fetchall()
+        mapa_porcentajes = {row[0]: float(row[1]) for row in rows}
+        
+        # Sumamos acumulando si el ID se repite
+        for damage_id in ids:
+            total_porcentaje += mapa_porcentajes.get(damage_id, 0.0)
 
-    for dmg in dmgs_detectados:
-        total_dmgs += TABLA_COSTES.get(dmg, 0)
+    if 14 in ids and 11 in ids:
+        total_porcentaje += 25.0
 
-    precio_final = precio_base - total_dmgs
-
-    # Evitamos valores negativos o sin sentido fijando el valor residual mínimo del 10% (según BOE)
+    UMBRAL_SINIESTRO = 70.0
+    if total_porcentaje >= UMBRAL_SINIESTRO:
+        return {"precio_base": int(precio_base), "precio_final": 0, "total_porcentaje": total_porcentaje, "status": "siniestro"}
+    
+    if total_porcentaje == 0:
+        return {"precio_base": int(precio_base), "precio_final": int(precio_base), "total_porcentaje": 0.0, "status": "perfecto"}
+    
+    descuento = precio_base * (total_porcentaje / 100.0)
+    precio_final = precio_base - descuento
+    
     if precio_final < (precio_base * 0.1):
         precio_final = precio_base * 0.1
+
+    estado = "daño grave" if (total_porcentaje > 30.0 or precio_final == precio_base * 0.1) else "daño leve"
         
     return {
         "precio_base": int(precio_base),
         "precio_final": int(precio_final),
-        "status": "success"
+        "total_porcentaje": total_porcentaje,
+        "status": estado
     }
-
 # Fulo de LangGraph
 workflow = StateGraph(CarState)
 

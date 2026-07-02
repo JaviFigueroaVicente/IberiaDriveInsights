@@ -8,7 +8,7 @@ luna_parabrisas,3.0,"Fisura o impacto en el cristal parabrisas delantero (afecta
 luna_trasera,2.0,"Luneta trasera rota o fracturada"
 ventanilla_lateral,1.0,"Cristal de ventanilla lateral roto"
 neumatico_unidad,1.0,"Neumático visiblemente deshinchado, pinchado o con desgaste extremo"
-llanta_danio_grave,1.5,"Llanta de aleación con golpe estructural o deformada"
+llanta_daño_grave,4.5,"Llanta de aleación con golpe estructural o deformada"
 capo_deformado,6.0,"Capó delantero con abolladura grave o descuadrado por impacto"
 puerta_hundida,5.0,"Hundimiento grave en paño de puerta que requiere sustitución"
 techo_hundido,8.0,"Daño severo en el techo (granizo denso o vuelco leve)"

@@ -1,6 +1,7 @@
 from sqlalchemy import Boolean, ForeignKey, Integer, String, Column, DateTime, Date, Text, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import ARRAY
 from database import Base, engine
 # Car Model
 class CarKaffle(Base):
@@ -50,7 +51,7 @@ class Car(Base):
 
     price_base = Column(Integer, nullable=False)
     status = Column(String(20), nullable=True)
-    dmgs_detectados = Column(Text, nullable=True)
+    damages = Column(ARRAY(Integer), nullable=True, default=[])
     
     make_rel = relationship("Make", primaryjoin="Car.make == Make.id", foreign_keys=[make])
     model_rel = relationship("Model", primaryjoin="Car.model == Model.id", foreign_keys=[model])

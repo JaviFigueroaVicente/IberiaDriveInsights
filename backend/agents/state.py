@@ -1,4 +1,4 @@
-from typing import Annotated, TypedDict, Any
+from typing import Annotated, TypedDict
 from langgraph.graph.message import add_messages
 
 class CarState(TypedDict):
@@ -10,6 +10,7 @@ class CarState(TypedDict):
 
     # Datos que el flujo irá calculando y rellenando
     imagenes_coche: list[str]
-    dmgs_detectados: list[str]
+    damages: list[int]
     precio_base: int
     precio_final: int
+    status: str
