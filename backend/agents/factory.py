@@ -1,6 +1,9 @@
 import os
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_ollama import ChatOllama
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def obtener_modelo() -> BaseChatModel:
     """
@@ -14,7 +17,7 @@ def obtener_modelo() -> BaseChatModel:
         from langchain_groq import ChatGroq
         print("[INFRAESTRUCTURA] Iniciando Llama 3.2 Vision en Groq Cloud...")
         return ChatGroq(
-            model="llama-3.2-11b-vision-preview", 
+            model="qwen/qwen3.6-27b", 
             temperature=0.0,
             timeout=1200
         )
