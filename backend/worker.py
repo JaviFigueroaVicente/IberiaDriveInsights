@@ -79,13 +79,20 @@ def procesar_grafo_coche(car_id: int, car_data: dict, lista_img: list):
 
 
 if __name__ == "__main__":
-    redis_url = os.getenv("REDIS_URL")
+    REDIS_URL = os.getenv("REDIS_URL")
     
     print(f"[WORKER] Conectando a Redis...")
     
-    # 2. Conectar a Redis usando la URL dinámica
-    redis_conn = Redis.from_url(redis_url)
+    redis_conn = Redis.from_url(
+        REDIS_URL,
+        socket_timeout=10,
+        socket_connect_timeout=10,
+        socket_keepalive=True,
+        health_check_interval=30,
+        retry_on_timeout=True
+    )
+
     print("[WORKER] Escuchando cola de peritajes en segundo plano...")
-    # Forma compatible con las versiones actuales de RQ:
+    
     worker = SimpleWorker([Queue("peritajes", connection=redis_conn)], connection=redis_conn)
     worker.work()
