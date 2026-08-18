@@ -4,6 +4,9 @@ from redis import Redis
 from rq import SimpleWorker, Queue
 from database import SessionLocal
 import models
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from agents.graph import agent
 # Importamos la función que descarga/carga los modelos .pkl
@@ -76,7 +79,12 @@ def procesar_grafo_coche(car_id: int, car_data: dict, lista_img: list):
 
 
 if __name__ == "__main__":
-    redis_conn = Redis(host="localhost", port=6379, db=0)
+    redis_url = os.getenv("REDIS_URL")
+    
+    print(f"[WORKER] Conectando a Redis...")
+    
+    # 2. Conectar a Redis usando la URL dinámica
+    redis_conn = Redis.from_url(redis_url)
     print("[WORKER] Escuchando cola de peritajes en segundo plano...")
     # Forma compatible con las versiones actuales de RQ:
     worker = SimpleWorker([Queue("peritajes", connection=redis_conn)], connection=redis_conn)
