@@ -5,18 +5,51 @@ from agents.factory import obtener_modelo
 from langchain_core.messages import HumanMessage
 from langchain_core.runnables import RunnableConfig
 from sqlalchemy import text
+import models
+import base64
+from io import BytesIO
+from PIL import Image
 
+def optimizar_imagen_b64(b64_string: str, max_size=(800, 800)) -> str:
+    """Reduce la resolución y el tamaño en bytes de la imagen Base64."""
+    try:
+        img_data = base64.b64decode(b64_string)
+        img = Image.open(BytesIO(img_data))
+        
+        # Convertir a RGB si está en RGBA
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+            
+        img.thumbnail(max_size, Image.Resampling.LANCZOS)
+        
+        buffer = BytesIO()
+        img.save(buffer, format="JPEG", quality=75)
+        return base64.b64encode(buffer.getvalue()).decode("utf-8")
+    except Exception as e:
+        print(f"Error optimizando imagen: {e}")
+        return b64_string
+
+    
 # Nodo de peritación
 def peritacion(state: CarState, config: RunnableConfig):
+    configurable = config.get("configurable", {})
+    db = configurable.get("db", None)
+    car_id = state.get("car_id")
+
+    # 1. ACTUALIZAR ESTADO A "peritando" ANTES DE LA INFERENCIA
+    if db and car_id:
+        coche = db.query(models.Car).filter(models.Car.id == car_id).first()
+        if coche:
+            coche.status = "peritando"
+            db.commit()
+
     img_b64 = state.get("imagenes_coche", [])
 
     if not img_b64:
-        return {"damages": []}
-    
+        return {"damages": [], "status": "peritado"}
+
     # Llamamos al modelo
     ai_model = obtener_modelo()
-    configurable = config.get("configurable", {})
-    db = configurable.get("db", None)
 
     prompt = """
     Objetivo: Analizar las imágenes del coche y detectar todos los daños visibles de la carrocería.
@@ -54,9 +87,10 @@ def peritacion(state: CarState, config: RunnableConfig):
     contenido_mensaje = [{"type": "text", "text": prompt}]
 
     for img in img_b64:
+        img_opt = optimizar_imagen_b64(img)
         contenido_mensaje.append({
             "type": "image_url", 
-            "image_url": {"url": f"data:image/jpeg;base64,{img}"}
+            "image_url": {"url": f"data:image/jpeg;base64,{img_opt}"}
         })
 
     mensaje = HumanMessage(content=contenido_mensaje)
@@ -85,7 +119,10 @@ def peritacion(state: CarState, config: RunnableConfig):
         print(f"Error al parsear JSON del peritaje: {e}. Respuesta cruda: {respuesta.content}")
         lista_ids = []
 
-    return {"damages": lista_ids}
+    return {
+        "damages": lista_ids,
+        "status": "peritado"
+    }
 
 # Nodo de cálculo de precio post peritación
 def calcular_precio(state: CarState, config: RunnableConfig):
@@ -95,6 +132,13 @@ def calcular_precio(state: CarState, config: RunnableConfig):
     model = configurable.get("model")
     transformadores = configurable.get("transformadores")
     db = configurable.get("db", None)
+    car_id = state.get("car_id")
+
+    if db and car_id:
+        coche = db.query(models.Car).filter(models.Car.id == car_id).first()
+        if coche:
+            coche.status = "calculando_precio"
+            db.commit()
 
     # Ejecución de la predicción base
     car = state.get("car_data", {})
@@ -118,24 +162,26 @@ def calcular_precio(state: CarState, config: RunnableConfig):
 
     UMBRAL_SINIESTRO = 70.0
     if total_porcentaje >= UMBRAL_SINIESTRO:
-        return {"precio_base": int(precio_base), "precio_final": 0, "total_porcentaje": total_porcentaje, "status": "siniestro"}
+        return {"precio_base": int(precio_base), "precio_final": 0, "total_porcentaje": total_porcentaje, "diagnostico_dmgs": "siniestro", "status": "tasado"}
     
     if total_porcentaje == 0:
-        return {"precio_base": int(precio_base), "precio_final": int(precio_base), "total_porcentaje": 0.0, "status": "perfecto"}
+        return {"precio_base": int(precio_base), "precio_final": int(precio_base), "total_porcentaje": 0.0, "diagnostico_dmgs": "perfecto", "status": "tasado"}
     
+
     descuento = precio_base * (total_porcentaje / 100.0)
     precio_final = precio_base - descuento
     
     if precio_final < (precio_base * 0.1):
         precio_final = precio_base * 0.1
 
-    estado = "daño grave" if (total_porcentaje > 30.0 or precio_final == precio_base * 0.1) else "daño leve"
+    diagnostico_dmgs = "daño grave" if (total_porcentaje > 30.0 or precio_final == precio_base * 0.1) else "daño leve"
         
     return {
         "precio_base": int(precio_base),
         "precio_final": int(precio_final),
-        "total_porcentaje": total_porcentaje,
-        "status": estado
+        "total_porcentaje": total_porcentaje,        
+        "status": "tasado",
+        "diagnostico_dmgs": diagnostico_dmgs
     }
 # Fulo de LangGraph
 workflow = StateGraph(CarState)

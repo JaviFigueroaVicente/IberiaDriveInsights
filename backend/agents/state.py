@@ -13,4 +13,5 @@ class CarState(TypedDict):
     damages: list[int]
     precio_base: int
     precio_final: int
+    diagnostico_dmgs: str
     status: str

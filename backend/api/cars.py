@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, selectinload
 from typing import Annotated, List
 import models
 from database import SessionLocal
@@ -12,10 +12,14 @@ import os
 import json
 from dotenv import load_dotenv
 from fastapi import Request, Depends
-from agents.graph import agent
+from redis import Redis
+from rq import Queue
 
 
 router = APIRouter()
+
+redis_conn = Redis.from_url(os.getenv("REDIS_URL"))
+queue = Queue("peritajes", connection=redis_conn)
 
 def get_db():
     db = SessionLocal()
@@ -63,7 +67,8 @@ async def get_my_cars(db: db_dependency, current_user: Annotated[models.User, De
         joinedload(models.Car.model_rel),
         joinedload(models.Car.version_rel),
         joinedload(models.Car.gear_rel),
-        joinedload(models.Car.fuel_rel)
+        joinedload(models.Car.fuel_rel),
+        selectinload(models.Car.images)
     ).order_by(models.Car.created_at.desc()).all()
     
     return cars_data
@@ -229,79 +234,58 @@ async def predict_car(
 async def tasar_dmgs(
     payload: TasacionRequest,
     db: db_dependency,
-    current_user: Annotated[models.User, Depends(get_current_user)],
-    model = Depends(get_model),
-    transformadores = Depends(get_transformadores)
+    current_user: Annotated[models.User, Depends(get_current_user)]
 ):
-    # Separar la imagen del payload técnico del coche
-    datos_completos = payload.model_dump()
-    lista_img = datos_completos.pop("imgs_b64", [])
-
-    # Estado inicial del grafo
-    inputs = {
-        "messages": [{"role": "user", "content": "Iniciar tasación con peritaje visual."}],
-        "car_data": datos_completos,
-        "imagenes_coche": lista_img,
-        "damages": [],
-        "precio_base": 0,
-        "precio_final": 0,
-        "status": "pendiente de tasación"
-    }
-
     try:
-        # Ejecutar el agente pasándole los cargadores del pkl en el contexto configurable
-        config = {
-            "recursion_limit": 10,
-            "configurable": {
-                "model": model,
-                "transformadores": transformadores,
-                "db": db
-            }
-        }
+        # Separar la imagen del payload técnico del coche
+        datos_completos = payload.model_dump(mode="json")
+        lista_img = datos_completos.pop("imgs_b64", [])
 
-        resultado = agent.invoke(inputs, config=config)
-
-        # Persistir en la base de datos el coche con el precio final calculado por el agente
-        car_bbdd = payload.model_dump()
-        car_bbdd.pop("imgs_b64", None)
-        
-        car_bbdd['price'] = resultado.get("precio_final")
-        car_bbdd['price_base'] = resultado.get("precio_base")
-        car_bbdd['status'] = resultado.get("status")
+        # 1. Crear el registro preliminar en BBDD
+        car_bbdd = datos_completos.copy()
+        car_bbdd['price'] = 0.0
+        car_bbdd['price_base'] = 0.0
+        car_bbdd['status'] = "pendiente"
         car_bbdd['is_prediction'] = True
+        car_bbdd['damages'] = []
 
-        lista_dmgs = resultado.get("damages", [])
-        car_bbdd['damages'] = lista_dmgs
-
-        # Creamos la entidad mapeando el usuario autenticado
         new_car = models.Car(**car_bbdd, rep_id=current_user.id)
-        
         db.add(new_car)
         db.commit()
         db.refresh(new_car)
 
+        # Guardar imágenes de forma preliminar
         for foto in lista_img:
             car_img = models.CarImage(car_id=new_car.id, imagen_b64=foto)
             db.add(car_img)
-        
         db.commit()
 
-        respuesta_final = payload.model_dump()
-        
-        respuesta_final.pop("imgs_b64", None)
+        # 2. 🚀 ENCOLAR LA TAREA EN REDIS
+        # Pasamos el ID del coche creado y los datos para que el worker ejecute el grafo
+        queue.enqueue(
+            "worker.procesar_grafo_coche",
+            car_id=new_car.id,
+            car_data=datos_completos,
+            lista_img=lista_img,
+            job_timeout=1200
+        )
 
+        # 3. Respuesta inmediata de aceptación
+        respuesta_final = payload.model_dump()
+        respuesta_final.pop("imgs_b64", None)
         respuesta_final.update({
-            "price_base": resultado.get("precio_base"),
-            "damages": lista_dmgs,
-            "price": resultado.get("precio_final"),
-            "status": resultado.get("status")
+            "id": new_car.id,
+            "price_base": 0.0,
+            "damages": [],
+            "price": 0.0,
+            "status": "pendiente",
+            "diagnostico_dmgs": "pendiente de tasación"
         })
 
         return respuesta_final
-    
 
     except Exception as e:
         db.rollback()
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Error en tasación avanzada: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al encolar tasación: {str(e)}")

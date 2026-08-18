@@ -47,7 +47,98 @@ const PaginationBtn = ({ text, icon: Icon, active, disabled, onClick }) => (
     </button>
 );
 
-export default function MyPredictions({ currentUser, handleLogout }) {
+const CarCardSlider = ({ car, viewMode, DirectionsCar }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const images = car.images || [];
+    const hasImages = images.length > 0;
+
+    const prevImage = (e) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
+    const nextImage = (e) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
+    return (
+        <div className={`rounded-sm bg-(--surface-highest) overflow-hidden relative group/slider border border-white/10 shrink-0 ${viewMode === 'grid' ? 'w-full h-44' : 'w-full lg:w-48 h-36'}`}>
+            <div className="absolute inset-0 bg-linear-to-br from-(--primary)/20 to-transparent z-10 pointer-events-none" />
+            
+            {/* Display de Imagen o SVG por defecto */}
+            <div className="absolute inset-0 flex items-center justify-center p-2">
+                {hasImages ? (
+                    <img 
+                        src={images[currentIndex].imagen_b64.startsWith('data:') 
+                            ? images[currentIndex].imagen_b64 
+                            : `data:image/jpeg;base64,${images[currentIndex].imagen_b64}`} 
+                        alt={`${car.make_info?.nombre || 'Vehículo'} - ${currentIndex + 1}`} 
+                        className="w-full h-full object-cover rounded-xs" 
+                    />
+                ) : (
+                    <img src={DirectionsCar} alt="Vehicle preview" className="w-full h-full object-contain opacity-90" />
+                )}
+            </div>
+
+            {/* Badge de Carrocería */}
+            <div className="absolute bottom-2 left-2 flex gap-1 z-20">
+                <span className="bg-(--secondary) text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-tighter rounded-xs shadow-lg">
+                    {car.body_type_rel?.nombre || "VEHÍCULO"}
+                </span>
+            </div>
+
+            {/* Controles del Slider (Solo si hay más de 1 imagen) */}
+            {hasImages && images.length > 1 && (
+                <>
+                    {/* Botones Anterior / Siguiente */}
+                    <button 
+                        type="button"
+                        onClick={prevImage}
+                        className="absolute left-1 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-black/90 text-white p-1 rounded-full group-hover/slider:opacity-100 transition-opacity cursor-pointer"
+                        title="Anterior"
+                    >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button 
+                        type="button"
+                        onClick={nextImage}
+                        className="absolute right-1 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-black/90 text-white p-1 rounded-full group-hover/slider:opacity-100 transition-opacity cursor-pointer"
+                        title="Siguiente"
+                    >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    {/* Contador e Indicadores */}
+                    <div className="absolute top-2 right-2 z-20 bg-black/70 backdrop-blur-xs px-1.5 py-0.5 rounded-xs">
+                        <span className="text-[8px] font-mono text-white font-bold">
+                            {currentIndex + 1}/{images.length}
+                        </span>
+                    </div>
+
+                    <div className="absolute bottom-2 right-2 z-20 flex gap-1">
+                        {images.map((_, idx) => (
+                            <button
+                                type="button"
+                                key={idx}
+                                onClick={(e) => { e.stopPropagation(); setCurrentIndex(idx); }}
+                                className={`h-1 rounded-full transition-all cursor-pointer ${
+                                    idx === currentIndex ? 'w-3 bg-(--secondary)' : 'w-1 bg-white/40'
+                                }`}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    );
+};
+
+export default function MyPredictions({ currentUser, handleLogout, defaultIcon }) {
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [viewMode, setViewMode] = useState('list');
@@ -274,69 +365,119 @@ export default function MyPredictions({ currentUser, handleLogout }) {
                                     <div className={`flex gap-6 p-4 ${viewMode === 'grid' ? 'flex-col items-start' : 'flex-col lg:flex-row items-center'}`}>
                                         
                                         {/* Contenedor de Imagen/Icono */}
-                                        <div className={`rounded-sm bg-(--surface-highest) overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500 border border-white/10 shrink-0 ${viewMode === 'grid' ? 'w-full h-40' : 'w-full lg:w-48 h-32'}`}>
-                                            <div className="absolute inset-0 bg-linear-to-br from-(--primary)/20 to-transparent" />
-                                            <div className="absolute inset-0 flex items-center justify-center p-4">
-                                                <img src={DirectionsCar} alt="Vehicle preview" className="w-full h-full object-contain opacity-90" />
-                                            </div>
-                                            <div className="absolute bottom-2 left-2">
-                                                <span className="bg-(--secondary) text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-tighter rounded-xs shadow-lg">VEHÍCULO</span>
-                                            </div>
-                                        </div>
+                                        <CarCardSlider 
+                                            car={car} 
+                                            viewMode={viewMode} 
+                                            DirectionsCar={DirectionsCar}
+                                        />
 
-                                        {/* Información Técnica */}
-                                        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                                        {/* Información Técnica Expandida */}
+                                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-4 w-full">
+                                            
+                                            {/* Columna 1: Info General */}
                                             <div>
                                                 <p className="text-[9px] uppercase font-bold text-(--on-surface-variant) tracking-widest mb-1">
-                                                    Información General
+                                                    Marca & Modelo
                                                 </p>
-                                                <h3 className="text-white font-headline text-lg font-bold">
+                                                <h3 className="text-white font-headline text-base font-bold leading-tight">
                                                     {car.make_rel?.nombre || "DESCONOCIDO"} {car.model_rel?.nombre || ""}
                                                 </h3>
                                                 <p className="text-(--on-surface-variant) text-[10px] font-mono uppercase opacity-80 mt-0.5">
-                                                    {car.version_rel?.nombre || "DESCONOCIDO"}
+                                                    {car.version_rel?.nombre || "Sin versión especificada"}
                                                 </p>
-                                                <p className="text-[8px] text-(--on-surface-variant) mt-1 uppercase tracking-tight font-mono">
-                                                    Matriculado: {formatDate(car.registration)}
-                                                </p>
-                                            </div>
-
-                                            <div>
-                                                <p className="text-[9px] uppercase font-bold text-(--on-surface-variant) tracking-widest mb-1">
-                                                    Potencia y Especificaciones
-                                                </p>
-                                                <h4 className="text-white font-headline text-sm font-bold mt-1 uppercase tracking-wider">
-                                                    {car.gear_rel?.nombre || 'Transmission'} • {car.power} CV
-                                                </h4>
-                                                <div className="flex items-center gap-1 text-[9px] text-(--primary) font-mono font-bold mt-1.5">
-                                                    <img className="w-3 h-3" src={TrendingUp} alt="Engine" />
-                                                    <span className="uppercase">{car.fuel_rel?.nombre || 'Engine Tier'}</span>
+                                                <div className="mt-2 space-y-0.5">
+                                                    <p className="text-[8px] text-(--on-surface-variant) uppercase font-mono">
+                                                        Matriculación: <span className="text-white">{formatDate(car.registration)}</span>
+                                                    </p>
+                                                    {car.location && (
+                                                        <p className="text-[8px] text-(--on-surface-variant) uppercase font-mono">
+                                                            Ubicación: <span className="text-white">{car.location}</span>
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
 
+                                            {/* Columna 2: Especificaciones Mecánicas */}
                                             <div>
                                                 <p className="text-[9px] uppercase font-bold text-(--on-surface-variant) tracking-widest mb-1">
-                                                    Evaluación Y Rendimiento
+                                                    Mecánica
                                                 </p>
-                                                <p className="text-white font-headline text-2xl font-black tracking-tighter">
+                                                <h4 className="text-white font-headline text-sm font-bold uppercase tracking-wider">
+                                                    {car.gear_rel?.nombre || 'Transmisión N/D'} • {car.power ? `${car.power} CV` : 'Potencia N/D'}
+                                                </h4>
+                                                <div className="flex items-center gap-1 text-[9px] text-(--primary) font-mono font-bold mt-1.5">
+                                                    <img className="w-3 h-3" src={TrendingUp} alt="Engine" />
+                                                    <span className="uppercase">{car.fuel_rel?.nombre || 'Combustible N/D'}</span>
+                                                </div>
+                                                {car.color && (
+                                                    <p className="text-[8px] text-(--on-surface-variant) mt-2 uppercase font-mono">
+                                                        Color: <span className="text-white">{car.color}</span>
+                                                    </p>
+                                                )}
+                                            </div>
+
+                                            {/* Columna 3: Precio y Kilometraje */}
+                                            <div>
+                                                <p className="text-[9px] uppercase font-bold text-(--on-surface-variant) tracking-widest mb-1">
+                                                    Valoración
+                                                </p>
+                                                <p className="text-white font-headline text-xl font-black tracking-tighter">
                                                     {Number(car.price).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })}
                                                 </p>
                                                 <p className="text-(--secondary) text-[10px] font-mono uppercase font-bold tracking-wider mt-1">
                                                     {Number(car.kms).toLocaleString()} KMS
                                                 </p>
                                             </div>
+
+                                            {/* Columna 4: Estado del Sistema / Tarea RQ */}
+                                            <div>
+                                                <p className="text-[9px] uppercase font-bold text-(--on-surface-variant) tracking-widest mb-1">
+                                                    Estado Peritaje
+                                                </p>
+                                                <div className="space-y-1 mt-1">
+                                                    <span className={`inline-block px-1.5 py-0.5 text-[8px] font-mono font-bold uppercase rounded-xs ${
+                                                        car.status === 'tasado' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                                                        car.status === 'sin tasar' ? 'bg-white/10 text-(--on-surface-variant)' :
+                                                        car.status === 'error' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                                        'bg-amber-500/20 text-amber-400 border border-amber-500/30 animate-pulse'
+                                                    }`}>
+                                                        {car.status || 'tasando'}
+                                                    </span>
+                                                    {car.task_id && (
+                                                        <p className="text-[7px] text-(--on-surface-variant) font-mono truncate" title={car.task_id}>
+                                                            TASK: {car.task_id}
+                                                        </p>
+                                                    )}
+                                                </div>                                                
+                                            </div>
+                                            <div>
+                                                <p className="text-[9px] uppercase font-bold text-(--on-surface-variant) tracking-widest mb-1">
+                                                    Estado Vehículo
+                                                </p>
+                                                <span className={`inline-block px-1.5 py-0.5 text-[8px] font-mono font-bold uppercase rounded-xs ${
+                                                    car.diagnostico_dmgs === 'perfecto' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                                                    car.diagnostico_dmgs === 'daño leve' ? 'text-amber-400 border' :
+                                                    car.diagnostico_dmgs === 'daño grave' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse' :
+                                                    car.diagnostico_dmgs === 'siniestro' ? 'bg-white/10 text-(--on-surface-variant)' :
+                                                    'bg-white/10 text-(--on-surface-variant)'
+                                                }`}>
+                                                    {car.diagnostico_dmgs || 'pendiente de tasar'}
+                                                    
+                                                </span>
+                                            </div>
+
                                         </div>
 
-                                        {/* Botones de Acción */}
+                                        {/* Botones de Acción e ID */}
                                         <div className={`flex justify-between items-end gap-4 shrink-0 ${viewMode === 'grid' ? 'w-full border-t border-white/5 pt-3' : 'flex-col w-full lg:w-auto'}`}>
                                             <p className={`text-[9px] text-(--on-surface-variant) font-mono opacity-60 ${viewMode === 'grid' ? 'text-left' : 'text-right'}`}>
                                                 ID-{car.id}
                                             </p>
                                             <div className="flex gap-2">
-                                                <button className="p-2 bg-(--surface-highest) hover:bg-(--primary)/20 text-(--on-surface-variant) hover:text-(--primary) transition-colors rounded-xs border border-white/5 cursor-pointer">
+                                                <button className="p-2 bg-(--surface-highest) hover:bg-(--primary)/20 text-(--on-surface-variant) hover:text-(--primary) transition-colors rounded-xs border border-white/5 cursor-pointer" title="Descargar Informe">
                                                     <img src={Download} alt="Download" className="w-3.5 h-3.5"/>
                                                 </button>
-                                                <button className="p-2 bg-(--surface-highest) hover:bg-(--secondary)/20 text-(--on-surface-variant) hover:text-(--secondary) transition-colors rounded-xs border border-white/5 cursor-pointer">
+                                                <button className="p-2 bg-(--surface-highest) hover:bg-(--secondary)/20 text-(--on-surface-variant) hover:text-(--secondary) transition-colors rounded-xs border border-white/5 cursor-pointer" title="Compartir">
                                                     <img src={Share} alt="Share" className="w-3.5 h-3.5"/>
                                                 </button>
                                             </div>

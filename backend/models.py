@@ -51,6 +51,7 @@ class Car(Base):
 
     price_base = Column(Integer, nullable=False)
     status = Column(String(20), nullable=True)
+    diagnostico_dmgs= Column(String(30), nullable=True)
     damages = Column(ARRAY(Integer), nullable=True, default=[])
     
     make_rel = relationship("Make", primaryjoin="Car.make == Make.id", foreign_keys=[make])

@@ -15,11 +15,13 @@ def obtener_modelo() -> BaseChatModel:
         print("[INFRAESTRUCTURA] Iniciando Llama 3.2 Vision en Groq Cloud...")
         return ChatGroq(
             model="llama-3.2-11b-vision-preview", 
-            temperature=0.0
+            temperature=0.0,
+            timeout=1200
         )
     else:
         print("[INFRAESTRUCTURA] Iniciando Qwen en Ollama Local...")
         return ChatOllama(
             model="qwen3.5:4b", 
-            temperature=0.0
+            temperature=0.0,
+            timeout=1200
         )

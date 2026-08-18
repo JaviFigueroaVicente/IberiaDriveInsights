@@ -192,6 +192,13 @@ class UserResponseWithCars(BaseModel):
         from_attributes = True
 
 
+class CarImageResponse(BaseModel):
+    id: int
+    imagen_b64: str
+
+    class Config:
+        from_attributes = True
+
 class MyPredictions(BaseModel):
     id: int
     make: int
@@ -203,6 +210,8 @@ class MyPredictions(BaseModel):
     fuel_type: int
     kms: int
     price: int
+    status: str
+    diagnostico_dmgs: str | None = None
     
     # Inyección automática de objetos usando las relaciones definidas en models.py
     make_info: MakeResponse = Field(..., alias="make_rel")
@@ -210,6 +219,8 @@ class MyPredictions(BaseModel):
     version_info: VersionResponse = Field(..., alias="version_rel")
     gear_info: GearResponse = Field(..., alias="gear_rel")
     fuel_info: FuelResponse = Field(..., alias="fuel_rel")
+
+    images: List[CarImageResponse] = []
 
     class Config:
         from_attributes = True
@@ -236,6 +247,7 @@ class TasacionRequest(CarPrediction):
     imgs_b64: list[str] = []    
 
 class TasacionResponse(BaseModel):
+    diagnostico_dmgs: str
     status: str
     price_base: int
     damages: List[int]

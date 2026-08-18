@@ -7,6 +7,8 @@ import { getMakes, getModelsByMake, getVersionsByModel, getFuelTypes, getGearTyp
 import VerifiedUser from '../assets/icons/verified_user.svg'
 import Bolt from '../assets/icons/bolt.svg'
 
+const MAX_IMAGES = 10;
+
 const formContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -155,22 +157,74 @@ export default function Predict() {
         }
     }
 
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        
-        files.forEach(file => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64String = reader.result.split(',')[1];
-                
-                setFormData(prev => ({
-                    ...prev,
-                    imgs_b64: [...prev.imgs_b64, base64String]
-                }));
-            };
-            reader.readAsDataURL(file);
-        });
-    };
+    const compressImage = (file, maxDim = 768, quality = 0.7) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const base64Data = canvas.toDataURL('image/jpeg', quality).split(',')[1];
+          resolve(base64Data);
+        };
+        img.onerror = (err) => reject(err);
+      };
+      reader.onerror = (err) => reject(err);
+    });
+  };
+
+  const handleImageChange = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const currentCount = formData.imgs_b64.length;
+    const availableSlots = MAX_IMAGES - currentCount;
+
+    if (availableSlots <= 0) {
+      alert(`Solo puedes subir un máximo de ${MAX_IMAGES} imágenes.`);
+      return;
+    }
+
+    const selectedFiles = Array.from(files).slice(0, availableSlots);
+
+    try {
+      const compressedImages = await Promise.all(
+        selectedFiles.map((file) => compressImage(file))
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        imgs_b64: [...prev.imgs_b64, ...compressedImages],
+      }));
+    } catch (error) {
+      console.error('Error al procesar las imágenes:', error);
+    }
+
+    e.target.value = '';
+  };
     const removeImage = (indexToRemove) => {
         setFormData(prev => ({
             ...prev,
@@ -189,7 +243,13 @@ export default function Predict() {
 
             await Swal.fire({
                 ...swalConfig,
-                title: 'Evaluación Completada',
+                title: 'TASACIÓN EN PROCESO',
+                icon: 'info',
+                iconColor: 'var(--secondary, #5de6ff)',
+                confirmButtonText: 'IR A MIS PREDICCIONES',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
                 customClass: {
                     ...swalConfig.customClass,
                     confirmButton: `${swalConfig.customClass.confirmButton} btn-primary-engine h-auto py-3`
@@ -198,28 +258,25 @@ export default function Predict() {
                     <div style="font-family: var(--font-body, 'Inter', sans-serif); text-align: left; margin: 4px 0; padding: 0; width: 100%;">        
                         <div style="background: var(--surface-lowest, #060e20); padding: 20px 16px; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2px; text-align: center; margin: 12px 0; position: relative; overflow: hidden;">
                             <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, var(--secondary, #5de6ff), transparent);"></div>
-                            <div style="position: absolute; top: 6px; left: 8px; font-size: 8px; font-family: var(--font-headline, sans-serif); font-weight: 700; letter-spacing: 0.15em; color: var(--secondary, #5de6ff); opacity: 0.6;">VALOR ESTIMADO</div>
                             
-                            <span style="font-family: var(--font-headline, sans-serif); font-size: 28px; md:font-size: 36px; font-weight: 700; letter-spacing: -0.03em; color: var(--secondary, #5de6ff); text-shadow: 0 0 20px rgba(93, 230, 255, 0.25); display: inline-block; line-height: 1.1; margin-top: 8px; max-width: 100%; word-break: break-all;">
-                                ${Number(predictedPrice).toLocaleString('es-ES')} €
-                            </span>
+                            <p style="font-family: var(--font-headline, sans-serif); font-size: 13px; font-weight: 700; letter-spacing: 0.05em; color: #ffffff; text-transform: uppercase; margin: 0 0 8px 0;">
+                                Solicitud registrada correctamente
+                            </p>
+                            <p style="font-size: 11px; color: var(--on-surface-variant, #bec8d2); line-height: 1.5; margin: 0;">
+                                Te redirigiremos a <strong style="color: var(--secondary, #5de6ff);">Mis Predicciones</strong> para hacer el seguimiento. Recibirás una notificación cuando el vehículo haya sido peritado.
+                            </p>
                         </div>
                         
                         <div style="background: var(--surface-high, #222a3d); padding: 10px 12px; border-left: 3px solid var(--secondary, #5de6ff); border-radius: 2px; margin-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.02); border-right: 1px solid rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.02);">
                             <p style="font-size: 10px; color: var(--on-surface-variant, #bec8d2); text-transform: uppercase; letter-spacing: 0.08em; margin: 0; line-height: 1.4; word-break: break-word;">
-                                Vehículo analizado: <span style="color: #ffffff; font-weight: 700; font-family: var(--font-body, sans-serif);">${selectedMake.nombre || ''} ${selectedModel.nombre || ''}</span>
+                                Vehículo en revisión: <span style="color: #ffffff; font-weight: 700; font-family: var(--font-body, sans-serif);">${selectedMake.nombre || ''} ${selectedModel.nombre || ''}</span>
                             </p>
                         </div>
                     </div>
-                `,
-                icon: 'success',
-                iconColor: 'var(--secondary, #5de6ff)',
-                confirmButtonText: 'CERRAR INFORME',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                allowEnterKey: false
+                `
             });
 
+            // Redirección al confirmar la lectura del modal
             navigate('/profile/my-predictions');
         } catch (error) {
             console.error("Error en la predicción", error);
@@ -406,32 +463,44 @@ export default function Predict() {
                             </div>
                         </motion.div>
 
-                        {/* 04. Peritaje Visual (Carga de Imágenes) */}
+                        {/* 04. Análisis de Carrocería */}
                         <motion.div variants={sectionVariants} className="space-y-3">
                             <div className="flex items-center gap-3">
                                 <span className="text-[9px] md:text-[10px] font-black text-white px-2 py-0.5 bg-(--surface-high) rounded-xs shadow-xs">04</span>
                                 <h3 className="text-xs font-bold uppercase tracking-widest text-[#bec8d2]">Análisis de Carrocería</h3>
+                                <span className="text-[10px] font-medium text-[#bec8d2]/60 ml-auto">
+                                    {formData.imgs_b64.length} / 10 fotos
+                                </span>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 gap-4">
-                                <div className="group relative border-2 border-dashed border-white/10 hover:border-(--secondary)/40 transition-colors p-6 rounded-sm bg-(--surface-highest)/30 text-center cursor-pointer">
-                                    <input 
-                                        type="file" 
-                                        multiple 
-                                        accept="image/*" 
-                                        onChange={handleImageChange} 
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                    />
-                                    <div className="space-y-2">
-                                        <span className="material-symbols-outlined text-2xl">Añadir Imágenes</span>
-                                        <p className="text-xs text-white font-medium">Subir imágenes del vehículo</p>
-                                        <p className="text-[10px] text-[#bec8d2]/40 uppercase tracking-wider">Selecciona una o varias fotos (Frontal, Trasera, Laterales)</p>
+                                {formData.imgs_b64.length < 10 ? (
+                                    <div className="group relative border-2 border-dashed border-white/10 hover:border-(--secondary)/40 transition-colors p-6 rounded-sm bg-(--surface-highest)/30 text-center cursor-pointer">
+                                        <input 
+                                            type="file" 
+                                            multiple 
+                                            accept="image/*" 
+                                            onChange={handleImageChange} 
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        />
+                                        <div className="space-y-2">
+                                            <span className="material-symbols-outlined text-2xl">Subir imágenes del vehículo</span>
+                                            <p className="text-[10px] text-[#bec8d2]/40 uppercase tracking-wider">
+                                                Selecciona hasta {10 - formData.imgs_b64.length} foto(s) más (Máx. 10 fotos)
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className="p-4 border border-amber-500/30 bg-amber-500/10 rounded-sm text-center">
+                                        <p className="text-xs text-amber-200 font-medium">
+                                            Límite máximo alcanzado. Elimina alguna foto para añadir otra.
+                                        </p>
+                                    </div>
+                                )}
 
                                 {/* Galería de Previsualización Dinámica */}
                                 {formData.imgs_b64.length > 0 && (
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 p-3 bg-black/20 rounded-sm border border-white/5">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 p-3 bg-black/20 rounded-sm border border-white/5">
                                         {formData.imgs_b64.map((img, index) => (
                                             <div key={index} className="relative aspect-video bg-(--surface-high) border border-white/10 rounded-xs overflow-hidden group/thumb">
                                                 <img 
@@ -444,9 +513,9 @@ export default function Predict() {
                                                     onClick={() => removeImage(index)}
                                                     className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-600 text-white p-1 rounded-xs opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center"
                                                 >
-                                                    <span className="material-symbols-outlined text-xs">Borrar</span>
+                                                    <span className="material-symbols-outlined text-xs">x</span>
                                                 </button>
-                                                <span className="absolute bottom-1 left-1 data-chip opacity-80">Foto {index + 1}</span>
+                                                <span className="absolute bottom-1 left-1 data-chip opacity-80 text-[9px]">Foto {index + 1}</span>
                                             </div>
                                         ))}
                                     </div>
