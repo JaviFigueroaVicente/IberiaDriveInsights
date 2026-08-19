@@ -13,21 +13,38 @@ from PIL import Image
 def optimizar_imagen_b64(b64_string: str, max_size=(800, 800)) -> str:
     """Reduce la resolución y el tamaño en bytes de la imagen Base64."""
     try:
+        if not b64_string or not isinstance(b64_string, str):
+            return ""
+
+        # Limpiar prefijo Data URL si existe
+        if "," in b64_string:
+            b64_string = b64_string.split(",")[1]
+
+        # Limpiar espacios en blanco, saltos de línea o caracteres de escape
+        b64_string = b64_string.strip().replace("\n", "").replace("\r", "").replace(" ", "")
+
+        # Ajustar padding de Base64 si falta
+        missing_padding = len(b64_string) % 4
+        if missing_padding:
+            b64_string += "=" * (4 - missing_padding)
+
+        # Decodificar y procesar con Pillow
         img_data = base64.b64decode(b64_string)
         img = Image.open(BytesIO(img_data))
-        
-        # Convertir a RGB si está en RGBA
+
         if img.mode in ("RGBA", "P"):
             img = img.convert("RGB")
-            
+
         img.thumbnail(max_size, Image.Resampling.LANCZOS)
-        
+
         buffer = BytesIO()
-        img.save(buffer, format="JPEG", quality=75)
+        img.save(buffer, format="JPEG", quality=85)
         return base64.b64encode(buffer.getvalue()).decode("utf-8")
+
     except Exception as e:
-        print(f"Error optimizando imagen: {e}")
-        return b64_string
+        print(f"[OPTIMIZADOR ERROR] Falla al procesar Base64 desde Redis: {e}")
+        # Si falla el procesado, devolvemos el string limpio básico
+        return b64_string.strip()
 
     
 # Nodo de peritación
@@ -52,6 +69,9 @@ def peritacion(state: CarState, config: RunnableConfig):
     ai_model = obtener_modelo()
 
     prompt = """
+    Eres un perito profesional de seguros evaluando un {car_data.get('make', '')} {car_data.get('model', '')}.
+    Se te proporcionan {len(img_b64)} fotografías del vehículo.
+
     Objetivo: Analizar las imágenes del coche y detectar todos los daños visibles de la carrocería.
     
     Reglas estrictas:
