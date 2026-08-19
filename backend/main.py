@@ -8,6 +8,8 @@ from database import engine
 from api import cars, auth
 from dotenv import load_dotenv
 import os
+import subprocess
+import sys
 from model_loader import init_models
 from contextlib import asynccontextmanager
 
@@ -22,7 +24,15 @@ transformadores = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.model, app.state.transformadores = init_models()
+    worker_process = subprocess.Popen([sys.executable, "worker.py"])
+
     yield
+
+    worker_process.terminate()
+    try:
+        worker_process.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        worker_process.kill()
 
 
 app = FastAPI(lifespan=lifespan)
