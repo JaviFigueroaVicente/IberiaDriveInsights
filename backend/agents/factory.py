@@ -17,7 +17,8 @@ def obtener_modelo() -> BaseChatModel:
         from langchain_groq import ChatGroq
         print("[INFRAESTRUCTURA] Iniciando Llama 3.2 Vision en Groq Cloud...")
         return ChatGroq(
-            model="qwen/qwen3.6-27b", 
+            model="qwen/qwen3.6-27b",
+            api_key=os.getenv("GROQ_API_KEY"), 
             temperature=0.0,
             timeout=1200
         )
